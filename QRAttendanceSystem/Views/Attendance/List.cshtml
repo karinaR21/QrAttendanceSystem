@@ -1,0 +1,23 @@
+﻿@model List<Attendance>
+
+<h2 class="mb-4">Attendance List</h2>
+
+<table class="table table-hover table-striped shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Student</th>
+            <th>Session</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Student.FullName</td>
+                <td>@item.Session.CourseId</td>
+                <td>@item.TimeRecorded</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Scan QR";
+}
+
+<h2 class="text-center mb-4">Scan QR Code</h2>
+
+<div class="row justify-content-center">
+    <div class="col-md-4 text-center">
+
+        <div class="card shadow p-3">
+            <div id="reader" class="mb-3"></div>
+            <p id="result" class="fw-semibold"></p>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    const scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        qrText => {
+
+            fetch('/Attendance/Register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: qrText })
+            })
+            .then(r => r.text())
+            .then(msg => {
+                document.getElementById("result").innerText = msg;
+                scanner.stop();
+            });
+        }
+    );
+</script>

@@ -1,0 +1,30 @@
+﻿@model List<QRAttendanceSystem.Models.Session>
+
+<h2>Sessions</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+            <th>QR</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Title</td>
+                <td>@s.Date</td>
+                <td>
+                    <a href="/Attendance/GenerateQr?sessionId=@s.Id">
+                        Generate QR
+                    </a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" href="/Sessions/Create">Create new session</a>

@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="d-flex justify-content-center align-items-start"
+     style="min-height:90vh; padding-top:8rem;">
+    <div class="col-11 col-sm-8 col-md-5 col-lg-4">
+
+        <div class="card shadow-lg p-4 slide-in">
+
+            <h3 class="text-center mb-4">Create Account</h3>
+
+            <form method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input name="email"
+                           type="email"
+                           class="form-control"
+                           placeholder="example@student.school.bg"
+                           required />
+
+                    <small class="text-muted">
+                        Role is determined automatically by email domain
+                    </small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+
+                    <div class="input-group">
+                        <input id="password"
+                               name="password"
+                               type="password"
+                               class="form-control"
+                               required />
+
+                        <span class="input-group-text"
+                              style="cursor:pointer"
+                              onclick="togglePassword()">
+                            <i id="eyeIcon" class="bi bi-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-success w-100 mt-3">
+                    Register
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const pass = document.getElementById("password");
+            const icon = document.getElementById("eyeIcon");
+
+            if (pass.type === "password") {
+                pass.type = "text";
+                icon.classList.replace("bi-eye", "bi-eye-slash");
+            } else {
+                pass.type = "password";
+                icon.classList.replace("bi-eye-slash", "bi-eye");
+            }
+        }
+    </script>
+}

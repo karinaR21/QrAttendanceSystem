@@ -1,0 +1,22 @@
+﻿@model QRAttendanceSystem.Models.Session
+
+<h2>Create Session</h2>
+
+<form asp-action="Create" method="post">
+
+    <label>Course</label>
+    <select asp-for="CourseId" class="form-control">
+        @foreach (var course in ViewBag.Courses)
+        {
+            <option value="@course.Id">@course.Name</option>
+        }
+    </select>
+
+    <label>Date</label>
+    <input asp-for="Date" type="datetime-local" class="form-control" />
+
+    <button type="submit" class="btn btn-primary mt-3">
+        Create session & generate QR
+    </button>
+
+</form>

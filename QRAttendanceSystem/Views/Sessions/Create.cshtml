@@ -1,0 +1,45 @@
+﻿@model QRAttendanceSystem.Models.Session
+
+@{
+    ViewData["Title"] = "Create Session";
+}
+
+<div class="d-flex justify-content-center mt-5">
+    <div style="max-width: 420px; width:100%;">
+
+        <div class="card shadow-lg p-4 rounded-4 border-0 slide-in">
+
+            <h4 class="fw-bold mb-4 text-center">
+                Create Session
+            </h4>
+
+            <form asp-action="Create" method="post">
+
+                <div class="mb-3">
+                    <label class="form-label">Course</label>
+                    <select asp-for="CourseId" class="form-select">
+                        @foreach (var course in ViewBag.Courses)
+                        {
+                            <option value="@course.Id">@course.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Date & Time</label>
+                    <input asp-for="Date"
+                           type="datetime-local"
+                           class="form-control" />
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary w-100">
+                    Create Session & Generate QR
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>

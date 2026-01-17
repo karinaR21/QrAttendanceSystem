@@ -1,0 +1,57 @@
+﻿@model QRAttendanceSystem.Models.QrToken
+@{
+    ViewData["Title"] = "QR Code";
+}
+
+@if (Model == null)
+{
+    <div class="alert alert-danger text-center">
+        QR code not available.
+    </div>
+    return;
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-lg text-center p-5">
+
+            <h3 class="mb-3">Attendance QR Code</h3>
+            <p class="text-muted">Students must scan within the time limit</p>
+
+            <img class="my-4 border rounded shadow-sm d-block mx-auto"
+                 style="width:180px; height:180px;"
+                 src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=@Model.Token" />
+
+
+            <p class="fw-semibold">
+                Expires at: @Model.ExpirationTime.ToString("HH:mm:ss")
+            </p>
+
+            <p id="timer" class="fs-4 fw-bold text-success"></p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const expirationTime = new Date("@Model.ExpirationTime").getTime();
+        const timer = document.getElementById("timer");
+
+        const countdown = setInterval(() => {
+            const now = new Date().getTime();
+            const diff = expirationTime - now;
+
+            if (diff <= 0) {
+                clearInterval(countdown);
+                timer.innerText = "QR code expired";
+                timer.className = "fs-4 fw-bold text-danger";
+                return;
+            }
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            timer.innerText = `Time left: ${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+        }, 1000);
+    </script>
+}

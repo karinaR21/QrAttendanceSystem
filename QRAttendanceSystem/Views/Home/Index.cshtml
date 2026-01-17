@@ -1,0 +1,150 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Home";
+    var role = Context.Session.GetString("Role");
+}
+
+<!-- ================= HERO SECTION ================= -->
+<div class="hero d-flex align-items-center justify-content-center text-center">
+    <div class="hero-card glass p-4 p-md-5">
+
+        <i class="bi bi-qr-code fs-1 mb-3"></i>
+
+        <h1 class="fw-bold fs-2 fs-md-1 mb-3">
+            QR Attendance
+        </h1>
+
+        <p class="text-white-50 mb-4">
+            @if (role == "Teacher")
+            {
+                <span>Create & manage attendance instantly</span>
+            }
+            else if (role == "Student")
+            {
+                <span>Scan QR and mark your presence</span>
+            }
+            else
+            {
+                <span>Modern QR-based attendance system</span>
+            }
+        </p>
+
+        @if (role == "Teacher")
+        {
+            <a asp-controller="Sessions" asp-action="Create"
+               class="btn btn-outline-light btn-lg w-100">
+                Generate QR
+            </a>
+        }
+        else if (role == "Student")
+        {
+            <a asp-controller="Attendance" asp-action="Scan"
+               class="btn btn-outline-light btn-lg w-100">
+                Scan QR
+            </a>
+        }
+        else
+        {
+            <a asp-controller="Auth" asp-action="Index"
+               class="btn btn-primary btn-lg w-100">
+                Get Started
+            </a>
+        }
+
+    </div>
+</div>
+
+<!-- ================= DASHBOARD CARDS (ONLY IF LOGGED IN) ================= -->
+@if (!string.IsNullOrEmpty(role))
+{
+    <div class="container mt-5">
+        <div class="row g-4">
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="glass p-4 h-100 hover-card text-center">
+                    <i class="bi bi-clock-history fs-3 mb-2"></i>
+                    <h5>History</h5>
+                    <p class="text-white-50 small">
+                        Attendance history
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="glass p-4 h-100 hover-card text-center">
+                    <i class="bi bi-bar-chart fs-3 mb-2"></i>
+                    <h5>Statistics</h5>
+                    <p class="text-white-50 small">
+                        Attendance insights
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="glass p-4 h-100 hover-card">
+
+                    <!-- CARD HEADER (CLICKABLE) -->
+                    <div class="text-center"
+                         role="button"
+                         data-bs-toggle="collapse"
+                         data-bs-target="#guidelinesCollapse"
+                         aria-expanded="false"
+                         aria-controls="guidelinesCollapse">
+
+                        <i class="bi bi-info-circle fs-3 mb-2"></i>
+                        <h5>System Guidelines</h5>
+                        <p class="text-white-50 small">
+                            Click to view instructions
+                        </p>
+                    </div>
+
+                    <!-- COLLAPSIBLE CONTENT -->
+                    <div class="collapse mt-3" id="guidelinesCollapse">
+
+                        @* Teacher Guidelines *@
+                        @if (role == "Teacher")
+                        {
+                            <ul class="list-unstyled text-white-50 small">
+                                <li class="mb-2">
+                                    <i class="bi bi-qr-code me-2"></i>
+                                    Click <strong>Generate QR</strong> to start a session
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-display me-2"></i>
+                                    Show the QR code to students
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-clock me-2"></i>
+                                    QR is valid only for the active session
+                                </li>
+                            </ul>
+                        }
+
+                        @* Student Guidelines *@
+                        @if (role == "Student")
+                        {
+                            <ul class="list-unstyled text-white-50 small">
+                                <li class="mb-2">
+                                    <i class="bi bi-camera me-2"></i>
+                                    Open <strong>Scan QR</strong>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-phone me-2"></i>
+                                    Allow camera access
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle me-2"></i>
+                                    Scan confirms attendance
+                                </li>
+                            </ul>
+                        }
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+}

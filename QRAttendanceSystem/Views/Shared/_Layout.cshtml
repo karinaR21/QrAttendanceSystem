@@ -1,0 +1,113 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - QR Attendance</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    @{
+        var role = Context.Session.GetString("Role");
+    }
+
+    <!-- ================= NAVBAR (ALWAYS VISIBLE) ================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark glass shadow-lg mt-3 mx-3 px-4">
+        <a class="navbar-brand fw-bold fs-4"
+           asp-controller="Home" asp-action="Index">
+            <i class="bi bi-qr-code-scan me-2"></i>QR Attendance
+        </a>
+
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#nav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="nav">
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+
+                <!-- HOME (VISIBLE FOR ALL) -->
+                <li class="nav-item">
+                    <a class="nav-link"
+                       asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house"></i>
+                    </a>
+                </li>
+
+                @* ================= LOGGED USERS ONLY ================= *@
+                @if (!string.IsNullOrEmpty(role))
+                {
+                    @if (role == "Teacher")
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light btn-sm"
+                               asp-controller="Sessions" asp-action="Create">
+                                <i class="bi bi-plus-circle"></i> Generate
+                            </a>
+                        </li>
+                    }
+
+                    @if (role == "Student")
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light btn-sm"
+                               asp-controller="Attendance" asp-action="Scan">
+                                <i class="bi bi-camera"></i> Scan
+                            </a>
+                        </li>
+                    }
+
+                    <li class="nav-item">
+                        <span class="badge bg-info text-dark px-3 py-2">
+                            @role
+                        </span>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="btn btn-danger btn-sm"
+                           asp-controller="Auth" asp-action="Logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </li>
+                }
+
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="@(string.IsNullOrEmpty(role) ? "mt-5" : "container mt-5")">
+        <div class="@(string.IsNullOrEmpty(role) ? "" : "glass p-4 shadow-lg text-white")">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="text-center text-white-50 mt-5 pb-3">
+        © 2025 QR Attendance System
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
