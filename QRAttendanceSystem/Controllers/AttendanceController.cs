@@ -24,23 +24,31 @@ public class AttendanceController : Controller
     // Реално генериране на QR
     public IActionResult ShowQr(int sessionId)
     {
-        var session = _context.Sessions.Find(sessionId);
-        if (session == null)
-            return RedirectToAction("Create", "Sessions");
+        var token = _context.QrTokens
+            .FirstOrDefault(t => t.SessionId == sessionId);
 
-        var token = new QrToken
+        if (token == null)
         {
-            Token = Guid.NewGuid().ToString(),
-            SessionId = session.Id,
-            ExpirationTime = DateTime.Now.AddMinutes(5),
-            IsUsed = false
-        };
+            token = new QrToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                ExpirationTime = DateTime.Now.AddMinutes(5),
+                IsUsed = false,
+                SessionId = sessionId
+            };
 
-        _context.QrTokens.Add(token);
-        _context.SaveChanges();
+            _context.QrTokens.Add(token);
+            _context.SaveChanges();
+        }
+        else
+        {
+            //  REFRESH → token already exists
+            return View("QrInvalid");
+        }
 
         return View(token);
     }
+
     [HttpGet]
     public IActionResult Scan()
     {
@@ -53,7 +61,7 @@ public class AttendanceController : Controller
     }
 
 
-    // 📱 СКАНИРАНЕ ОТ ТЕЛЕФОН (Student)
+    //  СКАНИРАНЕ ОТ ТЕЛЕФОН (Student)
     [HttpPost]
     public IActionResult Register([FromBody] ScanRequest request)
     {

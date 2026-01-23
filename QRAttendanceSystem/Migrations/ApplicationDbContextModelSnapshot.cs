@@ -83,7 +83,6 @@ namespace QRAttendanceSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Token")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -91,26 +90,6 @@ namespace QRAttendanceSystem.Migrations
                     b.HasIndex("SessionId");
 
                     b.ToTable("QrTokens");
-                });
-
-            modelBuilder.Entity("QRAttendanceSystem.Models.SchoolClass", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Grade")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Section")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Classes");
                 });
 
             modelBuilder.Entity("QRAttendanceSystem.Models.Session", b =>
@@ -127,18 +106,19 @@ namespace QRAttendanceSystem.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SchoolClassId")
+                    b.Property<int>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<string>("Title")
+                    b.Property<string>("Section")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
-
-                    b.HasIndex("SchoolClassId");
 
                     b.ToTable("Sessions");
                 });
@@ -172,6 +152,9 @@ namespace QRAttendanceSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -181,6 +164,8 @@ namespace QRAttendanceSystem.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Users");
                 });
@@ -223,15 +208,16 @@ namespace QRAttendanceSystem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("QRAttendanceSystem.Models.SchoolClass", "SchoolClass")
-                        .WithMany()
-                        .HasForeignKey("SchoolClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Course");
+                });
 
-                    b.Navigation("SchoolClass");
+            modelBuilder.Entity("User", b =>
+                {
+                    b.HasOne("User", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Student", b =>

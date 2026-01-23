@@ -42,14 +42,31 @@ public class AuthController : Controller
             Role = role
         };
 
-
         user.PasswordHash = _hasher.HashPassword(user, password);
 
         _context.Users.Add(user);
-        _context.SaveChanges();
+        _context.SaveChanges(); // ⚠️ важно – за да имаме user.Id
+
+        // 🔗 AUTO LINK PARENT → STUDENT
+        if (role == "Parent")
+        {
+            // взимаме частта преди @
+            var username = email.Split('@')[0];
+
+            var child = _context.Users.FirstOrDefault(u =>
+                u.Role == "Student" &&
+                u.Email.StartsWith(username));
+
+            if (child != null)
+            {
+                child.ParentId = user.Id;
+                _context.SaveChanges();
+            }
+        }
 
         return RedirectToAction("Login");
     }
+
 
 
 

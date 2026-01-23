@@ -44,6 +44,8 @@
 
         <div class="collapse navbar-collapse" id="nav">
             <ul class="navbar-nav ms-auto align-items-center gap-2">
+                
+
 
                 <!-- HOME (VISIBLE FOR ALL) -->
                 <li class="nav-item">
@@ -64,6 +66,16 @@
                                 <i class="bi bi-plus-circle"></i> Generate
                             </a>
                         </li>
+                        @if (role == "Teacher")
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm"
+                                   asp-controller="Statistics"
+                                   asp-action="Index">
+                                    <i class="bi bi-bar-chart"></i> Statistics
+                                </a>
+                            </li>
+                        }
                     }
 
                     @if (role == "Student")
@@ -75,6 +87,17 @@
                             </a>
                         </li>
                     }
+                    @if (role == "Student")
+                    {
+                        <li class="nav-item">
+                            <a class="btn btn-outline-light btn-sm"
+                               asp-controller="Statistics"
+                               asp-action="Student">
+                                <i class="bi bi-bar-chart"></i> My Stats
+                            </a>
+                        </li>
+                    }
+
 
                     <li class="nav-item">
                         <span class="badge bg-info text-dark px-3 py-2">
@@ -86,6 +109,16 @@
                         <a class="btn btn-danger btn-sm"
                            asp-controller="Auth" asp-action="Logout">
                             <i class="bi bi-box-arrow-right"></i>
+                        </a>
+                    </li>
+                }
+                @if (role == "Parent")
+                {
+                    <li class="nav-item">
+                        <a class="btn btn-outline-light btn-sm"
+                           asp-controller="Statistics"
+                           asp-action="Parent">
+                            <i class="bi bi-bar-chart"></i> Child Stats
                         </a>
                     </li>
                 }
@@ -102,7 +135,7 @@
     </main>
 
     <footer class="text-center text-white-50 mt-5 pb-3">
-        © 2025 QR Attendance System
+        © 2026 QR Attendance System
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Statistics";
+}
+
+<h3 class="mb-4">Attendance Statistics</h3>
+
+<div class="row g-4">
+
+    <div class="col-md-6">
+        <div class="card p-4 shadow">
+            <h5>Total Sessions</h5>
+            <h2>@ViewBag.TotalSessions</h2>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card p-4 shadow">
+            <h5>Total Attendances</h5>
+            <h2>@ViewBag.TotalAttendances</h2>
+        </div>
+    </div>
+
+</div>
+
+<hr class="my-4" />
+
+<h4>Attendance by Grade</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Grade</th>
+            <th>Attendances</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.ByGrade)
+        {
+            <tr>
+                <td>@item.Grade</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h4 class="mt-4">Attendance by Section</h4>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Section</th>
+            <th>Attendances</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.BySection)
+        {
+            <tr>
+                <td>@item.Section</td>
+                <td>@item.Count</td>
+            </tr>
+        }
+    </tbody>
+</table>

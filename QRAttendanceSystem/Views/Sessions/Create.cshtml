@@ -1,4 +1,5 @@
-﻿@model QRAttendanceSystem.Models.Session
+﻿@model QRAttendanceSystem.ViewModels.CreateSessionViewModel
+
 
 @{
     ViewData["Title"] = "Create Session";
@@ -18,18 +19,45 @@
                 <div class="mb-3">
                     <label class="form-label">Course</label>
                     <select asp-for="CourseId" class="form-select">
+                        <option value="">-- Select course --</option>
                         @foreach (var course in ViewBag.Courses)
                         {
                             <option value="@course.Id">@course.Name</option>
                         }
                     </select>
+                    <span asp-validation-for="CourseId" class="text-danger"></span>
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Grade</label>
+                    <select asp-for="Grade" class="form-select">
+                        <option value="">-- Select grade --</option>
+                        @for (int i = 7; i <= 12; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Grade" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Section</label>
+                    <select asp-for="Section" class="form-select">
+                        <option value="">-- Select section --</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                    <span asp-validation-for="Section" class="text-danger"></span>
+                </div>
+
 
                 <div class="mb-4">
                     <label class="form-label">Date & Time</label>
                     <input asp-for="Date"
                            type="datetime-local"
                            class="form-control" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
                 </div>
 
                 <button type="submit"
@@ -39,7 +67,12 @@
 
             </form>
 
+
         </div>
 
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

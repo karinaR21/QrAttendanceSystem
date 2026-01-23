@@ -23,7 +23,7 @@ namespace QRAttendanceSystem.Controllers
         }
         public IActionResult Dashboard()
         {
-            string role = "Teacher"; // ????????, ?? ????????
+            string role = "Teacher"; 
 
             if (role == "Teacher")
                 return RedirectToAction("GenerateQr", "Attendance");
