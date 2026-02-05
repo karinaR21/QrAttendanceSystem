@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var role = Context.Session.GetString("Role");
+}
+
+@if (string.IsNullOrEmpty(role))
+{
+    @await Html.PartialAsync("_Landing")
+}
+else if (role == "Teacher")
+{
+    @await Html.PartialAsync("_TeacherHome")
+}
+else if (role == "Student")
+{
+    @await Html.PartialAsync("_StudentHome")
+}
+else if (role == "Parent")
+{
+    @await Html.PartialAsync("_ParentHome")
+}

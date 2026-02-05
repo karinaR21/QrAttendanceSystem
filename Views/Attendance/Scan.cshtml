@@ -1,0 +1,255 @@
+﻿@{
+    ViewData["Title"] = "Scan QR";
+}
+
+<h2 class="text-center mb-3">
+    <i class="bi bi-qr-code-scan"></i> Scan QR Code
+</h2>
+
+<p class="text-center text-muted mb-3">
+    Point your camera at the QR code
+</p>
+
+<div class="scanner-wrapper">
+    <div id="reader"></div>
+</div>
+
+<div id="successOverlay" class="success-overlay d-none">
+    <div class="success-box">
+        <i class="bi bi-check-circle-fill"></i>
+        <h2>Attendance recorded</h2>
+        <p id="successMessage">Success</p>
+    </div>
+</div>
+<div id="errorOverlay" class="error-overlay d-none">
+    <div class="error-box">
+        <i class="bi bi-x-circle-fill"></i>
+        <h2>Already scanned</h2>
+        <p>Your attendance has already been recorded</p>
+    </div>
+</div>
+
+<p id="result" class="text-center fw-bold mt-3 scanning">
+    Scanning...
+</p>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    let scanned = false;
+    let scanner;
+
+    Html5Qrcode.getCameras().then(cameras => {
+
+        if (!cameras || cameras.length === 0) {
+            showError("No camera found on this device.");
+            return;
+        }
+
+        let backCamera = cameras.find(c =>
+            c.label.toLowerCase().includes("back") ||
+            c.label.toLowerCase().includes("rear")
+        );
+
+    const cameraId = backCamera
+        ? backCamera.id
+        : cameras[cameras.length - 1].id;
+
+
+        scanner = new Html5Qrcode("reader");
+
+        scanner.start(
+            cameraId,
+            { fps: 10, qrbox: 250 },
+            qrText => {
+
+                if (scanned) return;
+                scanned = true;
+
+                   fetch('/Attendance/Register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: qrText })
+    })
+    .then(async r => {
+        const text = await r.text();
+
+        scanner.stop();
+
+        if (r.ok) {
+            showSuccessOverlay(text);
+        } else if (text.includes("already")) {
+            showErrorOverlay("Already scanned", "Your attendance has already been recorded");
+        } else {
+            showErrorOverlay("Error", text);
+        }
+    })
+    .catch(() => {
+        scanned = false;
+        showErrorOverlay("Error", "Scan failed");
+    });
+
+            }
+        ).catch(() => {
+            showError("Unable to start camera.");
+        });
+
+    }).catch(() => {
+        showError("Camera permission denied.");
+    });
+
+    function showError(message) {
+        const result = document.getElementById("result");
+        result.innerText = message;
+        result.className = "text-danger fw-bold text-center";
+    }
+
+    function showSuccessOverlay(message) {
+        document.getElementById("successMessage").innerText = message;
+        document.getElementById("successOverlay").classList.remove("d-none");
+    }
+        function showErrorOverlay(title, message) {
+        document.querySelector("#errorOverlay h2").innerText = title;
+        document.querySelector("#errorOverlay p").innerText = message;
+        document.getElementById("errorOverlay").classList.remove("d-none");
+    }
+
+</script>
+
+<style>
+    .scanner-wrapper {
+        width: 380px;
+        height: 380px;
+        margin: auto;
+        border-radius: 20px;
+        padding: 10px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 0 30px rgba(0, 255, 140, 0.5);
+        animation: pulse 2s infinite;
+    }
+
+    #reader {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .scanning {
+        color: #28a745;
+        animation: blink 1.2s infinite;
+    }
+
+    @@keyframes pulse {
+        0% {
+            box-shadow: 0 0 15px rgba(0,255,140,.4);
+        }
+
+        50% {
+            box-shadow: 0 0 35px rgba(0,255,140,.9);
+        }
+
+        100% {
+            box-shadow: 0 0 15px rgba(0,255,140,.4);
+        }
+    }
+
+    @@keyframes blink {
+        0% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: .4;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .success-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .success-box {
+        background: linear-gradient(145deg, #1e3c32, #1a2f28);
+        border-radius: 25px;
+        padding: 40px 35px;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(0, 255, 140, 0.9);
+        animation: popIn 0.4s ease-out;
+        color: #d4ffe9;
+    }
+
+        .success-box i {
+            font-size: 4rem;
+            color: #2cff9d;
+            margin-bottom: 15px;
+        }
+
+        .success-box h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .success-box p {
+            opacity: 0.85;
+        }
+
+    @@keyframes popIn {
+        0% {
+            transform: scale(0.7);
+            opacity: 0;
+        }
+
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .error-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .error-box {
+        background: linear-gradient(145deg, #3b1e1e, #2a1414);
+        border-radius: 25px;
+        padding: 40px 35px;
+        text-align: center;
+        box-shadow: 0 0 50px rgba(255, 60, 60, 0.9);
+        animation: popIn 0.4s ease-out;
+        color: #ffd6d6;
+    }
+
+        .error-box i {
+            font-size: 4rem;
+            color: #ff4d4d;
+            margin-bottom: 15px;
+        }
+
+        .error-box h2 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .error-box p {
+            opacity: 0.85;
+        }
+
+</style>

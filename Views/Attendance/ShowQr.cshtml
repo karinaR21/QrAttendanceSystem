@@ -1,0 +1,124 @@
+﻿@model QRAttendanceSystem.Models.QrToken
+
+@{
+    ViewData["Title"] = "Attendance QR";
+}
+
+<div class="text-center mt-4">
+    <h2><i class="bi bi-qr-code"></i> Attendance QR</h2>
+
+    <div class="mt-4">
+        <img src="@Url.Action("Generate", "Qr", new { sessionId = Model.SessionId })"
+             class="img-fluid"
+             style="max-width:280px;" />
+    </div>
+
+    <p id="timer" class="mt-3 fw-bold text-success"></p>
+</div>
+
+<hr class="my-4" />
+
+<h5 class="text-center mb-3">
+    <i class="bi bi-people-fill"></i> Live Attendance
+</h5>
+
+<ul id="liveList" class="list-group mx-auto" style="max-width:420px;">
+    <li class="list-group-item text-muted text-center">
+        Waiting for scans...
+    </li>
+</ul>
+
+<script>
+
+    const startTime = new Date("@Model.Session.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")").getTime();
+    const endTime = new Date("@Model.Session.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")").getTime();
+    const sessionId = @Model.SessionId;
+
+    function updateTimer() {
+
+        const now = new Date().getTime();
+
+        // 🟡 Още не е започнало
+        if (now < startTime) {
+
+            const diff = startTime - now;
+
+            const minutes = Math.floor(diff / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+
+            document.getElementById("timer").innerText =
+                `Session starts in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            document.getElementById("timer").className =
+                "mt-3 fw-bold text-warning";
+
+            return;
+        }
+
+        // 🔴 Свършило е
+        if (now >= endTime) {
+
+            document.getElementById("timer").innerText = "Session ended";
+            document.getElementById("timer").className =
+                "mt-3 fw-bold text-danger";
+
+            return;
+        }
+
+        // 🟢 Часът тече (45 мин)
+        const diff = endTime - now;
+
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById("timer").innerText =
+            `Time left: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+        document.getElementById("timer").className =
+            "mt-3 fw-bold text-success";
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+
+    // 📋 LIVE LIST
+    async function loadLiveList() {
+
+        const res = await fetch(`/Attendance/LiveList?sessionId=${sessionId}`);
+        const data = await res.json();
+
+        const ul = document.getElementById("liveList");
+        ul.innerHTML = "";
+
+        if (data.length === 0) {
+            ul.innerHTML = `
+                <li class="list-group-item text-muted text-center">
+                    Waiting for scans...
+                </li>`;
+            return;
+        }
+
+        data.forEach(item => {
+
+            const color =
+                item.status === "Present" ? "success" :
+                item.status === "Late" ? "warning" : "secondary";
+
+            ul.innerHTML += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${item.student}</strong><br/>
+                        <small class="text-muted">${item.time}</small>
+                    </div>
+                    <span class="badge bg-${color}">
+                        ${item.status}
+                    </span>
+                </li>`;
+        });
+    }
+
+    loadLiveList();
+    setInterval(loadLiveList, 5000);
+
+</script>

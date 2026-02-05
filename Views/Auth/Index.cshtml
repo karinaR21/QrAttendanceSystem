@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Authentication";
+}
+
+<div class="landing position-relative">
+
+    <!-- BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container">
+        <div class="row min-vh-75 align-items-center justify-content-center">
+
+            <!-- AUTH CARD -->
+            <div class="col-md-8 col-lg-6">
+
+                <div class="glass p-5 text-center slide-in">
+
+                    <!-- ICON -->
+                    <div class="mb-3">
+                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                             style="width:72px;height:72px;background:rgba(255,255,255,.15)">
+                            <i class="bi bi-shield-lock fs-2"></i>
+                        </div>
+                    </div>
+
+                    <h2 class="fw-bold mb-2">
+                        Access QR Attendance
+                    </h2>
+
+                    <p class="text-white-50 mb-4">
+                        Login or create an account to continue
+                    </p>
+
+                    <!-- ACTION BUTTONS -->
+                    <div class="row g-3 mt-3">
+
+                        <div class="col-md-6">
+                            <a asp-action="Login"
+                               class="btn btn-primary btn-lg w-100">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Login
+                            </a>
+                        </div>
+
+                        <div class="col-md-6">
+                            <a asp-action="Register"
+                               class="btn btn-outline-light btn-lg w-100">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Register
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <!-- ROLES -->
+                    <div class="d-flex justify-content-center gap-4 mt-4 text-white-50 small">
+                        <span><i class="bi bi-mortarboard"></i> Student</span>
+                        <span><i class="bi bi-person-badge"></i> Teacher</span>
+                        <span><i class="bi bi-person-heart"></i> Parent</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

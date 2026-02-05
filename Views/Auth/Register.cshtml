@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="landing position-relative">
+
+    <!-- BLOBS -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="container">
+        <div class="row min-vh-75 align-items-center justify-content-center">
+
+            <div class="col-md-8 col-lg-5">
+
+                <div class="glass p-5 slide-in">
+
+                    <!-- HEADER -->
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3"
+                             style="width:72px;height:72px;background:rgba(255,255,255,.15)">
+                            <i class="bi bi-person-plus fs-2"></i>
+                        </div>
+
+                        <h3 class="fw-bold">Create Account</h3>
+                        <p class="text-white-50 small">
+                            Join the QR Attendance system
+                        </p>
+                    </div>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger text-center">
+                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    <!-- FORM -->
+                    <form method="post">
+
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Full name</label>
+                            <input name="fullName"
+                                   class="form-control"
+                                   
+                                   required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label text-white-50">Email</label>
+                            <input name="email"
+                                   type="email"
+                                   class="form-control"
+                                   placeholder="name@student.school.bg"
+                                   required />
+                            <small class="text-white-50">
+                                Role is assigned automatically by email domain
+                            </small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label text-white-50">Password</label>
+                            <div class="input-group">
+                                <input id="password"
+                                       name="password"
+                                       type="password"
+                                       class="form-control"
+                                       required />
+                                <span class="input-group-text"
+                                      style="cursor:pointer"
+                                      onclick="togglePassword()">
+                                    <i id="eyeIcon" class="bi bi-eye"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-success btn-lg w-100">
+                            Create Account
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <a asp-action="Index"
+                               class="text-white-50 text-decoration-none small">
+                                ← Back to authentication
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            const pass = document.getElementById("password");
+            const icon = document.getElementById("eyeIcon");
+
+            if (pass.type === "password") {
+                pass.type = "text";
+                icon.classList.replace("bi-eye", "bi-eye-slash");
+            } else {
+                pass.type = "password";
+                icon.classList.replace("bi-eye-slash", "bi-eye");
+            }
+        }
+    </script>
+}

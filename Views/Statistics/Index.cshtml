@@ -1,0 +1,208 @@
+﻿@{
+    ViewData["Title"] = "Statistics";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container my-5">
+
+    <h2 class="fw-bold mb-4 text-success">
+        <i class="bi bi-activity"></i> Attendance Statistics
+    </h2>
+
+    <!-- STATS -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="stat-tile">
+                <span>Total Sessions</span>
+                <h1 class="counter" data-value="@ViewBag.TotalSessions">0</h1>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="stat-tile highlight">
+                <span>Total Attendances</span>
+                <h1 class="counter" data-value="@ViewBag.TotalAttendances">0</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABLES -->
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="soft-card">
+                <h5 class="mb-3 text-success">By Grade</h5>
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        @foreach (var item in ViewBag.ByGrade)
+                        {
+                            <tr>
+                                <td> @item.Grade</td>
+                                <td class="text-end fw-bold">@item.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="soft-card">
+                <h5 class="mb-3 text-success">By Section</h5>
+                <table class="table table-hover mb-0">
+                    <tbody>
+                        @foreach (var item in ViewBag.BySection)
+                        {
+                            <tr>
+                                <td> @item.Section</td>
+                                <td class="text-end fw-bold">@item.Count</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="soft-card mt-5 text-center">
+        <h5 class="mb-3 text-success">Attendance Overview</h5>
+
+        <div class="chart-wrap">
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-tile {
+        background: #ffffff;
+        border-radius: 22px;
+        padding: 34px;
+        box-shadow: 0 12px 30px rgba(0,0,0,.1);
+        transition: all .35s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .stat-tile::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(40,167,69,.08), transparent);
+            transform: translateX(-100%);
+            transition: transform .6s ease;
+        }
+
+        .stat-tile:hover::after {
+            transform: translateX(100%);
+        }
+
+        .stat-tile:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 25px 50px rgba(0,0,0,.18);
+        }
+
+        .stat-tile span {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .1em;
+            color: #6c757d;
+        }
+
+        .stat-tile h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-top: 12px;
+            color : black;
+        }
+
+        .stat-tile.highlight {
+            background: linear-gradient(135deg, #28a745, #2ecc71);
+            color: white;
+        }
+
+            .stat-tile.highlight span,
+            .stat-tile.highlight h1 {
+                color: white;
+            }
+
+    .soft-card {
+        background: #ffffff;
+        border-radius: 26px;
+        padding: 28px;
+        box-shadow: 0 15px 35px rgba(0,0,0,.12);
+        animation: lift .6s ease;
+    }
+
+    @@keyframes lift {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .chart-wrap {
+        max-width: 260px;
+        margin: auto;
+        padding: 10px;
+        filter: drop-shadow(0 0 18px rgba(40,167,69,.35));
+    }
+</style>
+
+<script>
+    // COUNTERS
+    document.querySelectorAll('.counter').forEach(el => {
+        const target = +el.dataset.value;
+        let current = 0;
+        const step = Math.max(1, target / 45);
+
+        const tick = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                el.innerText = target;
+                clearInterval(tick);
+            } else {
+                el.innerText = Math.floor(current);
+            }
+        }, 20);
+    });
+
+    // CHART
+    const data = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(ViewBag.ByStatus)
+        );
+
+    new Chart(document.getElementById('statusChart'), {
+        type: 'doughnut',
+        data: {
+            labels: data.map(x => x.Status),
+            datasets: [{
+                data: data.map(x => x.Count),
+                backgroundColor: [
+                    '#28a745', // Present
+                    '#ffc107', // Late
+                    '#dc3545'  // Absent
+                ],
+                hoverOffset: 12
+            }]
+        },
+        options: {
+            cutout: '72%',
+            animation: {
+                duration: 1400,
+                easing: 'easeOutCubic'
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+</script>

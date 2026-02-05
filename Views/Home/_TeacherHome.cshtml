@@ -1,0 +1,71 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var email = Context.Session.GetString("Email");
+}
+
+<div class="container my-5 text-white">
+
+    <!-- HEADER -->
+    <div class="mb-5">
+        <h1 class="fw-bold mb-2">Welcome, Teacher 👩‍🏫</h1>
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge rounded-pill bg-light text-dark px-3 py-2">
+                <i class="bi bi-envelope me-1"></i>
+                @email
+            </span>
+        </div>
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row g-4 justify-content-center">
+
+        <!-- GENERATE QR -->
+        <div class="col-lg-5 col-md-6">
+            <a asp-controller="Sessions" asp-action="Create"
+               class="text-decoration-none">
+
+                <div class="home-card glass p-5 hover-card text-center h-100">
+
+                    <div class="icon-circle bg-primary-gradient mb-4">
+                        <i class="bi bi-qr-code"></i>
+                    </div>
+
+                    <h4 class="fw-bold mb-2 text-white">
+                        Generate QR Code
+                    </h4>
+
+                    <p class="text-white-50 mb-0">
+                        Start a lesson and generate a live QR code
+                        for student attendance.
+                    </p>
+                </div>
+
+            </a>
+        </div>
+
+        <!-- STATISTICS -->
+        <div class="col-lg-5 col-md-6">
+            <a asp-controller="Statistics" asp-action="Index"
+               class="text-decoration-none">
+
+                <div class="home-card glass p-5 hover-card text-center h-100">
+
+                    <div class="icon-circle bg-success-gradient mb-4">
+                        <i class="bi bi-bar-chart"></i>
+                    </div>
+
+                    <h4 class="fw-bold mb-2 text-white">
+                        Attendance Statistics
+                    </h4>
+
+                    <p class="text-white-50 mb-0">
+                        View attendance data, trends and insights
+                        across all sessions.
+                    </p>
+                </div>
+
+            </a>
+        </div>
+
+    </div>
+</div>

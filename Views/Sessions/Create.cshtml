@@ -1,0 +1,85 @@
+﻿@model QRAttendanceSystem.ViewModels.CreateSessionViewModel
+@{
+    ViewData["Title"] = "Create Session";
+}
+
+<div class="d-flex justify-content-center mt-5">
+    <div class="glass p-4 shadow-lg"
+         style="max-width:420px; width:100%;">
+
+        <h4 class="text-center mb-4">
+            <i class="bi bi-calendar-plus"></i> Create Session
+        </h4>
+
+        <form method="post">
+
+            <!-- COURSE -->
+            <div class="mb-3">
+                <label class="form-label">Course</label>
+                <select asp-for="CourseId"
+                        asp-items="Model.Courses"
+                        class="form-select">
+                    <option value="">-- Select course --</option>
+                </select>
+                <span asp-validation-for="CourseId" class="text-danger small"></span>
+            </div>
+
+            <!-- DATE -->
+            <div class="mb-3">
+                <label class="form-label">Session Date</label>
+                <input asp-for="SessionDate"
+                       type="date"
+                       class="form-control" />
+                <span asp-validation-for="SessionDate" class="text-danger small"></span>
+            </div>
+
+            <!-- START TIME -->
+            <div class="mb-3">
+                <label class="form-label">Start Time</label>
+                <input asp-for="StartTime"
+                       type="time"
+                       class="form-control" />
+                <span asp-validation-for="StartTime" class="text-danger small"></span>
+            </div>
+
+            <!-- GRADE -->
+            <div class="mb-3">
+                <label class="form-label">Grade</label>
+                <select asp-for="Grade" class="form-select">
+                    <option value="">-- Select grade --</option>
+                    @for (int g = 7; g <= 12; g++)
+                    {
+                        <option value="@g">@g</option>
+                    }
+                </select>
+                <span asp-validation-for="Grade" class="text-danger small"></span>
+            </div>
+
+            <!-- SECTION -->
+            <div class="mb-4">
+                <label class="form-label">Section</label>
+                <select asp-for="Section" class="form-select">
+                    <option value="">-- Select section --</option>
+                    <option>А</option>
+                    <option>Б</option>
+                    <option>В</option>
+                    <option>Г</option>
+                </select>
+                <span asp-validation-for="Section" class="text-danger small"></span>
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="d-grid">
+                <button type="submit"
+                        class="btn btn-success btn-lg">
+                    <i class="bi bi-qr-code"></i> Generate QR
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
