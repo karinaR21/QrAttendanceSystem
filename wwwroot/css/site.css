@@ -524,3 +524,6 @@ body {
 .bg-primary-gradient {
     background: linear-gradient(135deg, #1677ff, #0d6efd);
 }
+.glow-qr:hover {
+    transform: scale(1.03);
+}

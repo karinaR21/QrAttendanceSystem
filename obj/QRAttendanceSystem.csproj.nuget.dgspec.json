@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\karka\\Documents\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj": {}
+    "C:\\Users\\karka\\Desktop\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\karka\\Documents\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj": {
+    "C:\\Users\\karka\\Desktop\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\karka\\Documents\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj",
+        "projectUniqueName": "C:\\Users\\karka\\Desktop\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj",
         "projectName": "QRAttendanceSystem",
-        "projectPath": "C:\\Users\\karka\\Documents\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj",
+        "projectPath": "C:\\Users\\karka\\Desktop\\QRAttendanceSystem\\QRAttendanceSystem\\QRAttendanceSystem.csproj",
         "packagesPath": "C:\\Users\\karka\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\karka\\Documents\\QRAttendanceSystem\\QRAttendanceSystem\\obj\\",
+        "outputPath": "C:\\Users\\karka\\Desktop\\QRAttendanceSystem\\QRAttendanceSystem\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
