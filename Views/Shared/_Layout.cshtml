@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/navbar.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+
 
     <style>
         body {
@@ -47,36 +52,37 @@
         </button>
 
         <div class="collapse navbar-collapse" id="nav">
-            <ul class="navbar-nav ms-auto align-items-center gap-2">
+            <ul class="navbar-nav ms-auto align-items-center gap-2 nav-actions">
 
-                <!-- HOME (FOR ALL) -->
+                <!-- HOME -->
                 <li class="nav-item">
-                    <a class="nav-link"
+                    <a class="nav-icon"
                        asp-controller="Home"
                        asp-action="Index"
                        title="Home">
-                        <i class="bi bi-house fs-5"></i>
+                        <i class="bi bi-house"></i>
                     </a>
                 </li>
 
-                @* ===== LOGGED USERS ===== *@
                 @if (!string.IsNullOrEmpty(role))
                 {
                     @if (role == "Teacher")
                     {
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm"
+                            <a class="nav-btn"
                                asp-controller="Sessions"
                                asp-action="Create">
-                                <i class="bi bi-plus-circle"></i> Generate
+                                <i class="bi bi-plus-circle"></i>
+                                Generate
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm"
+                            <a class="nav-btn"
                                asp-controller="Statistics"
                                asp-action="Index">
-                                <i class="bi bi-bar-chart"></i> Statistics
+                                <i class="bi bi-bar-chart"></i>
+                                Statistics
                             </a>
                         </li>
                     }
@@ -84,18 +90,20 @@
                     @if (role == "Student")
                     {
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm"
+                            <a class="nav-btn"
                                asp-controller="Attendance"
                                asp-action="Scan">
-                                <i class="bi bi-camera"></i> Scan
+                                <i class="bi bi-camera"></i>
+                                Scan
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm"
+                            <a class="nav-btn"
                                asp-controller="Statistics"
                                asp-action="Student">
-                                <i class="bi bi-bar-chart"></i> My Stats
+                                <i class="bi bi-bar-chart"></i>
+                                My Stats
                             </a>
                         </li>
                     }
@@ -103,30 +111,35 @@
                     @if (role == "Parent")
                     {
                         <li class="nav-item">
-                            <a class="btn btn-outline-light btn-sm"
+                            <a class="nav-btn"
                                asp-controller="Statistics"
                                asp-action="Parent">
-                                <i class="bi bi-bar-chart"></i> Child Stats
+                                <i class="bi bi-bar-chart"></i>
+                                Child Stats
                             </a>
                         </li>
                     }
 
+                    <!-- ROLE -->
                     <li class="nav-item">
-                        <span class="badge bg-info text-dark px-3 py-2">
+                        <span class="role-pill">
                             @role
                         </span>
                     </li>
 
+                    <!-- LOGOUT -->
                     <li class="nav-item">
-                        <a class="btn btn-danger btn-sm"
+                        <a class="logout-btn"
                            asp-controller="Auth"
-                           asp-action="Logout">
+                           asp-action="Logout"
+                           title="Logout">
                             <i class="bi bi-box-arrow-right"></i>
                         </a>
                     </li>
                 }
 
             </ul>
+
         </div>
     </nav>
 
@@ -148,4 +161,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
+
 </html>

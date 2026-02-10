@@ -6,12 +6,12 @@
 
 <style>
 
-    /* 🔥 Hidden class (super reliable) */
+    
     .hidden {
         display: none !important;
     }
 
-    /* Animated Hourglass */
+    
     .hourglass-icon {
         font-size: 70px;
         animation: spinHourglass 2.5s linear infinite;
@@ -31,7 +31,7 @@
         }
     }
 
-    /* Placeholder */
+   
     .qr-placeholder {
         width: 280px;
         height: 280px;
@@ -40,7 +40,7 @@
         color: #6c757d;
     }
 
-    /* 🔥 Glow QR */
+  
     .glow-qr {
         border-radius: 20px;
         animation: qrGlow 1.8s ease-in-out infinite alternate;
@@ -112,7 +112,7 @@
         const qr = document.getElementById("qrCode");
         const placeholder = document.getElementById("qrPlaceholder");
 
-        // 🟡 NOT STARTED
+        //  NOT STARTED
         if (now < startTime) {
 
             qr.classList.add("hidden");
@@ -136,7 +136,7 @@
             return;
         }
 
-        // 🔴 ENDED
+        //  ENDED
         if (now >= endTime) {
 
             qr.classList.add("hidden");
@@ -152,7 +152,7 @@
             return;
         }
 
-        // 🟢 ACTIVE SESSION
+        //  ACTIVE SESSION
 
         placeholder.classList.add("hidden");
 

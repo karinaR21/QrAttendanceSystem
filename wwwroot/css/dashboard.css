@@ -1,0 +1,180 @@
+﻿/* ================= PAGE ================= */
+
+.teacher-stats-page {
+    min-height: 100vh;
+    padding: 60px 0;
+    background: radial-gradient(circle at 15% 20%, rgba(139,92,246,.25), transparent 40%), radial-gradient(circle at 85% 75%, rgba(34,211,238,.18), transparent 40%), linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+}
+
+
+/* ================= STATS CARDS ================= */
+
+.stats-card {
+    border-radius: 24px;
+    padding: 26px;
+    background: rgba(255,255,255,.10);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 55px rgba(0,0,0,.35);
+    color: white;
+    transition: .25s;
+}
+
+    .stats-card:hover {
+        transform: translateY(-6px);
+    }
+
+    .stats-card span {
+        opacity: .75;
+        font-size: .85rem;
+    }
+
+    .stats-card h1 {
+        font-size: 2.7rem;
+        font-weight: 600;
+    }
+
+    /* highlight */
+    .stats-card.highlight {
+        background: linear-gradient(135deg,#6366f1,#22d3ee);
+    }
+
+
+/* ================= GLASS CARD ================= */
+
+.glass-card {
+    border-radius: 26px;
+    padding: 26px;
+    background: rgba(255,255,255,.07);
+    backdrop-filter: blur(20px);
+    color: #e6edf3;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+}
+
+
+    /* ================= REMOVE BOOTSTRAP WHITE ================= */
+
+    .glass-card table,
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+        background: transparent !important;
+    }
+
+
+        /* rows */
+        .table tr {
+            border-bottom: 1px solid rgba(255,255,255,.08);
+            transition: .2s;
+        }
+
+            .table tr:hover {
+                background: rgba(255,255,255,.05);
+            }
+
+        .table td {
+            padding: 14px 6px;
+            font-weight: 500;
+            color: #e6edf3;
+        }
+
+
+/* ================= CHART ================= */
+
+.chart-wrap {
+    height: 280px;
+    position: relative;
+}
+
+
+/* ================= COURSE / ACTIVITY ================= */
+
+.course-item-modern,
+.activity-item-modern {
+    background: rgba(255,255,255,.05);
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    transition: .2s;
+}
+
+    .course-item-modern:hover,
+    .activity-item-modern:hover {
+        background: rgba(255,255,255,.08);
+    }
+
+
+/* icon */
+.course-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(99,102,241,.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* badge */
+.course-count {
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+.email-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(99,102,241,.45);
+}
+.lesson-count {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    font-weight: 600;
+}
+.course-item-modern {
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: rgba(255,255,255,.06);
+    transition: .2s;
+}
+
+    .course-item-modern:hover {
+        background: rgba(255,255,255,.10);
+    }
+
+.course-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.course-name {
+    font-weight: 500;
+    font-size: .95rem;
+}
+
+.course-count {
+    min-width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: .9rem;
+    color: white;
+}

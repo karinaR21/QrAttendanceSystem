@@ -78,19 +78,39 @@ public class StatisticsController : Controller
         if (userId == null)
             return Unauthorized();
 
-        // 🔥 ВЗИМАМЕ УЧЕНИКА
         var user = _context.Users.FirstOrDefault(u => u.Id == userId);
         if (user == null)
             return NotFound();
 
-        // 🔥 EMAIL ЗА HEADER
         ViewBag.Email = user.Email;
 
-        ViewBag.TotalAttendances = _context.Attendances
-            .Count(a => a.UserId == userId);
+       
 
-        ViewBag.ByStatus = _context.Attendances
-            .Where(a => a.UserId == userId)
+        var totalSessions = _context.Attendances
+    .Where(a => a.UserId == userId)
+    .Select(a => a.SessionId)
+    .Distinct()
+    .Count();
+
+        
+
+        var attendancesQuery = _context.Attendances
+            .Where(a => a.UserId == userId);
+
+        var totalAttendances = attendancesQuery.Count();
+
+
+        double attendanceRate = totalSessions == 0
+            ? 0
+            : Math.Round((double)totalAttendances * 100 / totalSessions, 0);
+
+       
+
+        ViewBag.TotalSessions = totalSessions;
+        ViewBag.TotalAttendances = totalAttendances;
+        ViewBag.AttendanceRate = attendanceRate;
+
+        ViewBag.ByStatus = attendancesQuery
             .GroupBy(a => a.Status)
             .Select(g => new
             {
@@ -99,8 +119,10 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        ViewBag.ByCourse = _context.Attendances
-            .Where(a => a.UserId == userId)
+
+        ViewBag.ByCourse = attendancesQuery
+            .Include(a => a.Session)
+            .ThenInclude(s => s.Course)
             .GroupBy(a => a.Session.Course.Name)
             .Select(g => new
             {
@@ -109,8 +131,11 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        ViewBag.Recent = _context.Attendances
-            .Where(a => a.UserId == userId)
+        
+
+        ViewBag.Recent = attendancesQuery
+            .Include(a => a.Session)
+            .ThenInclude(s => s.Course)
             .OrderByDescending(a => a.TimeRecorded)
             .Take(5)
             .Select(a => new
@@ -123,6 +148,7 @@ public class StatisticsController : Controller
 
         return View();
     }
+
 
     // ===== PARENT =====
     public IActionResult Parent()
