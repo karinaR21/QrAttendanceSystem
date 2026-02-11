@@ -4,136 +4,219 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="teacher-stats-page">
+<div class="app-dark-gradient">
 
-    <div class="container">
+    <div class="app-container">
 
         <!-- HEADER -->
         <div class="text-center text-white mb-5">
-            <div class="stats-icon mb-3">
-                <i class="bi bi-bar-chart-line"></i>
-            </div>
-
             <h2 class="fw-semibold mb-1">Attendance Statistics</h2>
-            <p class="opacity-75 mb-0">
-                Overview of sessions and student presence
-            </p>
+            <p class="opacity-75">Overview of sessions and student presence</p>
+        </div>
+        <!-- FILTER BAR -->
+        <div class="glass glass-card p-3 mb-5">
+
+            <form method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Grade -->
+                    <div class="col-md-3">
+                        <label class="text-white-50 small">Grade</label>
+                        <select name="grade" class="form-select">
+                            <option value="">All</option>
+                            @for (int i = 7; i <= 12; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                    </div>
+
+                    <!-- Section -->
+                    <div class="col-md-3">
+                        <label class="text-white-50 small">Section</label>
+                        <select name="section" class="form-select">
+                            <option value="">All</option>
+                            <option>А</option>
+                            <option>Б</option>
+                            <option>В</option>
+                            <option>Г</option>
+                        </select>
+                    </div>
+
+                    <!-- From -->
+                    <div class="col-md-2">
+                        <label class="text-white-50 small">From</label>
+                        <input type="date" name="from" class="form-control" />
+                    </div>
+
+                    <!-- To -->
+                    <div class="col-md-2">
+                        <label class="text-white-50 small">To</label>
+                        <input type="date" name="to" class="form-control" />
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-soft w-100">
+                            Apply
+                        </button>
+                    </div>
+
+                </div>
+
+            </form>
+
         </div>
 
         <!-- STAT CARDS -->
-        <div class="row g-4 mb-4">
+        <div class="row g-4 mb-5">
 
             <div class="col-md-6">
-                <div class="stats-card highlight">
+                <div class="stats-card glass highlight text-center">
                     <span>Total Sessions</span>
-                    <h1 class="counter">@ViewBag.TotalSessions</h1>
+                    <h1>@ViewBag.TotalSessions</h1>
                 </div>
             </div>
 
-
             <div class="col-md-6">
-                <div class="stats-card highlight">
+                <div class="stats-card glass highlight text-center">
                     <span>Total Attendances</span>
-                    <h1 class="counter">@ViewBag.TotalAttendances</h1>
+                    <h1>@ViewBag.TotalAttendances</h1>
                 </div>
             </div>
 
         </div>
 
         <!-- TABLES -->
-        <div class="row g-4">
+        <div class="row g-4 mb-5">
 
             <div class="col-lg-6">
-                <div class="glass-card">
-                    <h5 class="mb-3">By Grade</h5>
+                <div class="glass glass-card p-4 h-100">
 
-                    <table class="table table-borderless mb-0">
-                        <tbody>
-                            @foreach (var item in ViewBag.ByGrade)
-                            {
-                                <tr>
-                                    <td>@item.Grade</td>
-                                    <td class="text-end fw-semibold">
-                                        @item.Count
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <h5 class="mb-4 fw-semibold">
+                        By Grade
+                    </h5>
+
+                    @foreach (var item in ViewBag.ByGrade)
+                    {
+                        <div class="course-item-modern d-flex justify-content-between align-items-center">
+
+                            <div class="course-left">
+                                <div class="course-icon">
+                                    <i class="bi bi-mortarboard"></i>
+                                </div>
+
+                                <span class="course-name">
+                                    Grade @item.Grade
+                                </span>
+                            </div>
+
+                            <span class="course-count">
+                                @item.Count
+                            </span>
+
+                        </div>
+                    }
+
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <div class="glass-card">
-                    <h5 class="mb-3">By Section</h5>
+                <div class="glass glass-card p-4 h-100">
 
-                    <table class="table table-borderless mb-0">
-                        <tbody>
-                            @foreach (var item in ViewBag.BySection)
-                            {
-                                <tr>
-                                    <td>@item.Section</td>
-                                    <td class="text-end fw-semibold">
-                                        @item.Count
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                    <h5 class="mb-4 fw-semibold">
+                        By Section
+                    </h5>
+
+                    @foreach (var item in ViewBag.BySection)
+                    {
+                        <div class="course-item-modern d-flex justify-content-between align-items-center">
+
+                            <div class="course-left">
+                                <div class="course-icon">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+
+                                <span class="course-name">
+                                    Section @item.Section
+                                </span>
+                            </div>
+
+                            <span class="course-count">
+                                @item.Count
+                            </span>
+
+                        </div>
+                    }
+
                 </div>
             </div>
+
 
         </div>
-
         <!-- CHART -->
-        <div class="glass-card mt-4 text-center">
-            <h5 class="mb-3">Attendance Overview</h5>
+        <div class="glass glass-card dashboard-section p-4 mx-auto" style="max-width:900px;">
 
-            <div class="chart-wrap">
+            <h5 class="mb-4 text-center fw-semibold">
+                Attendance Overview
+            </h5>
+
+            <div style="position:relative; height:260px; max-width:500px; margin:auto;">
                 <canvas id="statusChart"></canvas>
             </div>
+
         </div>
-
     </div>
-
 </div>
 
 <script>
+
     const chartData = @Html.Raw(
                 System.Text.Json.JsonSerializer.Serialize(ViewBag.ByStatus)
         );
 
     const ctx = document.getElementById('statusChart');
 
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: chartData.map(x => x.Status),
-            datasets: [{
-                data: chartData.map(x => x.Count),
-                backgroundColor: [
-                    '#22c55e', // Present
-                    '#facc15', // Late
-                    '#ef4444'  // Absent
-                ],
-                hoverOffset: 10
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        color: '#ffffff',
-                        font: {
-                            size: 13
+    if (chartData && chartData.length > 0) {
+
+        new Chart(ctx, {
+            type: 'doughnut',
+
+            data: {
+                labels: chartData.map(x => x.Status),
+
+                datasets: [{
+                    data: chartData.map(x => x.Count),
+
+                    backgroundColor: [
+                        '#22c55e',  // Present
+                        '#facc15',  // Late
+                        '#ef4444'   // Absent
+                    ],
+
+                    borderWidth: 0,
+                    hoverOffset: 12
+                }]
+            },
+
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '72%',
+
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#e6edf3',
+                            font: {
+                                size: 13
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
+
 </script>

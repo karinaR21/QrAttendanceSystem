@@ -242,8 +242,8 @@ C:\Users\karka\Documents\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0
 C:\Users\karka\Documents\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\ref\QRAttendanceSystem.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\appsettings.json
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.staticwebassets.endpoints.json
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.staticwebassets.runtime.json
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.staticwebassets.endpoints.json
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.exe
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.deps.json
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\QRAttendanceSystem.runtimeconfig.json
@@ -406,6 +406,10 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\r
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\scopedcss\bundle\QRAttendanceSystem.styles.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\scopedcss\projectbundle\QRAttendanceSystem.bundle.scp.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\h896bi9t7k-{0}-zs7dtww9tr-zs7dtww9tr.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\vau29ipb27-{0}-6rwbgsoum7-6rwbgsoum7.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\wfhvn4fk5e-{0}-8btgc4iuin-8btgc4iuin.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\l9jrymaahw-{0}-gqu2t2iah1-gqu2t2iah1.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\c2imtv31od-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\td8cnewwyi-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\9g7j3vsup2-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -481,8 +485,4 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\r
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.pdb
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.genruntimeconfig.cache
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\ref\QRAttendanceSystem.dll
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\h896bi9t7k-{0}-zs7dtww9tr-zs7dtww9tr.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\wfhvn4fk5e-{0}-8btgc4iuin-8btgc4iuin.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\l9jrymaahw-{0}-gqu2t2iah1-gqu2t2iah1.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\vau29ipb27-{0}-6rwbgsoum7-6rwbgsoum7.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\41tax9kq2q-{0}-jytr4mb8s4-jytr4mb8s4.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\41tax9kq2q-{0}-bn2nze70vo-bn2nze70vo.gz

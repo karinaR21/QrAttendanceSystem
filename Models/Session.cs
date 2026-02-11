@@ -13,7 +13,6 @@ namespace QRAttendanceSystem.Models
         public int Grade { get; set; }
         public string Section { get; set; } = string.Empty;
 
-        // ➕ ДОБАВЕНИ (без да се маха нищо съществуващо)
         public DateTime StartTime { get; set; }
         public DateTime PresentUntil { get; set; }
         public DateTime LateUntil { get; set; }

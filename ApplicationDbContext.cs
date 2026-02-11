@@ -15,7 +15,8 @@ namespace QRAttendanceSystem.Data
         public DbSet<QrToken> QrTokens { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<User> Users { get; set; }
-       
+        public DbSet<Absence> Absences { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,12 +29,8 @@ namespace QRAttendanceSystem.Data
     new Course { Id = 5, Name = "History" }
 );
 
-            // оставяме само User → Parent ако го ползваш
-            modelBuilder.Entity<User>()
-                .HasOne(u => u.Parent)
-                .WithMany()
-                .HasForeignKey(u => u.ParentId)
-                .OnDelete(DeleteBehavior.NoAction);
+            
+
         }
 
 

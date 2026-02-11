@@ -10,4 +10,7 @@
 
     public int? ParentId { get; set; }
     public User? Parent { get; set; }
+    public ICollection<Student> Children { get; set; }
+    = new List<Student>();
+
 }

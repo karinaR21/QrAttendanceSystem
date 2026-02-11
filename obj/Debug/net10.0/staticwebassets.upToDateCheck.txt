@@ -1,3 +1,4 @@
+wwwroot\css\dashboard.css
 wwwroot\css\forms.css
 wwwroot\css\landing.css
 wwwroot\css\navbar.css
@@ -64,13 +65,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
-wwwroot\css\dashboard.css
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\forms.css
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\landing.css
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\navbar.css
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\site.css
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\favicon.ico
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\js\site.js
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\dashboard.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -82,6 +78,7 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstr
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\js\site.js
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
@@ -129,5 +126,8 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\dist\jquery.slim.min.map
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\lib\jquery\LICENSE.txt
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\dashboard.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\favicon.ico
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\forms.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\landing.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\navbar.css
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\wwwroot\css\site.css

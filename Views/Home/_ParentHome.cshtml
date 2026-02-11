@@ -11,7 +11,7 @@
         </span>
 
         <h1 class="fw-bold display-6 mb-2">
-            Welcome 👨‍👩‍👧
+            Welcome, Parent 👨‍👩‍👧
         </h1>
 
         <p class="text-white-50 fs-5">
@@ -39,36 +39,32 @@
                         View detailed attendance records
                     </p>
 
-                    <span class="cta text-primary">
-                        View attendance →
-                    </span>
                 </div>
             </a>
         </div>
 
-        <!-- STATISTICS -->
+        <!-- SUBMIT ABSENCE -->
         <div class="col-md-6">
-            <a asp-controller="Statistics" asp-action="Parent"
+            <a asp-controller="Absences" asp-action="Create"
                class="text-decoration-none">
-                <div class="home-card glass p-4 h-100">
-                    <div class="icon-circle bg-success-gradient">
-                        <i class="bi bi-graph-up"></i>
+                <div class="home-card glass p-4 hover-card h-100">
+
+                    <div class="icon-circle bg-warning-gradient">
+                        <i class="bi bi-envelope-paper"></i>
                     </div>
 
                     <h4 class="fw-bold mt-4 text-white">
-                        Attendance Statistics
+                        Submit Absence
                     </h4>
 
                     <p class="text-white-50">
-                        Track attendance trends and performance
+                        Notify the school and provide a reason for your child's absence.
                     </p>
 
-                    <span class="cta text-success">
-                        View statistics →
-                    </span>
                 </div>
             </a>
         </div>
+
 
     </div>
 </div>

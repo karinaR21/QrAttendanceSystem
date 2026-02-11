@@ -1,58 +1,95 @@
-﻿/* ================= PAGE ================= */
+﻿/* =====================================================
+   ROOT VARIABLES (VERY SENIOR MOVE)
+===================================================== */
 
-.teacher-stats-page {
+:root {
+    --glass-bg: rgba(255,255,255,.08);
+    --glass-strong: rgba(255,255,255,.12);
+    --border-soft: rgba(255,255,255,.08);
+    --text-main: #e6edf3;
+    --text-muted: .75;
+    --primary-grad: linear-gradient(135deg,#6366f1,#22d3ee);
+    --success-grad: linear-gradient(135deg,#1cc88a,#20c997);
+    --warning-grad: linear-gradient(135deg,#f6c23e,#f4a261);
+}
+
+/* =====================================================
+   GLOBAL DARK APP BACKGROUND
+===================================================== */
+
+.app-dark-gradient {
     min-height: 100vh;
-    padding: 60px 0;
-    background: radial-gradient(circle at 15% 20%, rgba(139,92,246,.25), transparent 40%), radial-gradient(circle at 85% 75%, rgba(34,211,238,.18), transparent 40%), linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+    padding: 50px 0;
+    background: radial-gradient(circle at 15% 20%, rgba(140,82,255,.25), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,198,255,.18), transparent 40%), linear-gradient(135deg,#0f2027,#1b2a49,#2c2f6b);
 }
 
 
-/* ================= STATS CARDS ================= */
+/* CENTER DASHBOARD WIDTH (HUGE UX UPGRADE) */
+
+.app-container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+
+/* =====================================================
+   GLASS DESIGN SYSTEM
+===================================================== */
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    border: 1px solid var(--border-soft);
+    box-shadow: 0 25px 60px rgba(0,0,0,.35);
+    transition: .35s ease;
+}
+
+    /* Premium hover */
+    .glass:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 70px rgba(0,0,0,.45);
+    }
+
+
+/* =====================================================
+   STATS CARDS
+===================================================== */
 
 .stats-card {
-    border-radius: 24px;
-    padding: 26px;
-    background: rgba(255,255,255,.10);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 20px 55px rgba(0,0,0,.35);
+    padding: 30px;
     color: white;
-    transition: .25s;
 }
-
-    .stats-card:hover {
-        transform: translateY(-6px);
-    }
 
     .stats-card span {
         opacity: .75;
-        font-size: .85rem;
+        font-size: .8rem;
     }
 
     .stats-card h1 {
-        font-size: 2.7rem;
+        font-size: 2.8rem;
         font-weight: 600;
+        margin-top: 6px;
     }
 
-    /* highlight */
+    /* highlight = WOW card */
     .stats-card.highlight {
-        background: linear-gradient(135deg,#6366f1,#22d3ee);
+        background: var(--primary-grad);
     }
 
 
-/* ================= GLASS CARD ================= */
+/* =====================================================
+   CONTENT GLASS CARD
+===================================================== */
 
 .glass-card {
-    border-radius: 26px;
-    padding: 26px;
-    background: rgba(255,255,255,.07);
-    backdrop-filter: blur(20px);
-    color: #e6edf3;
-    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+    padding: 28px;
+    color: var(--text-main);
 }
 
 
-    /* ================= REMOVE BOOTSTRAP WHITE ================= */
-
+    /* Remove bootstrap white */
     .glass-card table,
     .table,
     .table tbody,
@@ -61,120 +98,271 @@
         background: transparent !important;
     }
 
-
-        /* rows */
         .table tr {
-            border-bottom: 1px solid rgba(255,255,255,.08);
-            transition: .2s;
+            border-bottom: 1px solid var(--border-soft);
         }
 
             .table tr:hover {
-                background: rgba(255,255,255,.05);
+                background: rgba(255,255,255,.04);
             }
 
-        .table td {
-            padding: 14px 6px;
-            font-weight: 500;
-            color: #e6edf3;
-        }
 
-
-/* ================= CHART ================= */
-
-.chart-wrap {
-    height: 280px;
-    position: relative;
-}
-
-
-/* ================= COURSE / ACTIVITY ================= */
+/* =====================================================
+   COURSE + ACTIVITY ITEMS
+===================================================== */
 
 .course-item-modern,
 .activity-item-modern {
-    background: rgba(255,255,255,.05);
-    padding: 14px 16px;
-    border-radius: 14px;
-    margin-bottom: 10px;
-    transition: .2s;
+    background: rgba(255,255,255,.04);
+    padding: 16px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    transition: .25s;
 }
 
     .course-item-modern:hover,
     .activity-item-modern:hover {
-        background: rgba(255,255,255,.08);
+        background: rgba(255,255,255,.07);
     }
 
 
 /* icon */
+
 .course-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: rgba(99,102,241,.35);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(99,102,241,.25);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+/* course count bubble */
 
-/* badge */
 .course-count {
-    background: linear-gradient(135deg,#6366f1,#22d3ee);
-    padding: 4px 12px;
+    min-width: 40px;
+    height: 40px;
     border-radius: 999px;
+    background: var(--primary-grad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 600;
+    color: white;
 }
+
+
+/* =====================================================
+   EMAIL / USER PILLS
+===================================================== */
+
 .email-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 18px;
+    padding: 9px 20px;
     border-radius: 999px;
-    background: linear-gradient(135deg,#6366f1,#22d3ee);
+    background: var(--primary-grad);
     color: white;
     font-weight: 500;
-    box-shadow: 0 10px 30px rgba(99,102,241,.45);
+    box-shadow: 0 12px 30px rgba(99,102,241,.45);
 }
-.lesson-count {
-    width: 34px;
-    height: 34px;
+
+
+/* =====================================================
+   ICON CIRCLES
+===================================================== */
+
+.icon-circle-lg {
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg,#6366f1,#22d3ee);
-    font-weight: 600;
-}
-.course-item-modern {
-    padding: 16px 18px;
-    border-radius: 16px;
-    background: rgba(255,255,255,.06);
-    transition: .2s;
+    font-size: 30px;
 }
 
-    .course-item-modern:hover {
-        background: rgba(255,255,255,.10);
-    }
-
-.course-left {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.course-name {
-    font-weight: 500;
-    font-size: .95rem;
-}
-
-.course-count {
-    min-width: 36px;
-    height: 36px;
-    border-radius: 999px;
-    background: linear-gradient(135deg,#6366f1,#22d3ee);
+.icon-circle-sm {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#ff7a18,#ffb347);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
-    font-size: .9rem;
-    color: white;
+    font-size: 1.6rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
 }
+
+
+/* =====================================================
+   GRADIENT HELPERS
+===================================================== */
+
+.bg-primary-gradient {
+    background: var(--primary-grad);
+}
+
+.bg-success-gradient {
+    background: var(--success-grad);
+}
+
+.bg-warning-gradient {
+    background: var(--warning-grad);
+}
+
+
+/* =====================================================
+   ABSENCE PAGE
+===================================================== */
+
+.absence-page {
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 15% 20%, rgba(140,82,255,.25), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,198,255,.18), transparent 40%), linear-gradient(135deg,#0f2027,#1b2a49,#2c2f6b);
+}
+
+.absence-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 32px;
+    border-radius: 28px;
+    background: var(--glass-strong);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 70px rgba(0,0,0,.45);
+}
+
+
+/* =====================================================
+   MODERN FORMS
+===================================================== */
+
+.form-group-modern {
+    margin-bottom: 18px;
+}
+
+    .form-group-modern label {
+        font-size: .8rem;
+        opacity: .8;
+    }
+
+/* inputs */
+
+.form-control,
+.form-select {
+    background: rgba(255,255,255,.92);
+    border: none;
+    border-radius: 14px;
+    padding: 11px 14px;
+    transition: .2s;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        background: white;
+        box-shadow: 0 0 0 3px rgba(99,102,241,.25);
+    }
+
+
+/* =====================================================
+   BUTTON (VERY PREMIUM)
+===================================================== */
+
+.btn-soft {
+    border: none;
+    border-radius: 16px;
+    padding: 13px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: linear-gradient(135deg,#ff7a18,#ffb347);
+    box-shadow: 0 12px 28px rgba(255,140,0,.35);
+    transition: .25s;
+}
+
+    .btn-soft:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 38px rgba(255,140,0,.5);
+    }
+
+
+/* =====================================================
+   CHILD PILL
+===================================================== */
+
+.child-pill {
+    background: rgba(255,255,255,.12);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+
+/* =====================================================
+   SMOOTH ENTRY ANIMATION
+===================================================== */
+
+.slide-in {
+    animation: slideIn .45s ease;
+}
+
+@keyframes slideIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =====================================================
+   MOBILE FIX (VERY IMPORTANT)
+===================================================== */
+
+@media(max-width:768px) {
+
+    .stats-card h1 {
+        font-size: 2.2rem;
+    }
+
+    .glass {
+        border-radius: 20px;
+    }
+
+    .app-dark-gradient {
+        padding: 30px 0;
+    }
+}
+.glass-card {
+    background: rgba(255,255,255,.10);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 55px rgba(0,0,0,.35);
+
+    .glass-card {
+        composes: glass-base;
+    }
+}
+.chart-wrap {
+    position: relative;
+    height: 320px;
+}
+.glass-card {
+    transition: .3s;
+}
+
+    .glass-card:hover {
+        transform: translateY(-8px);
+    }

@@ -13,12 +13,40 @@ public class StatisticsController : Controller
     }
 
     // ===== ADMIN / TEACHER =====
-    public IActionResult Index()
+    public IActionResult Index(int? grade, string? section,
+                          DateTime? from, DateTime? to)
     {
-        var totalSessions = _context.Sessions.Count();
-        var totalAttendances = _context.Attendances.Count();
+        var sessionsQuery = _context.Sessions.AsQueryable();
 
-        var attendanceByStatus = _context.Attendances
+        // ✅ FILTERS
+        if (grade.HasValue)
+            sessionsQuery = sessionsQuery.Where(s => s.Grade == grade);
+
+        if (!string.IsNullOrEmpty(section))
+            sessionsQuery = sessionsQuery.Where(s => s.Section == section);
+
+        if (from.HasValue)
+            sessionsQuery = sessionsQuery.Where(s => s.Date >= from.Value);
+
+        if (to.HasValue)
+            sessionsQuery = sessionsQuery.Where(s => s.Date <= to.Value);
+
+
+        var sessionIds = sessionsQuery.Select(s => s.Id);
+
+        var attendancesQuery = _context.Attendances
+            .Where(a => sessionIds.Contains(a.SessionId));
+
+
+        // ===== TOTALS =====
+
+        ViewBag.TotalSessions = sessionsQuery.Count();
+        ViewBag.TotalAttendances = attendancesQuery.Count();
+
+
+        // ===== STATUS =====
+
+        ViewBag.ByStatus = attendancesQuery
             .GroupBy(a => a.Status)
             .Select(g => new
             {
@@ -27,9 +55,12 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        var attendanceByGrade = _context.Sessions
+
+        // ===== GRADE =====
+
+        ViewBag.ByGrade = sessionsQuery
             .GroupJoin(
-                _context.Attendances,
+                attendancesQuery,
                 s => s.Id,
                 a => a.SessionId,
                 (s, a) => new { s.Grade, Count = a.Count() }
@@ -43,9 +74,12 @@ public class StatisticsController : Controller
             .OrderBy(x => x.Grade)
             .ToList();
 
-        var attendanceBySection = _context.Sessions
+
+        // ===== SECTION =====
+
+        ViewBag.BySection = sessionsQuery
             .GroupJoin(
-                _context.Attendances,
+                attendancesQuery,
                 s => s.Id,
                 a => a.SessionId,
                 (s, a) => new { s.Section, Count = a.Count() }
@@ -58,14 +92,9 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        ViewBag.TotalSessions = totalSessions;
-        ViewBag.TotalAttendances = totalAttendances;
-        ViewBag.ByGrade = attendanceByGrade;
-        ViewBag.BySection = attendanceBySection;
-        ViewBag.ByStatus = attendanceByStatus;
-
         return View();
     }
+
 
     // ===== STUDENT =====
     public IActionResult Student()
