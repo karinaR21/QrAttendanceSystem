@@ -5,169 +5,297 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <div class="app-dark-gradient">
-
     <div class="app-container">
 
         <!-- HEADER -->
-        <div class="text-center text-white mb-5">
+        <div class="text-center text-white mb-4">
             <h2 class="fw-semibold mb-1">Attendance Statistics</h2>
             <p class="opacity-75">Overview of sessions and student presence</p>
         </div>
-        <!-- FILTER BAR -->
-        <div class="glass glass-card p-3 mb-5">
 
-            <form method="get">
 
-                <div class="row g-3 align-items-end">
+        <!-- FILTER BUTTON -->
+        <div class="text-center mb-4">
+            <button class="btn btn-soft"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#filters">
 
-                    <!-- Grade -->
-                    <div class="col-md-3">
-                        <label class="text-white-50 small">Grade</label>
-                        <select name="grade" class="form-select">
-                            <option value="">All</option>
-                            @for (int i = 7; i <= 12; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                    </div>
-
-                    <!-- Section -->
-                    <div class="col-md-3">
-                        <label class="text-white-50 small">Section</label>
-                        <select name="section" class="form-select">
-                            <option value="">All</option>
-                            <option>А</option>
-                            <option>Б</option>
-                            <option>В</option>
-                            <option>Г</option>
-                        </select>
-                    </div>
-
-                    <!-- From -->
-                    <div class="col-md-2">
-                        <label class="text-white-50 small">From</label>
-                        <input type="date" name="from" class="form-control" />
-                    </div>
-
-                    <!-- To -->
-                    <div class="col-md-2">
-                        <label class="text-white-50 small">To</label>
-                        <input type="date" name="to" class="form-control" />
-                    </div>
-
-                    <div class="col-md-2">
-                        <button class="btn btn-soft w-100">
-                            Apply
-                        </button>
-                    </div>
-
-                </div>
-
-            </form>
-
+                <i class="bi bi-funnel me-2"></i>
+                Filters
+            </button>
         </div>
 
-        <!-- STAT CARDS -->
-        <div class="row g-4 mb-5">
 
-            <div class="col-md-6">
-                <div class="stats-card glass highlight text-center">
-                    <span>Total Sessions</span>
-                    <h1>@ViewBag.TotalSessions</h1>
-                </div>
+        <!-- FILTER PANEL -->
+        <div class="collapse mb-5" id="filters">
+            <div class="glass glass-card p-4">
+
+                <form method="get">
+
+                    <div class="row g-3 align-items-end">
+
+                        <!-- GRADE -->
+                        <div class="col-md-3">
+                            <label class="text-white-50 small">Grade</label>
+
+                            <select name="grade" class="form-select">
+                                <option value="">All</option>
+
+                                @for (int g = 7; g <= 12; g++)
+                                {
+                                    if (ViewBag.SelectedGrade != null && ViewBag.SelectedGrade == g)
+                                    {
+                                        <option selected value="@g">@g</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@g">@g</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- SECTION -->
+                        <div class="col-md-3">
+                            <label class="text-white-50 small">Section</label>
+
+                            <select name="section" class="form-select">
+                                <option value="">All</option>
+
+                                @foreach (var s in new[] { "А", "Б", "В", "Г" })
+                                {
+                                    if (ViewBag.SelectedSection == s)
+                                    {
+                                        <option selected value="@s">@s</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@s">@s</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+
+                        <!-- FROM -->
+                        <div class="col-md-2">
+                            <label class="text-white-50 small">From</label>
+
+                            <input type="date"
+                                   name="from"
+                                   value="@ViewBag.From"
+                                   class="form-control" />
+                        </div>
+
+
+                        <!-- TO -->
+                        <div class="col-md-2">
+                            <label class="text-white-50 small">To</label>
+
+                            <input type="date"
+                                   name="to"
+                                   value="@ViewBag.To"
+                                   class="form-control" />
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <div class="col-md-2">
+                            <button class="btn btn-soft w-100">
+                                Apply
+                            </button>
+                        </div>
+
+                    </div>
+
+                </form>
+
             </div>
-
-            <div class="col-md-6">
-                <div class="stats-card glass highlight text-center">
-                    <span>Total Attendances</span>
-                    <h1>@ViewBag.TotalAttendances</h1>
-                </div>
-            </div>
-
         </div>
 
-        <!-- TABLES -->
-        <div class="row g-4 mb-5">
 
-            <div class="col-lg-6">
-                <div class="glass glass-card p-4 h-100">
 
-                    <h5 class="mb-4 fw-semibold">
-                        By Grade
-                    </h5>
+        <!-- ACTIVE FILTERS -->
+        @if (ViewBag.SelectedGrade != null
+                || ViewBag.SelectedSection != null
+                || ViewBag.From != null
+                || ViewBag.To != null)
+        {
+            <div class="glass glass-card p-3 mb-4 text-center">
 
-                    @foreach (var item in ViewBag.ByGrade)
-                    {
-                        <div class="course-item-modern d-flex justify-content-between align-items-center">
+                <span class="text-white-50 me-2">Showing results for:</span>
 
-                            <div class="course-left">
-                                <div class="course-icon">
-                                    <i class="bi bi-mortarboard"></i>
+                @if (ViewBag.SelectedGrade != null)
+                {
+                    <span class="badge bg-light text-dark me-2">
+                        Grade @ViewBag.SelectedGrade
+                    </span>
+                }
+
+                @if (ViewBag.SelectedSection != null)
+                {
+                    <span class="badge bg-light text-dark me-2">
+                        Section @ViewBag.SelectedSection
+                    </span>
+                }
+
+                @if (ViewBag.From != null)
+                {
+                    <span class="badge bg-light text-dark me-2">
+                        From @ViewBag.From
+                    </span>
+                }
+
+                @if (ViewBag.To != null)
+                {
+                    <span class="badge bg-light text-dark me-2">
+                        To @ViewBag.To
+                    </span>
+                }
+
+                <a href="/Statistics" class="btn btn-sm btn-soft ms-3">
+                    Clear
+                </a>
+
+            </div>
+        }
+
+
+
+        <!-- NO RESULTS -->
+        @if (!(bool)ViewBag.HasResults)
+        {
+            <div class="glass glass-card text-center p-5 mt-4">
+
+                <i class="bi bi-bar-chart display-4 opacity-25 mb-3"></i>
+
+                <h4>No results were found</h4>
+
+                <p class="text-white-50 mb-4">
+                    Try adjusting your filters.
+                </p>
+
+               
+
+            </div>
+        }
+        else
+        {
+
+            <!-- STAT CARDS -->
+            <div class="row g-4 mb-5">
+
+                <div class="col-md-6">
+                    <div class="stats-card glass highlight text-center">
+                        <span>Total Sessions</span>
+                        <h1>@ViewBag.TotalSessions</h1>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="stats-card glass highlight text-center">
+                        <span>Total Attendances</span>
+                        <h1>@ViewBag.TotalAttendances</h1>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+            <!-- TABLES -->
+            <div class="row g-4 mb-5">
+
+                <div class="col-lg-6">
+                    <div class="glass glass-card p-4 h-100">
+
+                        <h5 class="mb-4 fw-semibold">
+                            By Grade
+                        </h5>
+
+                        @foreach (var item in ViewBag.ByGrade)
+                        {
+                            <div class="course-item-modern d-flex justify-content-between align-items-center">
+
+                                <div class="course-left">
+                                    <div class="course-icon">
+                                        <i class="bi bi-mortarboard"></i>
+                                    </div>
+
+                                    <span class="course-name">
+                                        Grade @item.Grade
+                                    </span>
                                 </div>
 
-                                <span class="course-name">
-                                    Grade @item.Grade
+                                <span class="course-count">
+                                    @item.Count
                                 </span>
+
                             </div>
+                        }
 
-                            <span class="course-count">
-                                @item.Count
-                            </span>
-
-                        </div>
-                    }
-
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-lg-6">
-                <div class="glass glass-card p-4 h-100">
 
-                    <h5 class="mb-4 fw-semibold">
-                        By Section
-                    </h5>
 
-                    @foreach (var item in ViewBag.BySection)
-                    {
-                        <div class="course-item-modern d-flex justify-content-between align-items-center">
+                <div class="col-lg-6">
+                    <div class="glass glass-card p-4 h-100">
 
-                            <div class="course-left">
-                                <div class="course-icon">
-                                    <i class="bi bi-diagram-3"></i>
+                        <h5 class="mb-4 fw-semibold">
+                            By Section
+                        </h5>
+
+                        @foreach (var item in ViewBag.BySection)
+                        {
+                            <div class="course-item-modern d-flex justify-content-between align-items-center">
+
+                                <div class="course-left">
+                                    <div class="course-icon">
+                                        <i class="bi bi-diagram-3"></i>
+                                    </div>
+
+                                    <span class="course-name">
+                                        Section @item.Section
+                                    </span>
                                 </div>
 
-                                <span class="course-name">
-                                    Section @item.Section
+                                <span class="course-count">
+                                    @item.Count
                                 </span>
+
                             </div>
+                        }
 
-                            <span class="course-count">
-                                @item.Count
-                            </span>
-
-                        </div>
-                    }
-
+                    </div>
                 </div>
+
             </div>
 
 
-        </div>
-        <!-- CHART -->
-        <div class="glass glass-card dashboard-section p-4 mx-auto" style="max-width:900px;">
 
-            <h5 class="mb-4 text-center fw-semibold">
-                Attendance Overview
-            </h5>
+            <!-- CHART -->
+            <div class="glass glass-card p-4 mx-auto mb-5"
+                 style="max-width:700px;">
 
-            <div style="position:relative; height:260px; max-width:500px; margin:auto;">
-                <canvas id="statusChart"></canvas>
+                <h5 class="mb-4 text-center fw-semibold">
+                    Attendance Overview
+                </h5>
+
+                <div style="position:relative; height:220px; max-width:420px; margin:auto;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+
             </div>
 
-        </div>
+        }
+
     </div>
 </div>
+
+
 
 <script>
 
@@ -189,29 +317,25 @@
                     data: chartData.map(x => x.Count),
 
                     backgroundColor: [
-                        '#22c55e',  // Present
-                        '#facc15',  // Late
-                        '#ef4444'   // Absent
+                        '#22c55e',
+                        '#facc15',
+                        '#ef4444'
                     ],
 
-                    borderWidth: 0,
-                    hoverOffset: 12
+                    borderWidth: 0
                 }]
             },
 
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '72%',
+                cutout: '65%',
 
                 plugins: {
                     legend: {
                         position: 'bottom',
                         labels: {
-                            color: '#e6edf3',
-                            font: {
-                                size: 13
-                            }
+                            color: '#e6edf3'
                         }
                     }
                 }

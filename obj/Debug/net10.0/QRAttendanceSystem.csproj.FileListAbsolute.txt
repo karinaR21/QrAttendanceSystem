@@ -485,4 +485,4 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\r
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.pdb
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.genruntimeconfig.cache
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\ref\QRAttendanceSystem.dll
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\41tax9kq2q-{0}-bn2nze70vo-bn2nze70vo.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\41tax9kq2q-{0}-iqqaofx8hr-iqqaofx8hr.gz

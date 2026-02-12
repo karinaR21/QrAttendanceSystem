@@ -366,3 +366,23 @@
     .glass-card:hover {
         transform: translateY(-8px);
     }
+.filter-hidden {
+    display: none;
+}
+
+.filter-visible {
+    display: block;
+    animation: slideDown .25s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

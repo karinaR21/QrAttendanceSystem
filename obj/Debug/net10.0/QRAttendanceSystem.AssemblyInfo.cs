@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QRAttendanceSystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bdb53259bbd6a31c46237b5132fe226af225b2e3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c5cd423fa41cc9579b9e528b784cc91371515afb")]
 [assembly: System.Reflection.AssemblyProductAttribute("QRAttendanceSystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QRAttendanceSystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

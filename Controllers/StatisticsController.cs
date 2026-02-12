@@ -91,13 +91,20 @@ public class StatisticsController : Controller
                 Count = g.Sum(x => x.Count)
             })
             .ToList();
+        // RETURN SELECTED FILTERS
+        ViewBag.SelectedGrade = grade;
+        ViewBag.SelectedSection = section;
+        ViewBag.From = from?.ToString("yyyy-MM-dd");
+        ViewBag.To = to?.ToString("yyyy-MM-dd");
+        ViewBag.HasResults = attendancesQuery.Any();
 
         return View();
     }
 
 
     // ===== STUDENT =====
-    public IActionResult Student()
+    // ===== STUDENT =====
+    public IActionResult Student(DateTime? from, DateTime? to, int? courseId)
     {
         var role = HttpContext.Session.GetString("Role");
         if (role != "Student")
@@ -113,18 +120,41 @@ public class StatisticsController : Controller
 
         ViewBag.Email = user.Email;
 
-       
 
-        var totalSessions = _context.Attendances
-    .Where(a => a.UserId == userId)
-    .Select(a => a.SessionId)
-    .Distinct()
-    .Count();
-
-        
-
+        // ✅ BASE QUERY
         var attendancesQuery = _context.Attendances
-            .Where(a => a.UserId == userId);
+            .Include(a => a.Session)
+            .ThenInclude(s => s.Course)
+            .Where(a => a.UserId == userId)
+            .AsQueryable();
+
+
+        // ================= FILTERS =================
+
+        if (from.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.Date >= from.Value);
+
+        if (to.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.Date <= to.Value);
+
+        if (courseId.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.CourseId == courseId);
+
+
+        // ================= DROPDOWN DATA =================
+
+        ViewBag.Courses = _context.Courses.ToList();
+
+
+        // ================= TOTALS =================
+
+        var totalSessions = attendancesQuery
+            .Select(a => a.SessionId)
+            .Distinct()
+            .Count();
 
         var totalAttendances = attendancesQuery.Count();
 
@@ -133,11 +163,13 @@ public class StatisticsController : Controller
             ? 0
             : Math.Round((double)totalAttendances * 100 / totalSessions, 0);
 
-       
 
         ViewBag.TotalSessions = totalSessions;
         ViewBag.TotalAttendances = totalAttendances;
         ViewBag.AttendanceRate = attendanceRate;
+
+
+        // ================= STATUS =================
 
         ViewBag.ByStatus = attendancesQuery
             .GroupBy(a => a.Status)
@@ -149,9 +181,9 @@ public class StatisticsController : Controller
             .ToList();
 
 
+        // ================= COURSE =================
+
         ViewBag.ByCourse = attendancesQuery
-            .Include(a => a.Session)
-            .ThenInclude(s => s.Course)
             .GroupBy(a => a.Session.Course.Name)
             .Select(g => new
             {
@@ -160,11 +192,10 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        
+
+        // ================= RECENT =================
 
         ViewBag.Recent = attendancesQuery
-            .Include(a => a.Session)
-            .ThenInclude(s => s.Course)
             .OrderByDescending(a => a.TimeRecorded)
             .Take(5)
             .Select(a => new
@@ -175,12 +206,23 @@ public class StatisticsController : Controller
             })
             .ToList();
 
+
+        // ================= FILTER STATE =================
+
+        ViewBag.From = from?.ToString("yyyy-MM-dd");
+        ViewBag.To = to?.ToString("yyyy-MM-dd");
+        ViewBag.SelectedCourse = courseId;
+
+        ViewBag.HasResults = attendancesQuery.Any();
+
+
         return View();
     }
 
 
+
     // ===== PARENT =====
-    public IActionResult Parent()
+    public IActionResult Parent(DateTime? from, DateTime? to, int? courseId)
     {
         var role = HttpContext.Session.GetString("Role");
         if (role != "Parent")
@@ -198,11 +240,43 @@ public class StatisticsController : Controller
 
         ViewBag.ChildName = child.FullName;
 
-        ViewBag.TotalAttendances = _context.Attendances
-            .Count(a => a.UserId == child.Id);
 
-        ViewBag.ByStatus = _context.Attendances
+        // ⭐ SUPER IMPORTANT → IQueryable
+        var attendancesQuery = _context.Attendances
+            .Include(a => a.Session)
+            .ThenInclude(s => s.Course)
             .Where(a => a.UserId == child.Id)
+            .AsQueryable();
+
+
+
+        // ✅ FILTERS
+        if (from.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.Date >= from.Value);
+
+        if (to.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.Date <= to.Value);
+
+        if (courseId.HasValue)
+            attendancesQuery = attendancesQuery
+                .Where(a => a.Session.CourseId == courseId.Value);
+
+
+
+        // Needed for dropdown
+        ViewBag.Courses = _context.Courses.ToList();
+
+
+
+        // ===== STATS =====
+
+        ViewBag.TotalAttendances = attendancesQuery.Count();
+
+
+
+        ViewBag.ByStatus = attendancesQuery
             .GroupBy(a => a.Status)
             .Select(g => new
             {
@@ -211,8 +285,9 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        ViewBag.ByCourse = _context.Attendances
-            .Where(a => a.UserId == child.Id)
+
+
+        ViewBag.ByCourse = attendancesQuery
             .GroupBy(a => a.Session.Course.Name)
             .Select(g => new
             {
@@ -221,8 +296,9 @@ public class StatisticsController : Controller
             })
             .ToList();
 
-        ViewBag.Recent = _context.Attendances
-            .Where(a => a.UserId == child.Id)
+
+
+        ViewBag.Recent = attendancesQuery
             .OrderByDescending(a => a.TimeRecorded)
             .Take(5)
             .Select(a => new
@@ -232,6 +308,18 @@ public class StatisticsController : Controller
                 TimeRecorded = a.TimeRecorded
             })
             .ToList();
+
+
+
+        // ===== RETURN FILTER VALUES =====
+
+        ViewBag.From = from?.ToString("yyyy-MM-dd");
+        ViewBag.To = to?.ToString("yyyy-MM-dd");
+        ViewBag.SelectedCourse = courseId;
+
+        ViewBag.HasResults = attendancesQuery.Any();
+
+
 
         return View();
     }
