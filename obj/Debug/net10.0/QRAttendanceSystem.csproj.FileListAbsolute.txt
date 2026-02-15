@@ -386,9 +386,6 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\r
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win\lib\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\unix\lib\net6.0\System.Drawing.Common.dll
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win\lib\net6.0\System.Drawing.Common.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win\lib\net9.0\System.Windows.Extensions.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.csproj.AssemblyReference.cache
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\rpswa.dswa.cache.json
@@ -407,9 +404,7 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\s
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\scopedcss\bundle\QRAttendanceSystem.styles.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\scopedcss\projectbundle\QRAttendanceSystem.bundle.scp.css
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\h896bi9t7k-{0}-zs7dtww9tr-zs7dtww9tr.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\vau29ipb27-{0}-6rwbgsoum7-6rwbgsoum7.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\wfhvn4fk5e-{0}-8btgc4iuin-8btgc4iuin.gz
-C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\l9jrymaahw-{0}-gqu2t2iah1-gqu2t2iah1.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\c2imtv31od-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\td8cnewwyi-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\9g7j3vsup2-{0}-bqjiyaj88i-bqjiyaj88i.gz
@@ -486,3 +481,10 @@ C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\Q
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\QRAttendanceSystem.genruntimeconfig.cache
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\ref\QRAttendanceSystem.dll
 C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\41tax9kq2q-{0}-iqqaofx8hr-iqqaofx8hr.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\vau29ipb27-{0}-2y7tw5jqau-2y7tw5jqau.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\obj\Debug\net10.0\compressed\l9jrymaahw-{0}-tncjdbk4ks-tncjdbk4ks.gz
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\EPPlus.dll
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\EPPlus.Interfaces.dll
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\EPPlus.System.Drawing.dll
+C:\Users\karka\Desktop\QRAttendanceSystem\QRAttendanceSystem\bin\Debug\net10.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll

@@ -2,6 +2,7 @@
 using QRAttendanceSystem.Data;
 using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Models;
+using OfficeOpenXml;
 
 public class StatisticsController : Controller
 {
@@ -323,4 +324,60 @@ public class StatisticsController : Controller
 
         return View();
     }
+    public IActionResult ExportToExcel(int? grade, string? section,
+                                       DateTime? from, DateTime? to)
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+        using (var package = new ExcelPackage())
+        {
+            var worksheet = package.Workbook.Worksheets.Add("Attendance");
+
+            worksheet.Cells[1, 1].Value = "Grade";
+            worksheet.Cells[1, 2].Value = "Section";
+            worksheet.Cells[1, 3].Value = "Date";
+            worksheet.Cells[1, 4].Value = "Course";
+
+            var sessionsQuery = _context.Sessions.AsQueryable();
+
+            if (grade.HasValue)
+                sessionsQuery = sessionsQuery.Where(s => s.Grade == grade);
+
+            if (!string.IsNullOrEmpty(section))
+                sessionsQuery = sessionsQuery.Where(s => s.Section == section);
+
+            if (from.HasValue)
+                sessionsQuery = sessionsQuery.Where(s => s.Date >= from.Value);
+
+            if (to.HasValue)
+                sessionsQuery = sessionsQuery.Where(s => s.Date <= to.Value);
+
+            var sessions = sessionsQuery
+                .Include(s => s.Course)
+                .ToList();
+
+            int row = 2;
+
+            foreach (var s in sessions)
+            {
+                worksheet.Cells[row, 1].Value = s.Grade;
+                worksheet.Cells[row, 2].Value = s.Section;
+                worksheet.Cells[row, 3].Value = s.Date.ToString("yyyy-MM-dd");
+                worksheet.Cells[row, 4].Value = s.Course?.Name;
+
+                row++;
+            }
+
+            worksheet.Cells.AutoFitColumns();
+
+            var stream = new MemoryStream();
+            package.SaveAs(stream);
+            stream.Position = 0;
+
+            return File(stream,
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "AttendanceExport.xlsx");
+        }
+    }
+
 }

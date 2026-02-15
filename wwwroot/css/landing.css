@@ -6,8 +6,9 @@
     min-height: 90vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+    background: transparent;
 }
+
 
     /* VERY IMPORTANT */
     .landing .container {
