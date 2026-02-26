@@ -15,7 +15,6 @@ namespace QRAttendanceSystem.Data
         public DbSet<QrToken> QrTokens { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Absence> Absences { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -2,80 +2,77 @@
 @{
     var email = Context.Session.GetString("Email");
 }
+<div class="bg-visuals">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
 
-<div class="container mt-5">
+<div class="app-container mt-5 py-4">
 
-    <!-- HEADER -->
-    <div class="mb-5 text-white">
-
-        <span class="badge rounded-pill bg-primary bg-opacity-25 px-3 py-2 mb-3">
-            Teacher Dashboard
+    <div class="mb-5 text-white animate__animated animate__fadeIn">
+        <span class="badge rounded-pill px-3 py-2 mb-3 teacher-badge">
+            <i class="bi bi-shield-check me-2"></i> Teacher Dashboard
         </span>
 
-        <h1 class="fw-bold display-6 mb-2">
+        <h1 class="fw-bold display-5 mb-2">
             Welcome, Teacher 👩‍🏫
         </h1>
 
         @if (!string.IsNullOrEmpty(email))
         {
-            <div class="email-badge mt-2">
-                <i class="bi bi-envelope me-2"></i>
-                @email
+            <div class="email-pill mt-2">
+                <i class="bi bi-envelope-at"></i>
+                <span>@email</span>
             </div>
         }
 
         <p class="text-white-50 fs-5 mt-3">
-            Manage lessons, generate QR codes and analyze attendance
+            Manage lessons, generate dynamic QR codes, and analyze real-time attendance insights.
         </p>
     </div>
 
-    <!-- ACTION CARDS -->
-    <div class="row g-4">
+    <div class="row g-4 animate__animated animate__fadeInUp">
 
-        <!-- GENERATE QR -->
         <div class="col-md-6">
-            <a asp-controller="Sessions" asp-action="Create"
-               class="text-decoration-none">
-
-                <div class="home-card glass p-4 hover-card">
-
+            <a asp-controller="Sessions" asp-action="Create" class="text-decoration-none">
+                <div class="glass p-5 hover-card">
                     <div class="icon-circle bg-primary-gradient">
                         <i class="bi bi-qr-code"></i>
                     </div>
 
-                    <h4 class="fw-bold mt-4 text-white">
+                    <h3 class="fw-bold mt-4 text-white">
                         Generate QR Code
-                    </h4>
+                    </h3>
 
-                    <p class="text-white-50">
-                        Start a lesson and generate a live QR code
-                        for student attendance.
+                    <p class="text-white-50 fs-6">
+                        Start a new session to generate a secure, live QR code for instant student check-ins.
                     </p>
 
+                    <div class="action-link text-primary-emphasis">
+                        Open Session Manager <i class="bi bi-plus-circle-dotted"></i>
+                    </div>
                 </div>
             </a>
         </div>
 
-        <!-- STATISTICS -->
         <div class="col-md-6">
-            <a asp-controller="Statistics" asp-action="Index"
-               class="text-decoration-none">
-
-                <div class="home-card glass p-4 hover-card">
-
+            <a asp-controller="Statistics" asp-action="Index" class="text-decoration-none">
+                <div class="glass p-5 hover-card">
                     <div class="icon-circle bg-success-gradient">
-                        <i class="bi bi-bar-chart"></i>
+                        <i class="bi bi-bar-chart-steps"></i>
                     </div>
 
-                    <h4 class="fw-bold mt-4 text-white">
+                    <h3 class="fw-bold mt-4 text-white">
                         Attendance Statistics
-                    </h4>
+                    </h3>
 
-                    <p class="text-white-50">
-                        View attendance data, trends and insights
-                        across all sessions.
+                    <p class="text-white-50 fs-6">
+                        Deep dive into attendance data, trends, and automated reporting across all your classes.
                     </p>
 
+                    <div class="action-link text-success">
+                        View Analytics Dashboard <i class="bi bi-arrow-right-circle"></i>
+                    </div>
                 </div>
             </a>
         </div>

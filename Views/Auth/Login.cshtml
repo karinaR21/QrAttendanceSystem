@@ -2,95 +2,280 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="landing position-relative">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- BLOBS -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --primary-accent: #6366f1; /* Indigo */
+        --secondary-accent: #a855f7; /* Purple */
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
 
-    <div class="container">
-        <div class="row min-vh-75 align-items-center justify-content-center">
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: #0f172a;
+        color: var(--text-main);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
 
-            <div class="col-md-8 col-lg-5">
+    /* Background Animated Orbs */
+    .bg-visuals {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+    }
 
-                <div class="glass p-5 slide-in">
+    .orb {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.4;
+        animation: float 20s infinite alternate;
+    }
 
-                    <!-- HEADER -->
-                    <div class="text-center mb-4">
-                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3"
-                             style="width:72px;height:72px;background:rgba(255,255,255,.15)">
-                            <i class="bi bi-box-arrow-in-right fs-2"></i>
-                        </div>
+    .orb-1 {
+        background: var(--primary-accent);
+        top: -10%;
+        left: -10%;
+    }
 
-                        <h3 class="fw-bold">Welcome Back</h3>
-                        <p class="text-white-50 small">
-                            Login to your QR Attendance account
-                        </p>
-                    </div>
+    .orb-2 {
+        background: var(--secondary-accent);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -10s;
+    }
 
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="alert alert-danger text-center">
-                            <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                            @ViewBag.Error
-                        </div>
-                    }
+    keyframes float {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
 
-                    @if (TempData["Success"] != null)
-                    {
-                        <div class="alert alert-success text-center">
-                            <i class="bi bi-check-circle-fill me-1"></i>
-                            @TempData["Success"]
-                        </div>
-                    }
+        100% {
+            transform: translate(50px, 80px) scale(1.1);
+        }
+    }
 
-                    <!-- FORM -->
-                    <form method="post">
+    /* Glass Card Styling */
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
-                        <div class="mb-3">
-                            <label class="form-label text-white-50">Email</label>
-                            <input name="email"
-                                   type="email"
-                                   class="form-control"
-                                   placeholder="name@student.school.bg"
-                                   required />
-                        </div>
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        border-radius: 28px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
 
-                        <div class="mb-4">
-                            <label class="form-label text-white-50">Password</label>
-                            <div class="input-group">
-                                <input id="password"
-                                       name="password"
-                                       type="password"
-                                       class="form-control"
-                                       required />
-                                <span class="input-group-text"
-                                      style="cursor:pointer"
-                                      onclick="togglePassword()">
-                                    <i id="eyeIcon" class="bi bi-eye"></i>
-                                </span>
-                            </div>
-                        </div>
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
 
-                        <button type="submit"
-                                class="btn btn-primary btn-lg w-100">
-                            Login
-                        </button>
+    /* Header & Icons */
+    .brand-logo {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+    }
 
-                        <div class="text-center mt-3">
-                            <a asp-action="Index"
-                               class="text-white-50 text-decoration-none small">
-                                ← Back to authentication
-                            </a>
-                        </div>
+    h2 {
+        font-weight: 700;
+        letter-spacing: -0.025em;
+    }
 
-                    </form>
+    /* Forms */
+    .form-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-left: 4px;
+    }
 
-                </div>
+    .form-control {
+        background: rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid var(--glass-border);
+        color: white !important;
+        border-radius: 12px;
+        padding: 12px 16px;
+        transition: all 0.2s ease;
+    }
 
+        .form-control:focus {
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+            background: rgba(0, 0, 0, 0.3) !important;
+        }
+
+    .input-group-text {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--glass-border);
+        border-left: none;
+        color: var(--text-muted);
+        border-radius: 0 12px 12px 0;
+        cursor: pointer;
+    }
+
+    /* Buttons */
+    .btn-login {
+        background: linear-gradient(90deg, var(--primary-accent), var(--secondary-accent));
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 14px;
+        border-radius: 12px;
+        width: 100%;
+        margin-top: 1rem;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4);
+            opacity: 0.9;
+        }
+
+    /* Alerts */
+    .alert {
+        border-radius: 12px;
+        font-size: 0.9rem;
+        border: none;
+        background: rgba(220, 53, 69, 0.2);
+        color: #ff8080;
+    }
+
+    .alert-success {
+        background: rgba(25, 135, 84, 0.2);
+        color: #75f0a0;
+    }
+    /* Container to give some extra breathing room at the bottom */
+    .footer-link-container {
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05); /* Subtle separator */
+    }
+
+    .back-link {
+        color: var(--text-muted); /* Starts as your light grey/slate */
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+    }
+
+        .back-link i {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Hover State: Makes it bright white and slides the icon slightly */
+        .back-link:hover {
+            color: #ffffff !important;
+            opacity: 1;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+            .back-link:hover i {
+                transform: translateX(-5px); /* Interactive "nudge" effect */
+            }
+</style>
+
+<div class="bg-visuals">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="login-container">
+    <div class="glass-card">
+
+        <div class="text-center">
+            <div class="brand-logo">
+                <i class="bi bi-qr-code-scan"></i>
+            </div>
+            <h2>Welcome Back</h2>
+            <p class="text-secondary small mb-4">QR Attendance System Portal</p>
+        </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger text-center animate__animated animate__shakeX">
+                <i class="bi bi-exclamation-circle me-2"></i> @ViewBag.Error
+            </div>
+        }
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success text-center">
+                <i class="bi bi-check-circle me-2"></i> @TempData["Success"]
+            </div>
+        }
+
+        <form method="post" autocomplete="off">
+            <div class="mb-3">
+                <label class="form-label">Email Address</label>
+                <input name="email" type="email" class="form-control" placeholder="name@company.com" required />
             </div>
 
-        </div>
+            <div class="mb-4">
+                <div class="d-flex justify-content-between">
+                    <label class="form-label">Password</label>
+                   
+                </div>
+                <div class="input-group">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="••••••••" required />
+                    <span class="input-group-text" onclick="togglePassword()">
+                        <i id="eyeIcon" class="bi bi-eye"></i>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-login">
+                <span>Sign In</span>
+                <i class="bi bi-arrow-right"></i>
+            </button>
+            <div class="text-center mt-5 footer-link-container">
+                <a asp-action="Index" class="back-link">
+                    <i class="bi bi-arrow-left-circle me-2"></i>
+                    <span>Back to login</span>
+                </a>
+            </div>
+        </form>
+
     </div>
 </div>
 

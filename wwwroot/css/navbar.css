@@ -25,6 +25,12 @@
         transform: translateY(-1px);
     }
 
+/* align nav content with main app width */
+.nav-btn:hover {
+        background: rgba(255,255,255,.10);
+        transform: translateY(-1px);
+    }
+
 /* role */
 .role-pill {
     height: 38px;
@@ -36,6 +42,30 @@
     background: linear-gradient(135deg,#22c1c3,#4facfe);
 }
 
+/* role */
+.role-pill {
+    height: 38px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 999px;
+    font-size: .85rem;
+    background: linear-gradient(135deg,#22c1c3,#4facfe);
+}
+
+/* logout */
+.logout-btn {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: #ff4d4d;
+    color: white;
+}
+
+/* Footer style to match glass panels and center to app width */
 /* logout */
 .logout-btn {
     width: 38px;

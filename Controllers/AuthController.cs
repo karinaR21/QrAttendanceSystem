@@ -13,13 +13,14 @@ public class AuthController : Controller
         _context = context;
     }
 
+    // ================= REGISTER =================
+
     [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
 
-    
     [HttpPost]
     public IActionResult Register(string fullName, string email, string password)
     {
@@ -58,6 +59,7 @@ public class AuthController : Controller
         if (role == "Parent")
         {
             var username = email.Split('@')[0];
+
             var child = _context.Users.FirstOrDefault(u =>
                 u.Role == "Student" &&
                 u.Email.StartsWith(username));
@@ -73,15 +75,19 @@ public class AuthController : Controller
         return RedirectToAction("Login");
     }
 
+    // ================= LOGIN =================
+
     [HttpGet]
+
     public IActionResult Login()
     {
         return View();
     }
 
     [HttpPost]
-    public IActionResult Login(string email, string password)
+    public IActionResult Login(string email, string password, bool rememberMe)
     {
+        Console.WriteLine("LOGIN HIT");
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
         if (user == null)
@@ -89,7 +95,7 @@ public class AuthController : Controller
             ViewBag.Error = "Invalid email or password.";
             return View();
         }
-
+       
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
         if (result == PasswordVerificationResult.Failed)
@@ -102,20 +108,37 @@ public class AuthController : Controller
         HttpContext.Session.SetInt32("UserId", user.Id);
         HttpContext.Session.SetString("Email", user.Email);
 
-        //  ВИНАГИ КЪМ HOME
+        if (rememberMe)
+        {
+            Response.Cookies.Append(
+                "RememberEmail",
+                email,
+                new CookieOptions
+                {
+                    Expires = DateTime.Now.AddDays(30),
+                    Path = "/"
+                });
+        }
+        else
+        {
+            Response.Cookies.Delete("RememberEmail");
+        }
+
         return RedirectToAction("Index", "Home");
     }
-
+    // ================= LOGOUT =================
 
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
+
+        // НЕ трием RememberEmail
+
         return RedirectToAction("Login");
     }
+
     public IActionResult Index()
     {
-        return View(); 
+        return View();
     }
-
-
 }

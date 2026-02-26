@@ -1,185 +1,129 @@
 ﻿@using QRAttendanceSystem.Models
-
 @{
     ViewData["Title"] = "Parent Dashboard";
 }
 
 <div class="app-dark-gradient">
-
     <div class="app-container">
 
         <!-- HEADER -->
         <div class="text-white mb-4">
             <h1 class="fw-semibold mb-2">Parent Dashboard</h1>
-
             <span class="email-pill">
                 <i class="bi bi-person-heart me-2"></i>
                 @ViewBag.ChildName
             </span>
         </div>
 
-
-
-        <!-- FILTER BUTTON -->
+        <!-- FILTERS -->
         <div class="mb-4">
             <button class="btn btn-soft"
                     data-bs-toggle="collapse"
                     data-bs-target="#filters">
-
                 <i class="bi bi-funnel me-2"></i>
                 Filters
             </button>
         </div>
 
-
-
-        <!-- FILTER PANEL -->
-        <div class="collapse mb-4
-        @(ViewBag.From != null
-                     || ViewBag.To != null
-                     || ViewBag.SelectedCourse != null
-                     ? "show" : "")"
+        <div class="collapse mb-4 @(ViewBag.From != null || ViewBag.To != null || ViewBag.SelectedCourse != null ? "show" : "")"
              id="filters">
 
             <div class="glass glass-card p-4">
-
                 <form method="get">
-
                     <div class="row g-3 align-items-end">
 
-                        <!-- FROM -->
                         <div class="col-md-3">
                             <label class="text-white-50 small">From</label>
-
                             <input type="date"
                                    name="from"
                                    value="@ViewBag.From"
                                    class="form-control" />
                         </div>
 
-
-                        <!-- TO -->
                         <div class="col-md-3">
                             <label class="text-white-50 small">To</label>
-
                             <input type="date"
                                    name="to"
                                    value="@ViewBag.To"
                                    class="form-control" />
                         </div>
 
-
-                        <!-- COURSE -->
                         <div class="col-md-4">
                             <label class="text-white-50 small">Course</label>
-
                             <select name="courseId" class="form-select">
-
                                 <option value="">All Classes</option>
 
                                 @foreach (Course c in ViewBag.Courses)
                                 {
-                                    if (ViewBag.SelectedCourse != null &&
-                                    (int)ViewBag.SelectedCourse == c.Id)
+                                    if (ViewBag.SelectedCourse != null && (int)ViewBag.SelectedCourse == c.Id)
                                     {
-                                        <option selected value="@c.Id">
-                                            @c.Name
-                                        </option>
+                                        <option value="@c.Id" selected>@c.Name</option>
                                     }
                                     else
                                     {
-                                        <option value="@c.Id">
-                                            @c.Name
-                                        </option>
+                                        <option value="@c.Id">@c.Name</option>
                                     }
                                 }
-
                             </select>
                         </div>
 
-
-                        <!-- APPLY -->
                         <div class="col-md-2">
-                            <button class="btn btn-soft w-100">
-                                Apply
-                            </button>
+                            <button class="btn btn-soft w-100">Apply</button>
                         </div>
 
                     </div>
-
                 </form>
-
             </div>
         </div>
 
-
-
-        <!-- ACTIVE FILTERS -->
-        @if (ViewBag.From != null
-                || ViewBag.To != null
-                || ViewBag.SelectedCourse != null)
-        {
-            var selectedCourse = ((List<Course>)ViewBag.Courses)
-            .FirstOrDefault(c => c.Id == ViewBag.SelectedCourse);
-
-            <div class="glass glass-card p-3 mb-4">
-
-                <span class="text-white-50 me-2">
-                    Showing results for:
-                </span>
-
-                @if (ViewBag.From != null)
-                {
-                    <span class="badge bg-light text-dark me-2">
-                        From @ViewBag.From
-                    </span>
-                }
-
-                @if (ViewBag.To != null)
-                {
-                    <span class="badge bg-light text-dark me-2">
-                        To @ViewBag.To
-                    </span>
-                }
-
-                @if (selectedCourse != null)
-                {
-                    <span class="badge bg-light text-dark me-2">
-                        @selectedCourse.Name
-                    </span>
-                }
-
-                <a href="/Statistics/Parent"
-                   class="btn btn-sm btn-soft ms-2">
-                    Clear
-                </a>
-
-            </div>
-        }
-
-
-
-        <!-- NO RESULTS -->
         @if (!(bool)ViewBag.HasResults)
         {
             <div class="glass glass-card text-center p-5 mt-4">
-
                 <i class="bi bi-search display-4 opacity-25 mb-3"></i>
-
                 <h4>No attendance records were found</h4>
-
-                <p class="text-white-50">
-                    Try adjusting the filters.
-                </p>
-
+                <p class="text-white-50">Try adjusting the filters.</p>
             </div>
         }
         else
         {
+            var riskLevel = ViewBag.RiskLevel ?? "Good";
+
+            var riskColor = riskLevel == "High"
+            ? "danger"
+            : riskLevel == "Warning"
+            ? "warning"
+            : "success";
+
+            var riskIcon = riskLevel == "High"
+            ? "bi-exclamation-triangle-fill"
+            : riskLevel == "Warning"
+            ? "bi-exclamation-circle-fill"
+            : "bi-check-circle-fill";
+
+            <!-- RISK CARD -->
+            <div class="glass glass-card mb-4 border-start border-4 border-@riskColor">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi @riskIcon fs-2 text-@riskColor"></i>
+                    <div>
+                        <h5 class="mb-1">
+                            Attendance Risk:
+                            <span class="text-@riskColor fw-semibold">
+                                @ViewBag.RiskLevel
+                            </span>
+                        </h5>
+                        <div class="text-white-50">
+                            @ViewBag.RiskMessage
+                        </div>
+                        <div class="mt-2 small">
+                            Current Attendance Rate:
+                            <strong>@ViewBag.AttendancePercentage%</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- STATS -->
             <div class="row g-4 mb-5">
-
                 <div class="col-md-4">
                     <div class="stats-card glass highlight">
                         <span>Total Records</span>
@@ -189,22 +133,16 @@
 
                 @foreach (var item in ViewBag.ByStatus)
                 {
-                    var highlight =
-                    item.Status.ToString() == "Present"
-                    ? "highlight"
-                    : "";
+                    var statHighlight = item.Status == "Present" ? "highlight" : "";
 
                     <div class="col-md-4">
-                        <div class="stats-card glass @highlight">
+                        <div class="stats-card glass @statHighlight">
                             <span>@item.Status Days</span>
                             <h1>@item.Count</h1>
                         </div>
                     </div>
                 }
-
             </div>
-
-
 
             <!-- COURSE + RECENT -->
             <div class="row g-4">
@@ -219,27 +157,37 @@
 
                         @foreach (var item in ViewBag.ByCourse)
                         {
-                            <div class="course-item-modern d-flex justify-content-between align-items-center">
-                                <div class="course-left d-flex align-items-center gap-3">
-                                    <div class="course-icon">
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded"
+                                 style="background: rgba(255,255,255,0.05);">
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="icon-circle bg-primary-gradient"
+                                         style="width:40px;height:40px;">
                                         <i class="bi bi-book"></i>
                                     </div>
 
-                                    <span class="course-name">
-                                        @item.Course
-                                    </span>
+                                    <div>
+                                        <div class="fw-semibold">
+                                            @item.Course
+                                        </div>
+
+                                        <div class="opacity-75 small">
+                                            Total attendances
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <span class="course-count">
+                                <span class="badge bg-light text-dark px-3 py-2">
                                     @item.Count
                                 </span>
+
                             </div>
                         }
 
                     </div>
                 </div>
-
-
 
                 <div class="col-lg-6">
                     <div class="glass glass-card h-100">
@@ -251,25 +199,34 @@
 
                         @foreach (var item in ViewBag.Recent)
                         {
-                            var color =
-                            item.Status.ToString() == "Present"
-                            ? "success"
-                            : item.Status.ToString() == "Late"
-                            ? "warning"
-                            : "danger";
+                            var badgeColor =
+                            item.Status == "Present" ? "success" :
+                            item.Status == "Late" ? "warning" :
+                            "danger";
 
-                            <div class="activity-item-modern d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded"
+                                 style="background: rgba(255,255,255,0.05);">
 
-                                <div>
-                                    <div>@item.Course</div>
+                                <div class="d-flex align-items-center gap-3">
 
-                                    <div class="opacity-75">
-                                        <i class="bi bi-calendar-event me-1"></i>
-                                        @item.TimeRecorded
+                                    <div class="icon-circle bg-primary-gradient"
+                                         style="width:40px;height:40px;">
+                                        <i class="bi bi-calendar-check"></i>
                                     </div>
+
+                                    <div>
+                                        <div class="fw-semibold">
+                                            @item.Course
+                                        </div>
+
+                                        <div class="opacity-75 small">
+                                            @item.TimeRecorded
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <span class="badge rounded-pill bg-@color px-3 py-2">
+                                <span class="badge bg-@badgeColor px-3 py-2">
                                     @item.Status
                                 </span>
 
@@ -278,10 +235,7 @@
 
                     </div>
                 </div>
-
             </div>
-
         }
-
     </div>
 </div>
