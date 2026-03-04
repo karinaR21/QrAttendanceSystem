@@ -6,16 +6,16 @@ namespace QRAttendanceSystem.Models
     {
         public int Id { get; set; }
 
-        public DateTime Date { get; set; }
-
         public int CourseId { get; set; }
         public Course? Course { get; set; }
 
+        public DateTime Date { get; set; }
         public int Grade { get; set; }
-        public string Section { get; set; }=null!;
+        public string Section { get; set; } = string.Empty;
 
-        public string? Title { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime PresentUntil { get; set; }
+        public DateTime LateUntil { get; set; }
+        public DateTime EndTime { get; set; }
     }
-
-
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 
+[Route("[controller]/[action]")]
 public class AttendanceController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -11,95 +13,132 @@ public class AttendanceController : Controller
         _context = context;
     }
 
-    // Навигация от менюто (САМО за Teacher)
-    public IActionResult GenerateQr()
+    // ================= TEACHER =================
+
+    [HttpGet]
+    public IActionResult Generate(int sessionId)
     {
-        var role = HttpContext.Session.GetString("Role");
-        if (role != "Teacher")
-            return Unauthorized();
+        // invalidate previous unused tokens
+        var oldTokens = _context.QrTokens
+            .Where(t => t.SessionId == sessionId && !t.IsUsed);
 
-        return RedirectToAction("Create", "Sessions");
-    }
-
-    // Реално генериране на QR
-    public IActionResult ShowQr(int sessionId)
-    {
-        var token = _context.QrTokens
-            .FirstOrDefault(t => t.SessionId == sessionId);
-
-        if (token == null)
+        foreach (var t in oldTokens)
         {
-            token = new QrToken
-            {
-                Token = Guid.NewGuid().ToString(),
-                ExpirationTime = DateTime.Now.AddMinutes(5),
-                IsUsed = false,
-                SessionId = sessionId
-            };
-
-            _context.QrTokens.Add(token);
-            _context.SaveChanges();
-        }
-        else
-        {
-            //  REFRESH → token already exists
-            return View("QrInvalid");
+            t.ExpirationTime = DateTime.UtcNow;
         }
 
-        return View(token);
+        var token = new QrToken
+        {
+            Token = Guid.NewGuid().ToString(),
+            ExpirationTime = DateTime.UtcNow.AddSeconds(15), 
+            IsUsed = false,
+            SessionId = sessionId
+        };
+
+        _context.QrTokens.Add(token);
+        _context.SaveChanges();
+
+        token = _context.QrTokens
+            .Include(t => t.Session)
+            .First(t => t.Id == token.Id);
+
+        return View("ShowQr", token);
     }
+
+    // ================= STUDENT =================
 
     [HttpGet]
     public IActionResult Scan()
     {
-        var role = HttpContext.Session.GetString("Role");
-
-        if (role != "Student")
-            return Unauthorized();
-
         return View();
     }
 
-
-    //  СКАНИРАНЕ ОТ ТЕЛЕФОН (Student)
     [HttpPost]
     public IActionResult Register([FromBody] ScanRequest request)
     {
-        var role = HttpContext.Session.GetString("Role");
-        if (role != "Student")
-            return Unauthorized("Only students can scan");
+        var userId = HttpContext.Session.GetInt32("UserId");
+        if (userId == null)
+            return Unauthorized();
 
-        var studentId = HttpContext.Session.GetInt32("StudentId");
-        if (studentId == null)
-            return Unauthorized("Not logged in");
+        var qr = _context.QrTokens
+            .FirstOrDefault(q => q.Token == request.Token);
 
-        var qr = _context.QrTokens.FirstOrDefault(q =>
-            q.Token == request.Token &&
-            q.ExpirationTime > DateTime.Now &&
-            !q.IsUsed);
+        if (qr == null ||
+            qr.IsUsed ||
+            qr.ExpirationTime < DateTime.UtcNow)
+        {
+            return BadRequest("QR expired or invalid");
+        }
 
-        if (qr == null)
-            return BadRequest("Invalid or expired QR code");
+        var session = _context.Sessions
+            .FirstOrDefault(s => s.Id == qr.SessionId);
 
-        bool alreadyExists = _context.Attendances.Any(a =>
-            a.StudentId == studentId.Value &&
-            a.SessionId == qr.SessionId);
+        if (session == null)
+            return BadRequest("Invalid session");
 
-        if (alreadyExists)
+        var now = DateTime.UtcNow;
+
+        bool exists = _context.Attendances.Any(a =>
+            a.UserId == userId.Value &&
+            a.SessionId == session.Id);
+
+        if (exists)
             return BadRequest("Attendance already recorded");
 
-        var attendance = new Attendance
-        {
-            StudentId = studentId.Value,
-            SessionId = qr.SessionId,
-            TimeRecorded = DateTime.Now
-        };
+        AttendanceStatus status;
 
+        if (now > session.EndTime)
+        {
+            status = AttendanceStatus.Absent;
+        }
+        else if (now <= session.PresentUntil)
+        {
+            status = AttendanceStatus.Present;
+        }
+        else
+        {
+            status = AttendanceStatus.Late;
+        }
+
+        _context.Attendances.Add(new Attendance
+        {
+            UserId = userId.Value,
+            SessionId = session.Id,
+            TimeRecorded = now,
+            Status = status
+        });
+
+        // mark QR as used
         qr.IsUsed = true;
 
-        _context.Attendances.Add(attendance);
         _context.SaveChanges();
 
-        return Ok("Attendance recorded successfully");
+        return Ok(status.ToString());
     }
+
+    [HttpGet]
+    public IActionResult QrInvalid()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult LiveList(int sessionId)
+    {
+        var list = _context.Attendances
+            .Where(a => a.SessionId == sessionId)
+            .OrderBy(a => a.TimeRecorded)
+            .Select(a => new
+            {
+                Student = a.User.FullName,
+                Status = a.Status.ToString(),
+                Time = a.TimeRecorded.HasValue
+    ? a.TimeRecorded.Value.ToLocalTime().ToString("HH:mm:ss")
+    : "-"
+            })
+            .ToList();
+
+        return Json(list);
+    }
+
 }

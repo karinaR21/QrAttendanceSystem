@@ -14,15 +14,41 @@ namespace QRAttendanceSystem.Controllers
             _context = context;
         }
 
+        public IActionResult Show(int sessionId)
+        {
+            var model = new QrToken
+            {
+                SessionId = sessionId
+            };
+
+            return View("Generate", model);
+        }
+
+        // Генерира PNG
         public IActionResult Generate(int sessionId)
         {
+            var sessionExists = _context.Sessions.Any(s => s.Id == sessionId);
+            if (!sessionExists)
+            {
+                return StatusCode(204); 
+            }
+
+            // invalidate old tokens
+            var oldTokens = _context.QrTokens
+                .Where(t => t.SessionId == sessionId && !t.IsUsed);
+
+            foreach (var t in oldTokens)
+            {
+                t.ExpirationTime = DateTime.UtcNow;
+            }
+
             var token = Guid.NewGuid().ToString();
 
             var qrToken = new QrToken
             {
                 Token = token,
                 SessionId = sessionId,
-                ExpirationTime = DateTime.Now.AddMinutes(5),
+                ExpirationTime = DateTime.UtcNow.AddSeconds(15),
                 IsUsed = false
             };
 

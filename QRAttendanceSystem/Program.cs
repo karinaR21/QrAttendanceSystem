@@ -1,17 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Data;
-
+using OfficeOpenXml;
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// DATABASE
+// Remove localization configuration
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// MVC
 builder.Services.AddControllersWithViews();
 
-//  ?????? ???? – ?? ???? ???? Session
+// configure RequestLocalization options later when building the app
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -22,6 +24,17 @@ builder.Services.AddSession();
 
 
 var app = builder.Build();
+
+// Request localization
+var cultures = new[] { new System.Globalization.CultureInfo("bg"), new System.Globalization.CultureInfo("en") };
+var requestLocalizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("bg"),
+    SupportedCultures = cultures,
+    SupportedUICultures = cultures
+};
+
+app.UseRequestLocalization(requestLocalizationOptions);
 
 if (!app.Environment.IsDevelopment())
 {
@@ -36,7 +49,6 @@ app.UseRouting();
 app.UseSession();
 
 
-//  ?????: Session ?????? ?? ? ????? Authorization
 app.UseSession();
 
 app.UseAuthorization();

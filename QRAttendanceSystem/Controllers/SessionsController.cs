@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 using QRAttendanceSystem.ViewModels;
@@ -12,49 +14,75 @@ public class SessionsController : Controller
         _context = context;
     }
 
-    
+    public IActionResult Index()
+    {
+        var sessions = _context.Sessions
+            .Include(s => s.Course)
+            .OrderByDescending(s => s.StartTime)
+            .ToList();
+
+        return View(sessions);
+    }
+
     [HttpGet]
     public IActionResult Create()
     {
-        ViewBag.Courses = _context.Courses.ToList();
-        return View(new CreateSessionViewModel()); //  ВАЖНО
+        var vm = new CreateSessionViewModel
+        {
+            Courses = _context.Courses
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList(),
+
+            SessionDate = DateTime.Today
+        };
+
+        return View(vm);
     }
 
-    
     [HttpPost]
-    public IActionResult Create(CreateSessionViewModel model)
+    public IActionResult Create(CreateSessionViewModel vm)
     {
-        ViewBag.Courses = _context.Courses.ToList();
-
         if (!ModelState.IsValid)
         {
-            return View(model); 
+            vm.Courses = _context.Courses
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                })
+                .ToList();
+
+            return View(vm);
         }
 
-        var course = _context.Courses.Find(model.CourseId!.Value);
-        if (course == null)
-        {
-            ModelState.AddModelError("CourseId", "Invalid course");
-            return View(model);
-        }
+        var start = vm.SessionDate!.Value.Date
+                    .Add(vm.StartTime!.Value);
 
         var session = new Session
         {
-            CourseId = model.CourseId.Value,
-            Date = model.Date.Value,
-            Grade = model.Grade.Value,
-            Section = model.Section,
-            Title = $"{model.Grade}{model.Section} – {course.Name} – {model.Date:dd.MM.yyyy HH:mm}"
-        };
+            CourseId = vm.CourseId!.Value,
 
+            StartTime = start,
+            PresentUntil = start.AddMinutes(3),
+            EndTime = start.AddMinutes(45),
+
+            Date = start.Date,
+            Grade = vm.Grade!.Value,
+            Section = vm.Section!
+        };
 
         _context.Sessions.Add(session);
         _context.SaveChanges();
 
         return RedirectToAction(
-            "ShowQr",
+            "Generate",
             "Attendance",
             new { sessionId = session.Id }
         );
     }
+
 }

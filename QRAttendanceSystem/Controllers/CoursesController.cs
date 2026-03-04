@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 
@@ -15,24 +16,46 @@ namespace QRAttendanceSystem.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Courses.ToList());
+            var courses = _context.Courses.ToList();
+            return View(courses);
         }
 
         public IActionResult Create()
         {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Teacher")
+                return Unauthorized();
+
+            ViewBag.Teachers = new SelectList(
+                _context.Users.Where(u => u.Role == "Teacher"),
+                "Id",
+                "Email" 
+            );
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(Course course)
         {
-            if (ModelState.IsValid)
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Teacher")
+                return Unauthorized();
+
+            if (!ModelState.IsValid)
             {
-                _context.Courses.Add(course);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+                ViewBag.Teachers = new SelectList(
+                    _context.Users.Where(u => u.Role == "Teacher"),
+                    "Id",
+                    "Email"
+                );
+                return View(course);
             }
-            return View(course);
+
+            _context.Courses.Add(course);
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

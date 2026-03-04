@@ -1,0 +1,296 @@
+﻿:root {
+    --bg-dark: #0f172a;
+    --accent-indigo: #6366f1;
+    --accent-cyan: #22d3ee;
+    --accent-purple: #8b5cf6;
+    --text-main: #ffffff;
+    --text-dim: rgba(255, 255, 255, 0.7);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+/* ===============================
+   HERO SECTION
+================================= */
+
+.landing-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+}
+
+    .landing-hero .container {
+        position: relative;
+        z-index: 5;
+    }
+
+    .landing-hero .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+/* ===============================
+   BACKGROUND BLOBS
+================================= */
+
+.blob {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.5;
+    animation: blobMove 18s infinite alternate ease-in-out;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.blob-1 {
+    background: var(--accent-indigo);
+    top: -100px;
+    left: -100px;
+}
+
+.blob-2 {
+    background: var(--accent-cyan);
+    bottom: -100px;
+    right: -100px;
+    animation-delay: 4s;
+}
+
+.blob-3 {
+    background: var(--accent-purple);
+    top: 30%;
+    left: 40%;
+    animation-delay: 8s;
+}
+
+@keyframes blobMove {
+    from {
+        transform: translate(0,0) scale(1);
+    }
+
+    to {
+        transform: translate(60px, 40px) scale(1.15);
+    }
+}
+
+/* ===============================
+   TYPOGRAPHY
+================================= */
+
+.display-title {
+    font-weight: 800;
+    font-size: 4rem;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+
+.lead-text {
+    color: var(--text-dim);
+    font-size: 1.15rem;
+    margin-bottom: 2.5rem;
+    max-width: 520px;
+}
+
+/* ===============================
+   BUTTON
+================================= */
+
+.btn-get-started {
+    background: var(--accent-indigo);
+    color: white;
+    padding: 18px 45px;
+    border-radius: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    border: none;
+    transition: background 0.3s ease;
+}
+
+    .btn-get-started:hover {
+        background: var(--accent-purple);
+        color: white;
+    }
+
+/* ===============================
+   SYSTEM CORE CARD (FIXED)
+================================= */
+
+.system-core {
+    position: relative;
+    width: 100%;
+    max-width: 340px; 
+    height: 340px; 
+    margin: 0 auto;
+    border-radius: 28px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+.core-ring {
+    position: absolute;
+    inset: 20px;
+    border-radius: 50%;
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    animation: spin 25s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.qr-main {
+    font-size: 5rem;
+    color: white;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+}
+
+/* ===============================
+   FLOATING ICONS
+================================= */
+
+.floating-icon {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+    animation: floatSoft 5s ease-in-out infinite;
+    z-index: 12;
+}
+
+.icon-1 {
+    top: -10px;
+    right: -10px;
+}
+
+.icon-2 {
+    bottom: 10px;
+    left: -30px;
+}
+
+.icon-3 {
+    bottom: -20px;
+    right: 40px;
+}
+
+@keyframes floatSoft {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(10deg);
+    }
+}
+
+/* ===============================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 768px) {
+
+    .landing-hero {
+        min-height: auto;
+        padding: 40px 0;
+    }
+
+    .display-title {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .lead-text {
+        font-size: 1rem;
+        max-width: 100%;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-get-started {
+        width: 100%;
+        justify-content: center;
+        padding: 14px;
+        margin-bottom: 30px;
+    }
+
+    .landing-hero .row {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .landing-hero .col-lg-6,
+    .landing-hero .col-lg-5,
+    .landing-hero .offset-lg-1 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Smaller card on mobile */
+    .system-core {
+        max-width: 300px;
+        height: 300px;
+        border-radius: 22px;
+    }
+
+
+
+    .core-ring {
+        inset: 15px;
+    }
+
+    .qr-main {
+        font-size: 3.5rem;
+    }
+    .core-center {
+        text-align: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .display-title {
+        font-size: 1.6rem;
+    }
+
+    .lead-text {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .display-title {
+        font-size: 1.3rem;
+    }
+}

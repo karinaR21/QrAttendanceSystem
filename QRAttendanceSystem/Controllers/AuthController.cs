@@ -13,6 +13,8 @@ public class AuthController : Controller
         _context = context;
     }
 
+    // ================= REGISTER =================
+
     [HttpGet]
     public IActionResult Register()
     {
@@ -20,10 +22,13 @@ public class AuthController : Controller
     }
 
     [HttpPost]
-    public IActionResult Register(string email, string password)
+    public IActionResult Register(string fullName, string email, string password)
     {
         if (_context.Users.Any(u => u.Email == email))
-            return Content("User already exists");
+        {
+            ViewBag.Error = "User with this email already exists.";
+            return View();
+        }
 
         string role;
 
@@ -34,10 +39,14 @@ public class AuthController : Controller
         else if (email.EndsWith("@parent.school.bg"))
             role = "Parent";
         else
-            return Content("Invalid email domain");
+        {
+            ViewBag.Error = "Invalid email domain.";
+            return View();
+        }
 
         var user = new User
         {
+            FullName = fullName,
             Email = email,
             Role = role
         };
@@ -45,12 +54,10 @@ public class AuthController : Controller
         user.PasswordHash = _hasher.HashPassword(user, password);
 
         _context.Users.Add(user);
-        _context.SaveChanges(); // ⚠️ важно – за да имаме user.Id
+        _context.SaveChanges();
 
-        // 🔗 AUTO LINK PARENT → STUDENT
         if (role == "Parent")
         {
-            // взимаме частта преди @
             var username = email.Split('@')[0];
 
             var child = _context.Users.FirstOrDefault(u =>
@@ -64,54 +71,73 @@ public class AuthController : Controller
             }
         }
 
+        TempData["Success"] = "Account created successfully. You can now log in.";
         return RedirectToAction("Login");
     }
 
-
-
+    // ================= LOGIN =================
 
     [HttpGet]
+
     public IActionResult Login()
     {
         return View();
     }
 
-    
     [HttpPost]
-    public IActionResult Login(string email, string password)
+    public IActionResult Login(string email, string password, bool rememberMe)
     {
+        Console.WriteLine("LOGIN HIT");
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
-        if (user == null)
-            return Content("Invalid credentials");
 
+        if (user == null)
+        {
+            ViewBag.Error = "Invalid email or password.";
+            return View();
+        }
+       
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
         if (result == PasswordVerificationResult.Failed)
-            return Content("Invalid credentials");
+        {
+            ViewBag.Error = "Invalid email or password.";
+            return View();
+        }
 
-        if (string.IsNullOrEmpty(user.Role))
-            return Content("User has no role assigned");
-
-        //  СЕСИЯ
         HttpContext.Session.SetString("Role", user.Role);
         HttpContext.Session.SetInt32("UserId", user.Id);
+        HttpContext.Session.SetString("Email", user.Email);
 
-        if (user.Role == "Student")
+        if (rememberMe)
         {
-            HttpContext.Session.SetInt32("StudentId", user.Id);
+            Response.Cookies.Append(
+                "RememberEmail",
+                email,
+                new CookieOptions
+                {
+                    Expires = DateTime.Now.AddDays(30),
+                    Path = "/"
+                });
+        }
+        else
+        {
+            Response.Cookies.Delete("RememberEmail");
         }
 
         return RedirectToAction("Index", "Home");
     }
+    // ================= LOGOUT =================
+
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
+
+
         return RedirectToAction("Login");
     }
+
     public IActionResult Index()
     {
         return View();
     }
-
-
 }

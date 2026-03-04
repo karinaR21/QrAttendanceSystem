@@ -1,74 +1,117 @@
 ﻿@model QRAttendanceSystem.ViewModels.CreateSessionViewModel
-
-
 @{
     ViewData["Title"] = "Create Session";
 }
 
-<div class="d-flex justify-content-center mt-5">
-    <div style="max-width: 420px; width:100%;">
+<div class="create-session-page d-flex justify-content-center align-items-center">
 
-        <div class="card shadow-lg p-4 rounded-4 border-0 slide-in">
+    <div class="session-card slide-in">
 
-            <h4 class="fw-bold mb-4 text-center">
+        <!-- HEADER -->
+        <div class="session-header text-center mb-4">
+
+            <div class="icon-circle mb-3">
+                <i class="bi bi-calendar-plus"></i>
+            </div>
+
+            <h3 class="session-title mb-1">
                 Create Session
-            </h4>
+            </h3>
 
-            <form asp-action="Create" method="post">
-
-                <div class="mb-3">
-                    <label class="form-label">Course</label>
-                    <select asp-for="CourseId" class="form-select">
-                        <option value="">-- Select course --</option>
-                        @foreach (var course in ViewBag.Courses)
-                        {
-                            <option value="@course.Id">@course.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="CourseId" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Grade</label>
-                    <select asp-for="Grade" class="form-select">
-                        <option value="">-- Select grade --</option>
-                        @for (int i = 7; i <= 12; i++)
-                        {
-                            <option value="@i">@i</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Grade" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Section</label>
-                    <select asp-for="Section" class="form-select">
-                        <option value="">-- Select section --</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                    </select>
-                    <span asp-validation-for="Section" class="text-danger"></span>
-                </div>
-
-
-                <div class="mb-4">
-                    <label class="form-label">Date & Time</label>
-                    <input asp-for="Date"
-                           type="datetime-local"
-                           class="form-control" />
-                    <span asp-validation-for="Date" class="text-danger"></span>
-                </div>
-
-                <button type="submit"
-                        class="btn btn-primary w-100">
-                    Create Session & Generate QR
-                </button>
-
-            </form>
-
+            <p class="session-subtitle">
+                Set up a new QR attendance session
+            </p>
 
         </div>
+
+        <form method="post">
+
+            <!-- COURSE -->
+            <div class="form-group-modern">
+                <label>Course</label>
+                <select asp-for="CourseId"
+                        asp-items="Model.Courses"
+                        class="form-select">
+
+                    <option value="" selected disabled hidden>
+                        Select course
+                    </option>
+
+                </select>
+                <span asp-validation-for="CourseId" class="text-danger small"></span>
+            </div>
+
+
+            <!-- DATE + TIME -->
+            <div class="row g-3">
+
+                <div class="col-6">
+                    <div class="form-group-modern">
+                        <label>Date</label>
+                        <input asp-for="SessionDate"
+                               type="date"
+                               class="form-control" />
+                        <span asp-validation-for="SessionDate" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="form-group-modern">
+                        <label>Start time</label>
+                        <input asp-for="StartTime"
+                               type="time"
+                               class="form-control" />
+                        <span asp-validation-for="StartTime" class="text-danger small"></span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- GRADE -->
+            <div class="form-group-modern">
+                <label>Grade</label>
+                <select asp-for="Grade" class="form-select">
+
+                    <option value="" selected disabled hidden>
+                        Select grade
+                    </option>
+
+                    @for (int g = 7; g <= 12; g++)
+                    {
+                        <option value="@g">@g</option>
+                    }
+
+                </select>
+                <span asp-validation-for="Grade" class="text-danger small"></span>
+            </div>
+
+
+            <!-- SECTION -->
+            <div class="form-group-modern">
+                <label>Section</label>
+                <select asp-for="Section" class="form-select">
+
+                    <option value="" selected disabled hidden>
+                        Select section
+                    </option>
+
+                    <option>А</option>
+                    <option>Б</option>
+                    <option>В</option>
+                    <option>Г</option>
+
+                </select>
+                <span asp-validation-for="Section" class="text-danger small"></span>
+            </div>
+
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn btn-soft w-100 mt-3">
+                <i class="bi bi-qr-code-scan me-2"></i>
+                Generate QR Session
+            </button>
+
+        </form>
 
     </div>
 </div>
@@ -76,3 +119,147 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+
+    .create-session-page {
+        min-height: 100vh;
+        padding: 30px;
+        background: radial-gradient(circle at 15% 20%, rgba(140,82,255,0.25), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,198,255,0.18), transparent 40%), linear-gradient(135deg,#0f2027,#1b2a49,#2c2f6b);
+    }
+
+    .create-session-page {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .create-session-page::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(167,139,250,0.25), transparent 60%);
+            top: -120px;
+            right: -120px;
+            filter: blur(60px);
+        }
+
+    .session-card {
+        width: 100%;
+        max-width: 400px;
+        padding: 28px;
+        border-radius: 26px;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 25px 60px rgba(0,0,0,.35);
+        color: #fff;
+    }
+
+    .icon-circle {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        background: linear-gradient(135deg,#1677ff,#00c6ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin: auto;
+        box-shadow: 0 8px 20px rgba(0,0,0,.35);
+    }
+
+    .session-title {
+        font-size: 1.55rem;
+        font-weight: 500;
+        letter-spacing: .2px;
+    }
+
+    .session-subtitle {
+        font-size: .9rem;
+        opacity: .75;
+        margin-bottom: 0;
+    }
+
+    .form-group-modern {
+        margin-bottom: 16px;
+    }
+
+        .form-group-modern label {
+            font-size: .8rem;
+            font-weight: 400;
+            opacity: .85;
+            margin-bottom: 4px;
+        }
+
+    .form-control,
+    .form-select {
+        background: rgba(255,255,255,.95);
+        border: none;
+        border-radius: 14px;
+        padding: 10px 14px;
+        font-size: .95rem;
+        font-weight: 400;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 .15rem rgba(13,110,253,.25);
+        }
+
+    .btn-soft {
+        border: none;
+        border-radius: 16px;
+        padding: 12px;
+        font-size: 1rem;
+        font-weight: 500;
+        background: linear-gradient(135deg,#20c997,#00e676);
+        box-shadow: 0 10px 25px rgba(0,255,140,.35);
+        transition: .25s;
+    }
+
+        .btn-soft:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(0,255,140,.45);
+        }
+
+    .slide-in {
+        animation: slideIn .5s ease;
+    }
+
+    @@keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    @@media(max - width:768px) {
+
+        .session-card {
+            padding: 22px;
+        }
+    }
+
+    .form-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: rgba(255,255,255,.95);
+        background-image: url("data:image/svg+xml;utf8,<svg fill='%235c6ac4' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5.5 7.5l4.5 4.5 4.5-4.5'/></svg>");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        background-size: 18px;
+        padding-right: 40px; 
+    }
+
+        .form-select:invalid {
+            color: #9aa3b2;
+        }
+
+</style>
