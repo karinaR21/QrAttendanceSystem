@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Parent Home";
+    var email = Context.Session.GetString("Email");
+}
+
+<div class="bg-visuals">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="app-container mt-5 py-4">
+
+    <!-- HEADER -->
+    <div class="mb-5 text-white animate__animated animate__fadeIn">
+        <span class="badge rounded-pill px-3 py-2 mb-3 parent-badge">
+            <i class="bi bi-people-fill me-2"></i> Parent Dashboard
+        </span>
+
+        <h1 class="fw-bold display-5 mb-2">
+            Welcome, Parent 👨‍👩‍👧
+        </h1>
+
+        @if (!string.IsNullOrEmpty(email))
+        {
+            <div class="email-pill mb-2">
+                <i class="bi bi-envelope-at-fill"></i>
+                <span>@email</span>
+            </div>
+        }
+
+        <p class="text-white-50 fs-5">
+            Monitor your child’s attendance and progress
+        </p>
+    </div>
+
+    <!-- ACTION CARDS -->
+    <div class="row g-4 justify-content-center">
+
+        <!-- CHILD ATTENDANCE -->
+        <div class="col-md-6 col-lg-5">
+            <a asp-controller="Statistics" asp-action="Parent"
+               class="text-decoration-none">
+                <div class="glass p-5 h-100 hover-card">
+                    <div class="icon-circle bg-primary-gradient mb-4">
+                        <i class="bi bi-person-check"></i>
+                    </div>
+
+                    <h3 class="fw-bold mt-2 text-white">
+                        Child Attendance
+                    </h3>
+
+                    <p class="text-white-50 mb-0">
+                        View detailed attendance records
+                    </p>
+
+                    <div class="scan-text">
+                        View Records <i class="bi bi-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        
+    </div>
+</div>

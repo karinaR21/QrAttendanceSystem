@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 
@@ -26,12 +25,6 @@ namespace QRAttendanceSystem.Controllers
             if (role != "Teacher")
                 return Unauthorized();
 
-            ViewBag.Teachers = new SelectList(
-                _context.Users.Where(u => u.Role == "Teacher"),
-                "Id",
-                "Email" 
-            );
-
             return View();
         }
 
@@ -43,14 +36,7 @@ namespace QRAttendanceSystem.Controllers
                 return Unauthorized();
 
             if (!ModelState.IsValid)
-            {
-                ViewBag.Teachers = new SelectList(
-                    _context.Users.Where(u => u.Role == "Teacher"),
-                    "Id",
-                    "Email"
-                );
                 return View(course);
-            }
 
             _context.Courses.Add(course);
             _context.SaveChanges();

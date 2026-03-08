@@ -255,6 +255,8 @@
                         <i id="eyeIcon" class="bi bi-eye"></i>
                     </span>
                 </div>
+                
+                <div id="passwordError" class="alert alert-danger mt-3 d-none" role="alert"></div>
             </div>
 
             <button type="submit" class="btn btn-login">
@@ -277,7 +279,6 @@
         function togglePassword() {
             const pass = document.getElementById("password");
             const icon = document.getElementById("eyeIcon");
-
             if (pass.type === "password") {
                 pass.type = "text";
                 icon.classList.replace("bi-eye", "bi-eye-slash");

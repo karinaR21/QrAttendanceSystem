@@ -1,0 +1,45 @@
+﻿@model QRAttendanceSystem.Models.QrToken
+
+<h2 class="text-center mb-4">Generate QR Code</h2>
+
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow-lg text-center p-4">
+            <p class="text-muted mb-2">
+                QR refreshes every 15 seconds
+            </p>
+
+            <img id="qrImage"
+                 class="rounded border shadow-sm my-3"
+                 style="width:160px; height:160px;"
+                 src="@Url.Action("Generate", "Qr", new { sessionId = Model.SessionId })" />
+
+            <span class="badge bg-warning text-dark">
+                Valid 15 seconds
+            </span>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function refreshQr() {
+
+        const url = "/Qr/Generate?sessionId=@Model.SessionId&t=" + new Date().getTime();
+
+        try {
+            const response = await fetch(url);
+
+            if (!response.ok) return;
+
+            const blob = await response.blob();
+            const imgUrl = URL.createObjectURL(blob);
+
+            document.getElementById("qrImage").src = imgUrl;
+
+        } catch (e) {
+            console.log("QR refresh skipped");
+        }
+    }
+
+    setInterval(refreshQr, 15000);
+</script>

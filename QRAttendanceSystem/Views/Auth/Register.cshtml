@@ -235,9 +235,17 @@
 
             <div class="mb-3">
                 <label class="form-label">Email Address</label>
-                <input name="email" type="email" class="form-control" placeholder="name@school.bg" required />
+                <input name="email" type="email" class="form-control" placeholder="name.parent.school.bg" required />
                 <div class="domain-hint mt-2">
-                    <i class="bi bi-info-circle me-1"></i> Role is assigned automatically by your email domain.
+                    <i class="bi bi-info-circle me-1"></i> Role is assigned automatically by your email domain. Parents should register using the format `name.parent.school.bg`.
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Child's Email (optional)</label>
+                <input name="childEmail" type="email" class="form-control" placeholder="child@student.school.bg" />
+                <div class="domain-hint mt-2">
+                    <i class="bi bi-link-45deg me-1"></i> Provide your child's school email to link accounts automatically.
                 </div>
             </div>
 
@@ -249,6 +257,8 @@
                         <i id="eyeIcon" class="bi bi-eye"></i>
                     </span>
                 </div>
+        
+                <div id="passwordError" class="alert alert-danger mt-3 d-none" role="alert"></div>
             </div>
 
             <button type="submit" class="btn btn-register">
@@ -279,5 +289,32 @@
                 icon.classList.replace("bi-eye-slash", "bi-eye");
             }
         }
+
+        function validatePasswordStrength(p) {
+            const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+            return re.test(p);
+        }
+
+        (function () {
+            const form = document.querySelector('form[method="post"]');
+            const passInput = document.getElementById('password');
+            const errorDiv = document.getElementById('passwordError');
+
+            form.addEventListener('submit', function (e) {
+                const pass = passInput.value;
+                if (!validatePasswordStrength(pass)) {
+                    e.preventDefault();
+                    errorDiv.textContent = 'Password must be 8-12 characters and include uppercase, lowercase letters and numbers.';
+                    errorDiv.classList.remove('d-none');
+                    passInput.focus();
+                }
+            });
+
+            passInput.addEventListener('input', function () {
+                if (validatePasswordStrength(passInput.value)) {
+                    errorDiv.classList.add('d-none');
+                }
+            });
+        })();
     </script>
 }

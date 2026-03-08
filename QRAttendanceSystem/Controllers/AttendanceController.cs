@@ -18,9 +18,24 @@ public class AttendanceController : Controller
     [HttpGet]
     public IActionResult Generate(int sessionId)
     {
-        // invalidate previous unused tokens
+        var role = HttpContext.Session.GetString("Role");
+        if (role != "Teacher")
+            return Unauthorized();
+
+        var teacherId = HttpContext.Session.GetInt32("UserId");
+        if (teacherId == null)
+            return RedirectToAction("Login", "Auth");
+
+        var session = _context.Sessions
+            .Include(s => s.Course)
+            .FirstOrDefault(s => s.Id == sessionId && s.TeacherId == teacherId.Value);
+
+        if (session == null)
+            return Unauthorized();
+
         var oldTokens = _context.QrTokens
-            .Where(t => t.SessionId == sessionId && !t.IsUsed);
+            .Where(t => t.SessionId == sessionId && !t.IsUsed)
+            .ToList();
 
         foreach (var t in oldTokens)
         {
@@ -30,7 +45,7 @@ public class AttendanceController : Controller
         var token = new QrToken
         {
             Token = Guid.NewGuid().ToString(),
-            ExpirationTime = DateTime.UtcNow.AddSeconds(15), 
+            ExpirationTime = DateTime.UtcNow.AddSeconds(15),
             IsUsed = false,
             SessionId = sessionId
         };
@@ -40,6 +55,7 @@ public class AttendanceController : Controller
 
         token = _context.QrTokens
             .Include(t => t.Session)
+            .ThenInclude(s => s.Course)
             .First(t => t.Id == token.Id);
 
         return View("ShowQr", token);
@@ -50,27 +66,37 @@ public class AttendanceController : Controller
     [HttpGet]
     public IActionResult Scan()
     {
+        var role = HttpContext.Session.GetString("Role");
+        if (role != "Student")
+            return Unauthorized();
+
         return View();
     }
 
     [HttpPost]
     public IActionResult Register([FromBody] ScanRequest request)
     {
+        var role = HttpContext.Session.GetString("Role");
+        if (role != "Student")
+            return Unauthorized();
+
         var userId = HttpContext.Session.GetInt32("UserId");
         if (userId == null)
             return Unauthorized();
 
+        if (request == null || string.IsNullOrWhiteSpace(request.Token))
+            return BadRequest("Invalid QR request");
+
         var qr = _context.QrTokens
             .FirstOrDefault(q => q.Token == request.Token);
 
-        if (qr == null ||
-            qr.IsUsed ||
-            qr.ExpirationTime < DateTime.UtcNow)
+        if (qr == null || qr.IsUsed || qr.ExpirationTime < DateTime.UtcNow)
         {
             return BadRequest("QR expired or invalid");
         }
 
         var session = _context.Sessions
+            .Include(s => s.Course)
             .FirstOrDefault(s => s.Id == qr.SessionId);
 
         if (session == null)
@@ -95,9 +121,13 @@ public class AttendanceController : Controller
         {
             status = AttendanceStatus.Present;
         }
-        else
+        else if (now <= session.LateUntil)
         {
             status = AttendanceStatus.Late;
+        }
+        else
+        {
+            status = AttendanceStatus.Absent;
         }
 
         _context.Attendances.Add(new Attendance
@@ -108,7 +138,6 @@ public class AttendanceController : Controller
             Status = status
         });
 
-        // mark QR as used
         qr.IsUsed = true;
 
         _context.SaveChanges();
@@ -125,20 +154,34 @@ public class AttendanceController : Controller
     [HttpGet]
     public IActionResult LiveList(int sessionId)
     {
+        var role = HttpContext.Session.GetString("Role");
+        if (role != "Teacher")
+            return Unauthorized();
+
+        var teacherId = HttpContext.Session.GetInt32("UserId");
+        if (teacherId == null)
+            return Unauthorized();
+
+        var sessionExists = _context.Sessions
+            .Any(s => s.Id == sessionId && s.TeacherId == teacherId.Value);
+
+        if (!sessionExists)
+            return Unauthorized();
+
         var list = _context.Attendances
+            .Include(a => a.User)
             .Where(a => a.SessionId == sessionId)
             .OrderBy(a => a.TimeRecorded)
             .Select(a => new
             {
-                Student = a.User.FullName,
+                Student = a.User != null ? a.User.FullName : "",
                 Status = a.Status.ToString(),
                 Time = a.TimeRecorded.HasValue
-    ? a.TimeRecorded.Value.ToLocalTime().ToString("HH:mm:ss")
-    : "-"
+                    ? a.TimeRecorded.Value.ToLocalTime().ToString("HH:mm:ss")
+                    : "-"
             })
             .ToList();
 
         return Json(list);
     }
-
 }

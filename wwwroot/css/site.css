@@ -1,0 +1,66 @@
+html {
+    font-size: 14px;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg,#0f172a,#1e293b,#312e81);
+}
+
+
+/* animations */
+.slide-in {
+    animation: slideIn .6s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+footer {
+    background: rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(5px);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+#filters .glass,
+#filters .glass-card {
+    max-width: 920px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 992px) {
+    #filters .glass,
+    #filters .glass-card {
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+.app-container > .glass-card.p-3.mb-4,
+.app-container > .glass-card.text-center.p-5.mt-4 {
+    max-width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+@media (max-width: 992px) {
+    .app-container > .glass-card.p-3.mb-4,
+    .app-container > .glass-card.text-center.p-5.mt-4 {
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

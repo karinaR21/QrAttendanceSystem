@@ -5,84 +5,102 @@ using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 using QRAttendanceSystem.ViewModels;
 
-public class SessionsController : Controller
+namespace QRAttendanceSystem.Controllers
 {
-    private readonly ApplicationDbContext _context;
-
-    public SessionsController(ApplicationDbContext context)
+    public class SessionsController : Controller
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
 
-    public IActionResult Index()
-    {
-        var sessions = _context.Sessions
-            .Include(s => s.Course)
-            .OrderByDescending(s => s.StartTime)
-            .ToList();
-
-        return View(sessions);
-    }
-
-    [HttpGet]
-    public IActionResult Create()
-    {
-        var vm = new CreateSessionViewModel
+        public SessionsController(ApplicationDbContext context)
         {
-            Courses = _context.Courses
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
-                .ToList(),
+            _context = context;
+        }
 
-            SessionDate = DateTime.Today
-        };
-
-        return View(vm);
-    }
-
-    [HttpPost]
-    public IActionResult Create(CreateSessionViewModel vm)
-    {
-        if (!ModelState.IsValid)
+        public IActionResult Index()
         {
-            vm.Courses = _context.Courses
-                .Select(c => new SelectListItem
-                {
-                    Value = c.Id.ToString(),
-                    Text = c.Name
-                })
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Teacher")
+                return Unauthorized();
+
+            var teacherId = HttpContext.Session.GetInt32("UserId");
+            if (teacherId == null)
+                return RedirectToAction("Login", "Auth");
+
+            var sessions = _context.Sessions
+                .Include(s => s.Course)
+                .Where(s => s.TeacherId == teacherId.Value)
+                .OrderByDescending(s => s.StartTime)
                 .ToList();
+
+            return View(sessions);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Teacher")
+                return Unauthorized();
+
+            var vm = new CreateSessionViewModel
+            {
+                Courses = _context.Courses
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    })
+                    .ToList(),
+
+                SessionDate = DateTime.Today
+            };
 
             return View(vm);
         }
 
-        var start = vm.SessionDate!.Value.Date
-                    .Add(vm.StartTime!.Value);
-
-        var session = new Session
+        [HttpPost]
+        public IActionResult Create(CreateSessionViewModel vm)
         {
-            CourseId = vm.CourseId!.Value,
+            var role = HttpContext.Session.GetString("Role");
+            if (role != "Teacher")
+                return Unauthorized();
 
-            StartTime = start,
-            PresentUntil = start.AddMinutes(3),
-            EndTime = start.AddMinutes(45),
+            var teacherId = HttpContext.Session.GetInt32("UserId");
+            if (teacherId == null)
+                return RedirectToAction("Login", "Auth");
 
-            Date = start.Date,
-            Grade = vm.Grade!.Value,
-            Section = vm.Section!
-        };
+            if (!ModelState.IsValid)
+            {
+                vm.Courses = _context.Courses
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.Id.ToString(),
+                        Text = c.Name
+                    })
+                    .ToList();
 
-        _context.Sessions.Add(session);
-        _context.SaveChanges();
+                return View(vm);
+            }
 
-        return RedirectToAction(
-            "Generate",
-            "Attendance",
-            new { sessionId = session.Id }
-        );
+            var start = vm.SessionDate!.Value.Date.Add(vm.StartTime!.Value);
+
+            var session = new Session
+            {
+                CourseId = vm.CourseId!.Value,
+                TeacherId = teacherId.Value,
+                StartTime = start,
+                PresentUntil = start.AddMinutes(3),
+                LateUntil = start.AddMinutes(10),
+                EndTime = start.AddMinutes(45),
+                Date = start.Date,
+                Grade = vm.Grade!.Value,
+                Section = vm.Section!
+            };
+
+            _context.Sessions.Add(session);
+            _context.SaveChanges();
+
+            return RedirectToAction("Generate", "Attendance", new { sessionId = session.Id });
+        }
     }
-
 }

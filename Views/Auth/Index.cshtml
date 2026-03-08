@@ -1,0 +1,260 @@
+﻿@{
+    ViewData["Title"] = "Authentication";
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+<style>
+    :root {
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --primary-accent: #6366f1; 
+        --secondary-accent: #f43f5e; 
+        --text-main: #f8fafc;
+        --text-muted: #94a3b8;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        background-color: #0f172a;
+        color: var(--text-main);
+        min-height: 100vh;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .bg-visuals {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+    }
+
+    .orb {
+        position: absolute;
+        width: 60vw;
+        height: 60vw;
+        max-width: 800px;
+        max-height: 800px;
+        border-radius: 50%;
+        filter: blur(100px);
+        opacity: 0.3;
+        animation: rotate 30s infinite linear;
+    }
+
+    .orb-1 {
+        background: var(--primary-accent);
+        top: -20%;
+        left: -10%;
+    }
+
+    .orb-2 {
+        background: var(--secondary-accent);
+        bottom: -20%;
+        right: -10%;
+    }
+
+    keyframes rotate {
+        from {
+            transform: rotate(0deg) translate(30px) rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg) translate(30px) rotate(-360deg);
+        }
+    }
+
+    .welcome-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+    }
+
+    .glass-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(30px);
+        border: 1px solid var(--glass-border);
+        border-radius: 32px;
+        padding: 3.5rem 2.5rem;
+        width: 100%;
+        max-width: 550px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        animation: fadeInScale 0.6s ease-out;
+    }
+
+    keyframes fadeInScale {
+        from {
+            opacity: 0;
+            transform: scale(0.95) translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .hero-icon {
+        width: 72px;
+        height: 72px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2.2rem;
+        color: var(--text-main);
+        transition: all 0.4s ease;
+    }
+
+    .glass-card:hover .hero-icon {
+        transform: scale(1.05);
+        background: var(--primary-accent);
+        box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
+    }
+
+    h1 {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        font-size: 2.25rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .lead-text {
+        color: var(--text-muted);
+        font-size: 1rem;
+        margin-bottom: 2.5rem;
+        line-height: 1.5;
+    }
+
+    .action-stack {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .btn-action {
+        padding: 14px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-login {
+        background: #ffffff;
+        color: #0f172a;
+        border: 1px solid #ffffff;
+    }
+
+        .btn-login:hover {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+    .btn-register {
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        border: 1px solid var(--glass-border);
+    }
+
+        .btn-register:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .role-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 3rem;
+    }
+
+    .role-badge {
+        background: rgba(255, 255, 255, 0.04);
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        border: 1px solid var(--glass-border);
+    }
+
+    /* Mobile Responsiveness */
+    media (max-width: 576px) {
+        .glass-card {
+            padding: 2.5rem 1.5rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+        }
+
+        .action-stack {
+            grid-template-columns: 1fr;
+        }
+
+        .welcome-container {
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="bg-visuals">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+</div>
+
+<div class="welcome-container">
+    <div class="glass-card">
+
+        <div class="hero-icon">
+            <i class="bi bi-shield-lock"></i>
+        </div>
+
+        <h1>Access QR Attendance</h1>
+        <p class="lead-text">Select an option below to securely access your portal and manage attendance records.</p>
+
+        <div class="action-stack">
+            <a asp-action="Login" class="btn-action btn-login">
+                <i class="bi bi-box-arrow-in-right"></i>
+                Sign In
+            </a>
+            <a asp-action="Register" class="btn-action btn-register">
+                <i class="bi bi-person-plus"></i>
+                Join Now
+            </a>
+        </div>
+
+        <div class="role-group">
+            <div class="role-badge"><i class="bi bi-mortarboard me-1"></i> Student</div>
+            <div class="role-badge"><i class="bi bi-person-badge me-1"></i> Teacher</div>
+            <div class="role-badge"><i class="bi bi-person-heart me-1"></i> Parent</div>
+        </div>
+
+    </div>
+</div>

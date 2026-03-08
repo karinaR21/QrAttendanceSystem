@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace QRAttendanceSystem.Models
+﻿namespace QRAttendanceSystem.Models
 {
     public enum AttendanceStatus
     {

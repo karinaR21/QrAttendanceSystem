@@ -1,0 +1,333 @@
+﻿@{
+    ViewData["Title"] = "Statistics";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+    /* ===============================
+       SCROLL FIX FOR LONG LISTS
+    ================================= */
+
+    .equal-card {
+        height: 420px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .scroll-content {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding-right: 8px;
+    }
+
+        .scroll-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scroll-content::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.25);
+            border-radius: 10px;
+        }
+
+    .item-row {
+        padding: 14px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+    .icon-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>
+
+<div class="app-dark-gradient">
+    <div class="app-container">
+
+        <!-- HEADER -->
+        <div class="text-center text-white mb-4">
+            <h2 class="fw-semibold mb-1">Attendance Statistics</h2>
+            <p class="opacity-75">Overview of sessions and student presence</p>
+        </div>
+
+
+        <!-- FILTER BUTTON -->
+        <div class="text-center mb-4">
+            <button class="btn btn-soft"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#filters">
+                <i class="bi bi-funnel me-2"></i>
+                Filters
+            </button>
+        </div>
+
+
+        <!-- FILTER PANEL -->
+        <div class="collapse mb-5" id="filters">
+            <div class="glass glass-card p-4">
+
+                <form method="get">
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-md-3">
+                            <label class="text-white-50 small">Grade</label>
+                            <select name="grade" class="form-select">
+                                <option value="">All</option>
+                                @for (int g = 7; g <= 12; g++)
+                                {
+                                    <option value="@g"
+                                            selected="@(ViewBag.SelectedGrade == g)">
+                                        @g
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="text-white-50 small">Section</label>
+                            <select name="section" class="form-select">
+                                <option value="">All</option>
+                                @foreach (var s in new[] { "А", "Б", "В", "Г" })
+                                {
+                                    <option value="@s"
+                                            selected="@(ViewBag.SelectedSection == s)">
+                                        @s
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="text-white-50 small">From</label>
+                            <input type="date" name="from"
+                                   value="@ViewBag.From"
+                                   class="form-control" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="text-white-50 small">To</label>
+                            <input type="date" name="to"
+                                   value="@ViewBag.To"
+                                   class="form-control" />
+                        </div>
+
+                        <div class="col-md-2">
+                            <button class="btn btn-soft w-100">
+                                Apply
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+        @if (!(bool)ViewBag.HasResults)
+        {
+            <div class="glass glass-card text-center p-5 mt-4">
+                <i class="bi bi-bar-chart display-4 opacity-25 mb-3"></i>
+                <h4>No results were found</h4>
+                <p class="text-white-50">Try adjusting your filters.</p>
+            </div>
+        }
+        else
+        {
+
+            <!-- STAT CARDS -->
+            <div class="row g-4 mb-5">
+
+                <div class="col-md-6">
+                    <div class="stats-card glass highlight text-center">
+                        <span>Total Sessions</span>
+                        <h1>@ViewBag.TotalSessions</h1>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="stats-card glass highlight text-center">
+                        <span>Total Attendances</span>
+                        <h1>@ViewBag.TotalAttendances</h1>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- TABLES WITH SCROLL -->
+            <!-- TABLES -->
+            <div class="row g-4 mb-5">
+
+                <!-- By Grade -->
+                <div class="col-12 col-lg-6">
+                    <div class="glass glass-card equal-card p-4">
+
+                        <h5 class="fw-semibold mb-3">
+                            <i class="bi bi-mortarboard me-2"></i>
+                            By Grade
+                        </h5>
+
+                        <div class="scroll-content">
+
+                            @foreach (var item in ViewBag.ByGrade)
+                            {
+                                <div class="item-row d-flex justify-content-between align-items-center">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="icon-circle">
+                                            <i class="bi bi-mortarboard"></i>
+                                        </div>
+
+                                        <div class="fw-semibold">
+                                            Grade @item.Grade
+                                        </div>
+
+                                    </div>
+
+                                    <span class="badge bg-light text-dark px-3 py-2">
+                                        @item.Count
+                                    </span>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- By Section -->
+                <div class="col-12 col-lg-6">
+                    <div class="glass glass-card equal-card p-4">
+
+                        <h5 class="fw-semibold mb-3">
+                            <i class="bi bi-people me-2"></i>
+                            By Section
+                        </h5>
+
+                        <div class="scroll-content">
+
+                            @foreach (var item in ViewBag.BySection)
+                            {
+                                <div class="item-row d-flex justify-content-between align-items-center">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="icon-circle">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+
+                                        <div class="fw-semibold">
+                                            Section @item.Section
+                                        </div>
+
+                                    </div>
+
+                                    <span class="badge bg-light text-dark px-3 py-2">
+                                        @item.Count
+                                    </span>
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- CHART -->
+            <div class="glass glass-card p-4 mx-auto mb-4"
+                 style="max-width:700px;">
+
+                <h5 class="mb-4 text-center fw-semibold">
+                    Attendance Overview
+                </h5>
+
+                <div style="position:relative; height:220px; max-width:420px; margin:auto;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <!-- EXPORT -->
+            <div class="text-center mb-5">
+
+                <a asp-action="ExportToExcel"
+                   asp-route-grade="@ViewBag.SelectedGrade"
+                   asp-route-section="@ViewBag.SelectedSection"
+                   asp-route-from="@ViewBag.From"
+                   asp-route-to="@ViewBag.To"
+                   class="btn"
+                   style="
+                            background: linear-gradient(135deg,#1cc88a,#20c997);
+                            color:white;
+                            border-radius:20px;
+                            padding:12px 35px;
+                            box-shadow:0 10px 25px rgba(0,255,140,.35);
+                       ">
+                    <i class="bi bi-file-earmark-excel me-2"></i>
+                    Export to Excel
+                </a>
+
+            </div>
+
+        }
+
+    </div>
+</div>
+
+
+<script>
+
+    const chartData = @Html.Raw(
+                System.Text.Json.JsonSerializer.Serialize(ViewBag.ByStatus)
+        );
+
+    const ctx = document.getElementById('statusChart');
+
+    if (chartData && chartData.length > 0) {
+
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: chartData.map(x => x.Status),
+                datasets: [{
+                    data: chartData.map(x => x.Count),
+                    backgroundColor: ['#22c55e','#facc15','#ef4444'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '65%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { color: '#e6edf3' }
+                    }
+                }
+            }
+        });
+    }
+
+</script>

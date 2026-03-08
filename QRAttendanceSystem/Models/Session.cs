@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace QRAttendanceSystem.Models
+﻿namespace QRAttendanceSystem.Models
 {
     public class Session
     {
@@ -8,6 +6,9 @@ namespace QRAttendanceSystem.Models
 
         public int CourseId { get; set; }
         public Course? Course { get; set; }
+
+        public int TeacherId { get; set; }
+        public User? Teacher { get; set; }
 
         public DateTime Date { get; set; }
         public int Grade { get; set; }

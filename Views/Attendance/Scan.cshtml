@@ -1,0 +1,264 @@
+﻿@{
+    ViewData["Title"] = "Scan QR";
+}
+
+<h2 class="text-center mb-3">
+    <i class="bi bi-qr-code-scan"></i> Scan QR Code
+</h2>
+
+<p class="text-center mb-3">
+    Point your camera at the QR code
+</p>
+
+<div class="scanner-wrapper">
+    <div id="reader"></div>
+    <div class="scan-overlay" aria-hidden="true">
+        <div class="scan-guide"></div>
+    </div>
+</div>
+
+<div id="successOverlay" class="success-overlay d-none">
+    <div class="success-box">
+        <i class="bi bi-check-circle-fill"></i>
+        <h2>Attendance recorded</h2>
+        <p id="successMessage">Success</p>
+    </div>
+</div>
+<div id="errorOverlay" class="error-overlay d-none">
+    <div class="error-box">
+        <i class="bi bi-x-circle-fill"></i>
+        <h2>Already scanned</h2>
+        <p>Your attendance has already been recorded</p>
+    </div>
+</div>
+
+<p id="result" class="text-center fw-bold mt-3 scanning">
+    Scanning...
+</p>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+    let scanned = false;
+    let scanner;
+
+    Html5Qrcode.getCameras().then(cameras => {
+
+        if (!cameras || cameras.length === 0) {
+            showError("No camera found on this device.");
+            return;
+        }
+
+        let backCamera = cameras.find(c =>
+            c.label.toLowerCase().includes("back") ||
+            c.label.toLowerCase().includes("rear")
+        );
+
+    const cameraId = backCamera
+        ? backCamera.id
+        : cameras[cameras.length - 1].id;//(Iphone)
+
+
+        scanner = new Html5Qrcode("reader");
+
+        scanner.start(
+            cameraId,
+            { fps: 10, qrbox: 250 },
+            qrText => {
+
+                if (scanned) return;
+                scanned = true;
+
+                   fetch('/Attendance/Register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: qrText })
+    })
+    .then(async r => {
+        const text = await r.text();
+
+        scanner.stop();
+
+        if (r.ok) {
+            showSuccessOverlay(text);
+        } else if (text.includes("already")) {
+            showErrorOverlay("Already scanned", "Your attendance has already been recorded");
+        } else {
+            showErrorOverlay("Error", text);
+        }
+    })
+    .catch(() => {
+        scanned = false;
+        showErrorOverlay("Error", "Scan failed");
+    });
+
+            }
+        ).catch(() => {
+            showError("Unable to start camera.");
+        });
+
+    }).catch(() => {
+        showError("Camera permission denied.");
+    });
+
+    function showError(message) {
+        const result = document.getElementById("result");
+        result.innerText = message;
+        result.className = "text-danger fw-bold text-center";
+    }
+
+    function showSuccessOverlay(message) {
+        document.getElementById("successMessage").innerText = message;
+        document.getElementById("successOverlay").classList.remove("d-none");
+    }
+        function showErrorOverlay(title, message) {
+        document.querySelector("#errorOverlay h2").innerText = title;
+        document.querySelector("#errorOverlay p").innerText = message;
+        document.getElementById("errorOverlay").classList.remove("d-none");
+    }
+
+</script>
+
+<style>
+    body {
+        background: #0f172a;
+        color: #f1f5f9;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Scanner container */
+    .scanner-wrapper {
+        width: 100%;
+        max-width: 420px;
+        aspect-ratio: 1 / 1;
+        margin: 40px auto;
+        border-radius: 16px;
+        padding: 0;
+        background: transparent;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* Камерата */
+    #reader {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+        #reader video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+
+    #reader__scan_region,
+    #reader__dashboard,
+    #reader__dashboard_section,
+    #reader__dashboard_section_csr,
+    #reader__dashboard_section_swaplink {
+        display: none !important;
+    }
+
+    #reader > div {
+        background: transparent !important;
+    }
+
+    .scan-overlay {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .scan-guide {
+        width: 75%;
+        height: 75%;
+        border: 2px solid rgba(255,255,255,0.25);
+        border-radius: 12px;
+        position: relative;
+    }
+
+        .scan-guide::before,
+        .scan-guide::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #34d399;
+        }
+
+        .scan-guide::before {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .scan-guide::after {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+        }
+
+    .scanning {
+        color: #34d399;
+        animation: subtleBlink 1.6s infinite;
+        font-weight: 700;
+    }
+
+    keyframes subtleBlink {
+        0%, 100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.5;
+        }
+    }
+
+    /* Success / Error */
+    .success-overlay,
+    .error-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.75);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .success-box,
+    .error-box {
+        max-width: 420px;
+        width: calc(100% - 40px);
+        border-radius: 16px;
+        padding: 32px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+
+    .success-box {
+        background: #064e3b;
+        color: #d1fae5;
+    }
+
+    .error-box {
+        background: #7f1d1d;
+        color: #fee2e2;
+    }
+
+        .success-box i,
+        .error-box i {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+        }
+
+</style>
