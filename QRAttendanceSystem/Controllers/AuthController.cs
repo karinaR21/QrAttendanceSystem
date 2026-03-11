@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using QRAttendanceSystem.Data;
 using QRAttendanceSystem.Models;
 
@@ -24,12 +24,12 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Register(string fullName, string email, string password, string? childEmail)
     {
-        // enforce password strength: 8-12 chars, uppercase, lowercase, number
         if (string.IsNullOrEmpty(password) || !System.Text.RegularExpressions.Regex.IsMatch(password, "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{8,12}$"))
         {
             ViewBag.Error = "Password must be 8-12 characters and include uppercase, lowercase letters and numbers.";
             return View();
         }
+
         if (_context.Users.Any(u => u.Email == email))
         {
             ViewBag.Error = "User with this email already exists.";
@@ -54,7 +54,8 @@ public class AuthController : Controller
         {
             FullName = fullName,
             Email = email,
-            Role = role
+            Role = role,
+            IsActive = true
         };
 
         user.PasswordHash = _hasher.HashPassword(user, password);
@@ -73,12 +74,10 @@ public class AuthController : Controller
                     u.Email == childEmail);
             }
 
-            // fallback: try to derive the student's email from the parent's local-part
             if (child == null)
             {
                 var local = email.Split('@')[0];
 
-                // If parent used the pattern 'name.parent', replace with 'name.student'
                 string guessedChildEmail;
                 if (local.EndsWith(".parent", StringComparison.OrdinalIgnoreCase))
                 {
@@ -92,7 +91,8 @@ public class AuthController : Controller
 
                 child = _context.Users.FirstOrDefault(u =>
                     u.Role == "Student" &&
-                    (u.Email.Equals(guessedChildEmail, StringComparison.OrdinalIgnoreCase) || u.Email.StartsWith(local, StringComparison.OrdinalIgnoreCase)));
+                    (u.Email!.Equals(guessedChildEmail, StringComparison.OrdinalIgnoreCase) ||
+                     u.Email.StartsWith(local, StringComparison.OrdinalIgnoreCase)));
             }
 
             if (child != null)
@@ -109,7 +109,6 @@ public class AuthController : Controller
     // ================= LOGIN =================
 
     [HttpGet]
-
     public IActionResult Login()
     {
         return View();
@@ -118,7 +117,6 @@ public class AuthController : Controller
     [HttpPost]
     public IActionResult Login(string email, string password, bool rememberMe)
     {
-        Console.WriteLine("LOGIN HIT");
         var user = _context.Users.FirstOrDefault(u => u.Email == email);
 
         if (user == null)
@@ -126,7 +124,13 @@ public class AuthController : Controller
             ViewBag.Error = "Invalid email or password.";
             return View();
         }
-        
+
+        if (!user.IsActive)
+        {
+            ViewBag.Error = "Your account has been deactivated. Please contact the administrator.";
+            return View();
+        }
+
         var result = _hasher.VerifyHashedPassword(user, user.PasswordHash, password);
 
         if (result == PasswordVerificationResult.Failed)
@@ -137,7 +141,7 @@ public class AuthController : Controller
 
         HttpContext.Session.SetString("Role", user.Role);
         HttpContext.Session.SetInt32("UserId", user.Id);
-        HttpContext.Session.SetString("Email", user.Email);
+        HttpContext.Session.SetString("Email", user.Email ?? "");
 
         if (rememberMe)
         {
@@ -155,18 +159,53 @@ public class AuthController : Controller
             Response.Cookies.Delete("RememberEmail");
         }
 
+        if (user.Role == "Admin")
+            return RedirectToAction("Index", "Admin");
+
+        if (user.Role == "Teacher")
+            return RedirectToAction("_TeacherHome", "Home");
+
+        if (user.Role == "Student")
+            return RedirectToAction("_StudentHome", "Home");
+
+        if (user.Role == "Parent")
+            return RedirectToAction("_ParentHome", "Home");
+
         return RedirectToAction("Index", "Home");
     }
+
+    // ================= SEED ADMIN =================
+
+    [HttpGet]
+    public IActionResult SeedAdmin()
+    {
+        if (_context.Users.Any(u => u.Role == "Admin"))
+            return Content("Admin already exists.");
+
+        var admin = new User
+        {
+            FullName = "System Administrator",
+            Email = "admin@school.bg",
+            Role = "Admin",
+            IsActive = true
+        };
+
+        admin.PasswordHash = _hasher.HashPassword(admin, "Admin123");
+
+        _context.Users.Add(admin);
+        _context.SaveChanges();
+
+        return Content("Admin created successfully.");
+    }
+
     // ================= LOGOUT =================
 
     public IActionResult Logout()
     {
         HttpContext.Session.Clear();
-
-
         return RedirectToAction("Login");
     }
-
+    
     public IActionResult Index()
     {
         return View();

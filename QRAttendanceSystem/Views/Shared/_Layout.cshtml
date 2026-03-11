@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
 
-
     <style>
         body {
             background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
@@ -27,21 +26,29 @@
             backdrop-filter: blur(12px);
             border-radius: 16px;
         }
+
+        .nav-icon-disabled {
+            pointer-events: none;
+            cursor: default;
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
 
     @{
         var role = Context.Session.GetString("Role");
+        var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+        var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+        var isAdminDashboard = role == "Admin" && currentController == "Admin" && currentAction == "Index";
     }
 
     <nav class="navbar navbar-expand-lg navbar-dark glass shadow-lg mt-3 mx-3 px-4">
-
-            <a class="navbar-brand fw-bold fs-4"
+        <a class="navbar-brand fw-bold fs-4"
            asp-controller="Home"
            asp-action="Index">
-                <i class="bi bi-qr-code-scan me-2"></i>
-                QR Attendance System
+            <i class="bi bi-qr-code-scan me-2"></i>
+            QR Attendance System
         </a>
 
         <button class="navbar-toggler" type="button"
@@ -53,16 +60,32 @@
         <div class="collapse navbar-collapse" id="nav">
             <ul class="navbar-nav ms-auto align-items-center gap-2 nav-actions">
 
-                
-
-                    <li class="nav-item">
+                <li class="nav-item">
+                    @if (isAdminDashboard)
+                    {
+                        <span class="nav-icon nav-icon-disabled" title="Home">
+                            <i class="bi bi-house"></i>
+                        </span>
+                    }
+                    else if (role == "Admin")
+                    {
+                        <a class="nav-icon"
+                           asp-controller="Admin"
+                           asp-action="Index"
+                           title="Home">
+                            <i class="bi bi-house"></i>
+                        </a>
+                    }
+                    else
+                    {
                         <a class="nav-icon"
                            asp-controller="Home"
                            asp-action="Index"
                            title="Home">
                             <i class="bi bi-house"></i>
                         </a>
-                    </li>
+                    }
+                </li>
 
                 @if (!string.IsNullOrEmpty(role))
                 {
@@ -93,7 +116,7 @@
                             <a class="nav-btn"
                                asp-controller="Attendance"
                                asp-action="Scan">
-                        <i class="bi bi-camera"></i>
+                                <i class="bi bi-camera"></i>
                                 Scan
                             </a>
                         </li>
@@ -120,14 +143,33 @@
                         </li>
                     }
 
-                    <!-- ROLE -->
+                    @if (role == "Admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-btn"
+                               asp-controller="Admin"
+                               asp-action="Index">
+                                <i class="bi bi-speedometer2"></i>
+                                Admin
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-btn"
+                               asp-controller="Admin"
+                               asp-action="Users">
+                                <i class="bi bi-people"></i>
+                                Users
+                            </a>
+                        </li>
+                    }
+
                     <li class="nav-item">
                         <span class="role-pill">
                             @role
                         </span>
                     </li>
 
-                    <!-- LOGOUT -->
                     <li class="nav-item">
                         <a class="logout-btn"
                            asp-controller="Auth"
@@ -137,15 +179,10 @@
                         </a>
                     </li>
                 }
-
             </ul>
-
         </div>
     </nav>
 
-
-
-    <!-- ================= MAIN CONTENT ================= -->
     <main class="@(string.IsNullOrEmpty(role) ? "mt-5" : "container mt-5")">
         <div class="@(string.IsNullOrEmpty(role) ? "" : "glass p-4 shadow-lg text-white")">
             @RenderBody()
@@ -163,5 +200,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
-
 </html>

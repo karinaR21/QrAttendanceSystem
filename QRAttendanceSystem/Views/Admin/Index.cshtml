@@ -1,0 +1,390 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    body {
+        background: radial-gradient(circle at top left, rgba(0, 210, 255, 0.12), transparent 30%), radial-gradient(circle at bottom right, rgba(114, 9, 183, 0.18), transparent 35%), linear-gradient(135deg, #0b1020 0%, #111a2e 45%, #0f172a 100%);
+        min-height: 100vh;
+        color: #ffffff;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .dashboard-shell {
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-title {
+        font-size: 2.4rem;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-bottom: 0.35rem;
+    }
+
+    .page-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+
+    .glass-card {
+        background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .top-bar-button {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.16), rgba(255, 140, 0, 0.16));
+        color: #ffd166;
+        border: 1px solid rgba(255, 209, 102, 0.35);
+        border-radius: 14px;
+        padding: 0.8rem 1.2rem;
+        text-decoration: none;
+        font-weight: 700;
+        box-shadow: 0 8px 24px rgba(255, 193, 7, 0.12);
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .metric-card {
+        position: relative;
+        overflow: hidden;
+        padding: 1.5rem;
+        min-height: 150px;
+    }
+
+        .metric-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            pointer-events: none;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), transparent 45%);
+        }
+
+    .metric-blue {
+        border-top: 4px solid #38bdf8;
+        box-shadow: 0 20px 50px rgba(56, 189, 248, 0.10);
+    }
+
+    .metric-purple {
+        border-top: 4px solid #a855f7;
+        box-shadow: 0 20px 50px rgba(168, 85, 247, 0.10);
+    }
+
+    .metric-green {
+        border-top: 4px solid #22c55e;
+        box-shadow: 0 20px 50px rgba(34, 197, 94, 0.10);
+    }
+
+    .metric-pink {
+        border-top: 4px solid #ec4899;
+        box-shadow: 0 20px 50px rgba(236, 72, 153, 0.10);
+    }
+
+    .stat-label {
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 700;
+        color: rgba(255,255,255,0.55);
+    }
+
+    .stat-value {
+        font-size: 2.4rem;
+        font-weight: 800;
+        line-height: 1.1;
+        margin: 0.6rem 0 0;
+    }
+
+    .icon-box {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.06);
+    }
+
+    .section-title {
+        font-size: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: rgba(255,255,255,0.58);
+        margin-bottom: 1.25rem;
+    }
+
+    .infra-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+    }
+
+    .mini-stat {
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 18px;
+        padding: 1.25rem 1rem;
+        text-align: center;
+    }
+
+    .mini-stat-label {
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: rgba(255,255,255,0.55);
+        margin-bottom: 0.45rem;
+        font-weight: 700;
+    }
+
+    .mini-stat-value {
+        font-size: 1.7rem;
+        font-weight: 800;
+        margin: 0;
+    }
+
+    .live-value {
+        color: #22c55e;
+    }
+
+    .inactive-value {
+        color: #f87171;
+    }
+
+    .system-note {
+        margin-top: 1.5rem;
+        padding: 1rem 1.1rem;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+        border: 1px solid rgba(255,255,255,0.08);
+        color: rgba(255,255,255,0.82);
+    }
+
+    .chart-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .chart-badge {
+        background: rgba(56, 189, 248, 0.15);
+        color: #7dd3fc;
+        border: 1px solid rgba(125, 211, 252, 0.25);
+        padding: 0.5rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .chart-wrap {
+        position: relative;
+        height: 320px;
+    }
+
+    @@media (max-width: 991.98px) {
+        .infra-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @@media (max-width: 575.98px) {
+        .page-title {
+            font-size: 1.9rem;
+        }
+
+        .infra-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="container py-5 dashboard-shell">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3">
+        <div>
+            <h1 class="page-title">Admin Dashboard</h1>
+            <p class="page-subtitle">System health and user analytics at a glance.</p>
+        </div>
+
+        <a asp-controller="Admin" asp-action="Users" class="top-bar-button">
+            <i class="bi bi-gear-fill me-2"></i>
+            Manage Directory
+        </a>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-xl-3">
+            <div class="glass-card metric-card metric-blue">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Users</div>
+                        <h2 class="stat-value">@ViewBag.TotalUsers</h2>
+                    </div>
+                    <div class="icon-box text-info">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="glass-card metric-card metric-purple">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Teachers</div>
+                        <h2 class="stat-value">@ViewBag.TotalTeachers</h2>
+                    </div>
+                    <div class="icon-box text-primary">
+                        <i class="bi bi-briefcase-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="glass-card metric-card metric-green">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Students</div>
+                        <h2 class="stat-value">@ViewBag.TotalStudents</h2>
+                    </div>
+                    <div class="icon-box text-success">
+                        <i class="bi bi-mortarboard-fill"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-3">
+            <div class="glass-card metric-card metric-pink">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Parents</div>
+                        <h2 class="stat-value">@ViewBag.TotalParents</h2>
+                    </div>
+                    <div class="icon-box text-danger">
+                        <i class="bi bi-person-heart"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="glass-card p-4">
+                <div class="section-title">Infrastructure Metrics</div>
+
+                <div class="infra-grid">
+                    <div class="mini-stat">
+                        <div class="mini-stat-label">Admins</div>
+                        <p class="mini-stat-value">@ViewBag.TotalAdmins</p>
+                    </div>
+
+                    <div class="mini-stat">
+                        <div class="mini-stat-label">Live Now</div>
+                        <p class="mini-stat-value live-value">@ViewBag.TotalActiveUsers</p>
+                    </div>
+
+                    <div class="mini-stat">
+                        <div class="mini-stat-label">Inactive</div>
+                        <p class="mini-stat-value inactive-value">@ViewBag.TotalInactiveUsers</p>
+                    </div>
+
+                    <div class="mini-stat">
+                        <div class="mini-stat-label">Total Sessions</div>
+                        <p class="mini-stat-value">@ViewBag.TotalSessions</p>
+                    </div>
+                </div>
+
+                <div class="system-note">
+                    <i class="bi bi-shield-check me-2"></i>
+                    <small>System is running at 98.4% efficiency. Backups are up to date.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="glass-card p-4 h-100">
+                <div class="chart-card-header">
+                    <div>
+                        <h5 class="fw-bold text-white m-0">Attendance Overview</h5>
+                        <small class="text-white-50">Distribution by status</small>
+                    </div>
+                    <span class="chart-badge">@ViewBag.TotalAttendances Total</span>
+                </div>
+
+                <div class="chart-wrap">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const attendanceLabels = [
+        @Html.Raw(string.Join(",", ((IEnumerable<dynamic>)ViewBag.ByStatus).Select(x => $"'{x.Status}'")))
+    ];
+
+    const attendanceData = [
+        @Html.Raw(string.Join(",", ((IEnumerable<dynamic>)ViewBag.ByStatus).Select(x => x.Count)))
+    ];
+
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: attendanceLabels,
+            datasets: [{
+                data: attendanceData,
+                backgroundColor: [
+                    '#4ade80', // Present
+                    '#facc15', // Late
+                    '#ef4444'  // Absent
+                ],
+                borderColor: 'rgba(255,255,255,0.08)',
+                borderWidth: 2,
+                hoverOffset: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: {
+                duration: 1200
+            },
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        color: '#ffffff',
+                        padding: 18,
+                        font: {
+                            size: 13,
+                            weight: '600'
+                        }
+                    }
+                }
+            },
+            cutout: '68'
+        }
+    });
+</script>

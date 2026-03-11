@@ -1,15 +1,16 @@
-﻿using QRAttendanceSystem.Models;
-
-public class Student
+﻿namespace QRAttendanceSystem.Models
 {
-    public int Id { get; set; }
+    public class Student
+    {
+        public int Id { get; set; }
 
-    public string FullName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
 
-    public int ParentId { get; set; }
+        public int ParentId { get; set; }
 
-    public User Parent { get; set; } = null!;
+        public User Parent { get; set; } = null!;
 
-    public ICollection<Attendance> Attendances { get; set; }
-        = new List<Attendance>();
+        public ICollection<Attendance> Attendances { get; set; }
+            = new List<Attendance>();
+    }
 }

@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Data;
-using QRAttendanceSystem.Models;
 
 namespace QRAttendanceSystem.Controllers
 {

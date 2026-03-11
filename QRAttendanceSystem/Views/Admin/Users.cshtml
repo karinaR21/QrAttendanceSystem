@@ -1,0 +1,241 @@
+﻿@model IEnumerable<QRAttendanceSystem.Models.User>
+
+@{
+    ViewData["Title"] = "Manage Users";
+}
+
+<style>
+    :root {
+        --glass-bg: rgba(17, 25, 40, 0.75);
+        --glass-border: rgba(255, 255, 255, 0.125);
+        --neon-primary: #00d2ff;
+        --neon-secondary: #3a7bd5;
+        --accent-green: #00ff88;
+        --accent-red: #ff4b2b;
+        --bg-purple: rgba(168, 85, 247, 0.12);
+        --bg-green: rgba(34, 197, 94, 0.10);
+    }
+
+    body {
+        background: radial-gradient(circle at top left, var(--bg-purple), transparent 30%), radial-gradient(circle at bottom right, var(--bg-green), transparent 35%), linear-gradient(135deg, #0b1020 0%, #111827 45%, #0f172a 100%);
+        min-height: 100vh;
+    }
+
+    .admin-wrapper {
+        width: 95%;
+        max-width: 1600px;
+        margin: 0 auto;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .glass-panel {
+        background-color: var(--glass-bg);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(168, 85, 247, 0.06), 0 0 30px rgba(34, 197, 94, 0.05);
+    }
+
+    .user-name {
+        color: #ffffff !important;
+    }
+
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+        .table-responsive::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .table-responsive::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: var(--neon-primary);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+        }
+
+    .custom-table {
+        color: #ffffff;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+        margin-bottom: 0;
+        width: 100%;
+    }
+
+        .custom-table thead th {
+            background: rgba(17, 25, 40, 0.95);
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1.5px;
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .custom-table tbody tr {
+            background: rgba(255, 255, 255, 0.03);
+            transition: transform 0.2s, background 0.2s;
+            border-radius: 12px;
+        }
+
+            .custom-table tbody tr:hover {
+                background: rgba(255, 255, 255, 0.07);
+                transform: scale(1.005);
+            }
+
+        .custom-table td {
+            padding: 1.5rem;
+            border: none;
+            color: #ffffff;
+        }
+
+            .custom-table td:first-child {
+                border-radius: 12px 0 0 12px;
+            }
+
+            .custom-table td:last-child {
+                border-radius: 0 12px 12px 0;
+            }
+
+    .status-indicator {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 8px;
+        box-shadow: 0 0 10px currentColor;
+    }
+
+    .btn-neon {
+        border-radius: 12px;
+        padding: 10px 24px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        border: 1px solid transparent;
+    }
+
+    .btn-deactivate {
+        color: var(--accent-red);
+        background: rgba(255, 75, 43, 0.1);
+        border-color: rgba(255, 75, 43, 0.3);
+    }
+
+        .btn-deactivate:hover {
+            background: var(--accent-red);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 75, 43, 0.4);
+        }
+
+    .btn-activate {
+        color: var(--accent-green);
+        background: rgba(0, 255, 136, 0.1);
+        border-color: rgba(0, 255, 136, 0.3);
+    }
+
+        .btn-activate:hover {
+            background: var(--accent-green);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+        }
+
+    .user-id {
+        font-family: 'JetBrains Mono', monospace;
+        color: var(--neon-primary);
+        font-size: 0.85rem;
+    }
+</style>
+
+<div class="admin-wrapper py-5">
+    <div class="d-flex justify-content-between align-items-end mb-4 px-2">
+        <div>
+            <h1 class="display-5 fw-bold text-white mb-1">User Directory</h1>
+            <p class="text-white-50">Authorized Personnel Management & System Access</p>
+        </div>
+        <div class="text-end">
+            <span class="badge rounded-pill bg-dark border border-secondary p-2 px-3">
+                Total Users: @Model.Count()
+            </span>
+        </div>
+    </div>
+
+    <div class="glass-panel p-4">
+        <div class="table-responsive">
+            <table class="table custom-table align-middle">
+                <thead>
+                    <tr>
+                        <th>UUID</th>
+                        <th>Member</th>
+                        <th>Contact</th>
+                        <th>Access Level</th>
+                        <th>Status</th>
+                        <th class="text-end">Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td><span class="user-id">#@user.Id</span></td>
+                            <td>
+                                <div class="fw-bold fs-5 user-name">@user.FullName</div>
+                            </td>
+                            <td><span class="text-white-50">@user.Email</span></td>
+                            <td>
+                                <div class="text-uppercase small fw-bold" style="color: var(--neon-secondary);">
+                                    @user.Role
+                                </div>
+                            </td>
+                            <td>
+                                @if (user.IsActive)
+                                {
+                                    <div class="text-success small fw-bold">
+                                        <span class="status-indicator" style="color: var(--accent-green); background: var(--accent-green);"></span>
+                                        ONLINE
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="text-danger small fw-bold">
+                                        <span class="status-indicator" style="color: var(--accent-red); background: var(--accent-red);"></span>
+                                        OFFLINE
+                                    </div>
+                                }
+                            </td>
+                            <td class="text-end">
+                                @if (user.IsActive)
+                                {
+                                    <form asp-action="DeactivateUser" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-neon btn-deactivate">Deactivate</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="ActivateUser" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <button type="submit" class="btn btn-neon btn-activate">Activate</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
