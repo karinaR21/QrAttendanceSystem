@@ -152,7 +152,7 @@
 
     .btn-action {
         padding: 14px 20px;
-        border-radius: 12px;
+        border-radius: 6px;
         font-weight: 600;
         font-size: 0.95rem;
         transition: all 0.2s ease;
@@ -190,18 +190,39 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 12px;
-        margin-top: 3rem;
+        gap: 8px;
+        margin-top: 1.5rem;
     }
 
     .role-badge {
         background: rgba(255, 255, 255, 0.04);
-        padding: 6px 14px;
-        border-radius: 100px;
-        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.68rem;
         font-weight: 500;
         color: var(--text-muted);
         border: 1px solid var(--glass-border);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .role-badge i { font-size: 0.9rem; }
+
+    /* Strong page-specific overrides to ensure the Auth landing buttons are neutral and consistent */
+    .action-stack .btn-modern {
+        background: transparent !important;
+        color: white !important;
+        border: 1px solid rgba(255,255,255,0.06) !important;
+        box-shadow: none !important;
+        padding: 12px 18px !important;
+        font-size: 1rem !important;
+        border-radius: 6px !important;
+        text-align: center;
+    }
+
+    .action-stack .btn-modern i {
+        margin-right: 8px;
     }
 
     /* Mobile Responsiveness */
@@ -240,12 +261,12 @@
         <p class="lead-text">Select an option below to securely access your portal and manage attendance records.</p>
 
         <div class="action-stack">
-            <a asp-action="Login" class="btn-action btn-login">
-                <i class="bi bi-box-arrow-in-right"></i>
+            <a asp-action="Login" class="btn-modern btn-indigo text-center">
+                <i class="bi bi-box-arrow-in-right me-2"></i>
                 Sign In
             </a>
-            <a asp-action="Register" class="btn-action btn-register">
-                <i class="bi bi-person-plus"></i>
+            <a asp-action="Register" class="btn-modern btn-emerald text-center">
+                <i class="bi bi-person-plus me-2"></i>
                 Join Now
             </a>
         </div>
@@ -254,6 +275,13 @@
             <div class="role-badge"><i class="bi bi-mortarboard me-1"></i> Student</div>
             <div class="role-badge"><i class="bi bi-person-badge me-1"></i> Teacher</div>
             <div class="role-badge"><i class="bi bi-person-heart me-1"></i> Parent</div>
+        </div>
+
+        <div class="text-center mt-4 footer-link-container">
+            <a asp-controller="Home" asp-action="Index" class="back-link">
+                <i class="bi bi-house me-2"></i>
+                <span>Back to homepage</span>
+            </a>
         </div>
 
     </div>

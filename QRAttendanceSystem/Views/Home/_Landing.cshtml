@@ -4,11 +4,433 @@
     var role = Context.Session.GetString("Role");
 }
 
-
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
+<style>
+    :root {
+        --bg-dark: #0f172a;
+        --accent-indigo: #6366f1;
+        --accent-cyan: #22d3ee;
+        --accent-purple: #8b5cf6;
+        --text-main: #ffffff;
+        --text-dim: rgba(255, 255, 255, 0.72);
+        --glass-bg: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        overflow-x: hidden;
+        font-family: 'Inter', sans-serif;
+        background: radial-gradient(circle at 12% 32%, rgba(99, 102, 241, 0.30) 0%, transparent 34%), radial-gradient(circle at 85% 28%, rgba(34, 211, 238, 0.16) 0%, transparent 28%), radial-gradient(circle at 62% 78%, rgba(139, 92, 246, 0.22) 0%, transparent 30%), linear-gradient(135deg, #0f172a 0%, #111b36 45%, #1a1633 100%) !important;
+        background-attachment: fixed;
+        color: var(--text-main);
+    }
+
+        /* ===============================
+           BLEND WITH LAYOUT ONLY HERE
+        ================================= */
+
+        body > header,
+        body > footer,
+        header,
+        footer,
+        .navbar,
+        .footer,
+        main,
+        main[role="main"],
+        main.pb-3,
+        .container,
+        .container-fluid {
+            background-color: transparent !important;
+        }
+
+    header,
+    .navbar {
+        box-shadow: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    footer,
+    .footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
+        box-shadow: none !important;
+    }
+
+        header .container,
+        header .container-fluid,
+        .navbar .container,
+        .navbar .container-fluid,
+        footer .container,
+        footer .container-fluid,
+        main .container,
+        main .container-fluid {
+            background: transparent !important;
+        }
+
+    /* ===============================
+           HERO SECTION
+        ================================= */
+
+    .landing-hero {
+        position: relative;
+        min-height: calc(100vh - 80px);
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        background: transparent;
+        padding-bottom: 40px;
+    }
+
+        .landing-hero .container {
+            position: relative;
+            z-index: 5;
+        }
+
+        .landing-hero .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+    /* ===============================
+           BACKGROUND BLOBS
+        ================================= */
+
+    .blob {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        filter: blur(120px);
+        opacity: 0.48;
+        animation: blobMove 18s infinite alternate ease-in-out;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .blob-1 {
+        background: var(--accent-indigo);
+        top: -110px;
+        left: -100px;
+    }
+
+    .blob-2 {
+        background: var(--accent-cyan);
+        bottom: -120px;
+        right: -100px;
+        animation-delay: 4s;
+    }
+
+    .blob-3 {
+        background: var(--accent-purple);
+        top: 28%;
+        left: 42%;
+        animation-delay: 8s;
+    }
+
+    keyframes blobMove {
+        from {
+            transform: translate(0, 0) scale(1);
+        }
+
+        to {
+            transform: translate(60px, 40px) scale(1.15);
+        }
+    }
+
+    /* ===============================
+           TYPOGRAPHY
+        ================================= */
+
+    .display-title {
+        font-weight: 800;
+        font-size: 4rem;
+        line-height: 1.08;
+        margin-bottom: 1.5rem;
+        color: var(--text-main);
+        letter-spacing: -0.03em;
+    }
+
+    .lead-text {
+        color: var(--text-dim);
+        font-size: 1.15rem;
+        margin-bottom: 2.5rem;
+        max-width: 560px;
+        line-height: 1.5;
+    }
+
+    /* ===============================
+           START BUTTON
+        ================================= */
+
+    .btn-get-started {
+        background: linear-gradient(135deg, var(--accent-indigo), #7c6cf3);
+        color: white;
+        padding: 20px 48px !important;
+        border-radius: 8px !important;
+        font-weight: 700;
+        font-size: 1.05rem !important;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        border: none;
+        min-width: 180px;
+        min-height: 56px;
+        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.26);
+        transition: all 0.25s ease;
+    }
+
+        .btn-get-started:hover {
+            background: linear-gradient(135deg, #5f63ec, var(--accent-purple));
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 34px rgba(99, 102, 241, 0.30);
+        }
+
+    /* ===============================
+           SYSTEM CORE CARD
+        ================================= */
+
+    .system-core {
+        position: relative;
+        width: 100%;
+        max-width: 340px;
+        height: 340px;
+        margin: 0 auto;
+        border-radius: 28px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+
+    .core-ring {
+        position: absolute;
+        inset: 26px;
+        border-radius: 50%;
+        border: 2px dashed rgba(255, 255, 255, 0.10);
+        animation: spin 25s linear infinite;
+    }
+
+    keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .core-center {
+        text-align: center;
+        z-index: 2;
+    }
+
+    .qr-top {
+        font-size: 1.7rem;
+        margin-bottom: 0.8rem;
+        color: rgba(255, 255, 255, 0.92);
+    }
+
+    .core-center h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 800;
+        color: #ffffff;
+    }
+
+    /* ===============================
+           FLOATING ICONS
+        ================================= */
+
+    .floating-icon {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        animation: floatSoft 5s ease-in-out infinite;
+        z-index: 12;
+    }
+
+    .icon-1 {
+        top: -14px;
+        right: -12px;
+    }
+
+    .icon-2 {
+        bottom: 10px;
+        left: -30px;
+    }
+
+    .icon-3 {
+        bottom: -20px;
+        right: 40px;
+    }
+
+    keyframes floatSoft {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+            transform: translateY(-16px) rotate(8deg);
+        }
+    }
+
+    /* ===============================
+           RESPONSIVE
+        ================================= */
+
+    media (max-width: 991.98px) {
+        .landing-hero {
+            min-height: auto;
+            padding: 48px 0 56px;
+        }
+
+            .landing-hero .row {
+                row-gap: 48px;
+            }
+
+        .display-title {
+            font-size: 2.4rem;
+            text-align: center;
+        }
+
+        .lead-text {
+            font-size: 1rem;
+            max-width: 100%;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1.8rem;
+        }
+
+        .btn-get-started {
+            display: flex;
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto;
+        }
+
+        .landing-hero .col-lg-6,
+        .landing-hero .col-lg-5,
+        .landing-hero .offset-lg-1 {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-left: 0;
+        }
+
+        .system-core {
+            max-width: 300px;
+            height: 300px;
+            border-radius: 22px;
+        }
+
+        .core-ring {
+            inset: 18px;
+        }
+
+        .core-center {
+            text-align: center;
+        }
+    }
+
+    media (max-width: 576px) {
+        .display-title {
+            font-size: 1.95rem;
+        }
+
+        .lead-text {
+            font-size: 0.95rem;
+        }
+
+        .btn-get-started {
+            padding: 16px 28px !important;
+            min-height: 52px;
+            font-size: 1rem !important;
+        }
+
+        .system-core {
+            max-width: 280px;
+            height: 280px;
+        }
+
+        .floating-icon {
+            width: 54px;
+            height: 54px;
+            font-size: 1.3rem;
+        }
+    }
+
+    media (max-width: 360px) {
+        .display-title {
+            font-size: 1.7rem;
+        }
+    }
+    /* ===============================
+       FOOTER BLEND FIX
+    ================================= */
+
+    footer,
+    .footer,
+    body > footer {
+        background: transparent !important;
+        background-color: transparent !important;
+        border-top: none !important;
+        box-shadow: none !important;
+    }
+
+        footer .container,
+        footer .container-fluid,
+        .footer .container,
+        .footer .container-fluid {
+            background: transparent !important;
+        }
+
+        footer *,
+        .footer * {
+            background-color: transparent !important;
+        }
+
+        .border-top,
+        footer.border-top,
+        .footer.border-top {
+            border-top: none !important;
+        }
+
+        body > footer::before,
+        footer::before,
+        .footer::before {
+            display: none !important;
+            content: none !important;
+        }
+</style>
 
 <div class="landing-hero">
     <div class="blob blob-1"></div>
@@ -19,13 +441,12 @@
         <div class="row align-items-center">
 
             <div class="col-lg-6">
-                <span class="badge rounded-pill mb-3 px-3 py-2" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
-                    QR Attendance System
-                </span>
                 <h1 class="display-title">Smart QR Attendance</h1>
+
                 <p class="lead-text">
                     Automate attendance tracking at your school. Fast, secure, and with detailed reporting.
                 </p>
+
                 @if (string.IsNullOrEmpty(role))
                 {
                     <a asp-controller="Auth" asp-action="Index" class="btn-get-started">
@@ -38,16 +459,23 @@
                 <div class="system-core">
                     <div class="core-ring"></div>
 
-                    <div class="floating-icon icon-1 shadow"><i class="bi bi-shield-lock"></i></div>
-                    <div class="floating-icon icon-2 shadow"><i class="bi bi-bar-chart"></i></div>
-                    <div class="floating-icon icon-3 shadow"><i class="bi bi-people"></i></div>
+                    <div class="floating-icon icon-1 shadow-sm">
+                        <i class="bi bi-shield-lock"></i>
+                    </div>
+
+                    <div class="floating-icon icon-2 shadow-sm">
+                        <i class="bi bi-bar-chart"></i>
+                    </div>
+
+                    <div class="floating-icon icon-3 shadow-sm">
+                        <i class="bi bi-people"></i>
+                    </div>
 
                     <div class="core-center">
                         <div class="qr-top">
                             <i class="bi bi-qr-code-scan"></i>
                         </div>
-                        <h4 class="fw-bold">QR Attendance</h4>
-                        <p>Scan • Validate • Record</p>
+                        <h4>Scan • Validate • Record</h4>
                     </div>
                 </div>
             </div>

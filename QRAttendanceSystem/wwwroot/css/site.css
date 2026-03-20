@@ -2,6 +2,17 @@ html {
     font-size: 14px;
 }
 
+/* Landing button appearance is controlled in landing.css to allow subtle tints */
+
+:root {
+    --btn-radius: 6px;
+    --btn-padding: 12px 18px;
+    --btn-font-size: 1rem;
+    --btn-gap: 8px;
+}
+
+/* Landing button appearance is controlled in landing.css; full color gradients are defined in forms.css */
+
 body {
     min-height: 100vh;
     background: linear-gradient(135deg,#0f172a,#1e293b,#312e81);
@@ -32,6 +43,81 @@ footer {
     padding: 20px 0;
 }
 
+/* Centralized button normalization (shape, spacing, alignment) */
+button,
+.btn,
+.btn-action,
+.btn-modern,
+.btn-login,
+.btn-register,
+.nav-btn,
+.logout-btn,
+.btn-soft,
+.role-pill,
+.role-badge,
+.badge,
+.nav-icon,
+.nav-icon-disabled,
+a[class*="btn"],
+a.btn-modern {
+    border-radius: var(--btn-radius) !important;
+    padding: var(--btn-padding) !important;
+    font-size: var(--btn-font-size) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: var(--btn-gap) !important;
+    text-decoration: none !important;
+}
+
+/* Default hover/active transition for buttons */
+button:hover,
+.btn:hover,
+.btn-action:hover,
+.btn-modern:hover,
+.nav-btn:hover,
+.logout-btn:hover {
+    transform: translateY(-1px);
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+/* Keep form buttons full-width but normalized */
+.btn-modern {
+    width: 100% !important;
+}
+
+/* Back-link shared style (used on forms and landing) */
+.footer-link-container {
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.back-link {
+    color: rgba(148,163,184,1);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    opacity: 0.8;
+}
+
+.back-link i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.back-link:hover {
+    color: #ffffff !important;
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.back-link:hover i {
+    transform: translateX(-5px);
+}
+
 #filters .glass,
 #filters .glass-card {
     max-width: 920px; 
@@ -45,6 +131,35 @@ footer {
         max-width: 100%;
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+}
+
+/* Show the navbar "hamburger" toggler only on small screens (phones).
+   On larger screens keep the navbar expanded and hide the toggler. */
+.navbar-toggler {
+    display: none !important;
+}
+
+@media (max-width: 576px) {
+    .navbar-toggler {
+        display: block !important;
+    }
+
+    /* Let the collapse behave normally on phones (bootstrap will toggle .show) */
+    .navbar-collapse {
+        display: none !important;
+    }
+
+    .navbar-collapse.show {
+        display: block !important;
+    }
+}
+
+@media (min-width: 577px) {
+    /* Always show nav items on larger screens */
+    .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto !important;
     }
 }
 

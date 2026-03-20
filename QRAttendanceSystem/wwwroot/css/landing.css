@@ -9,7 +9,8 @@
     --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-html, body {
+html,
+body {
     overflow-x: hidden;
 }
 
@@ -74,7 +75,7 @@ html, body {
 
 @keyframes blobMove {
     from {
-        transform: translate(0,0) scale(1);
+        transform: translate(0, 0) scale(1);
     }
 
     to {
@@ -102,15 +103,16 @@ html, body {
 }
 
 /* ===============================
-   BUTTON
+   PRIMARY HERO BUTTON
 ================================= */
 
 .btn-get-started {
     background: var(--accent-indigo);
     color: white;
-    padding: 18px 45px;
-    border-radius: 16px;
+    padding: 22px 52px !important;
+    border-radius: 6px !important;
     font-weight: 700;
+    font-size: 1.05rem !important;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -126,14 +128,104 @@ html, body {
     }
 
 /* ===============================
-   SYSTEM CORE CARD (FIXED)
+   AUTH ACTION BUTTONS
+================================= */
+
+.action-stack {
+    gap: 20px !important;
+    margin-bottom: 32px !important;
+}
+
+    .action-stack .btn-modern.btn-indigo,
+    .action-stack .btn-modern.btn-emerald {
+        width: 100%;
+    }
+
+    .action-stack .btn-modern {
+        padding: 14px 20px !important;
+        font-size: 0.95rem !important;
+        border-radius: 10px !important;
+        font-weight: 600;
+        transition: all 0.25s ease !important;
+    }
+
+        /* Sign In */
+        .landing-hero .action-stack .btn-modern.btn-indigo,
+        .landing-hero .action-stack a.btn-modern.btn-indigo,
+        .action-stack .btn-modern.btn-indigo,
+        .action-stack a.btn-modern.btn-indigo {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.18) !important;
+        }
+
+            .landing-hero .action-stack .btn-modern.btn-indigo:hover,
+            .landing-hero .action-stack a.btn-modern.btn-indigo:hover,
+            .action-stack .btn-modern.btn-indigo:hover,
+            .action-stack a.btn-modern.btn-indigo:hover {
+                background: linear-gradient(135deg, #4f54eb, #7748e6) !important;
+                box-shadow: 0 12px 36px rgba(79, 84, 235, 0.18) !important;
+                transform: translateY(-3px) !important;
+            }
+
+        /* Join Now - softer green */
+        .landing-hero .action-stack .btn-modern.btn-emerald,
+        .landing-hero .action-stack a.btn-modern.btn-emerald,
+        .action-stack .btn-modern.btn-emerald,
+        .action-stack a.btn-modern.btn-emerald {
+            background: linear-gradient(135deg, #34d399, #10b981) !important;
+            color: #ffffff !important;
+            border: none !important;
+            box-shadow: 0 8px 25px rgba(52, 211, 153, 0.18) !important;
+        }
+
+            .landing-hero .action-stack .btn-modern.btn-emerald:hover,
+            .landing-hero .action-stack a.btn-modern.btn-emerald:hover,
+            .action-stack .btn-modern.btn-emerald:hover,
+            .action-stack a.btn-modern.btn-emerald:hover {
+                background: linear-gradient(135deg, #2ecf91, #0ea472) !important;
+                box-shadow: 0 12px 30px rgba(52, 211, 153, 0.22) !important;
+                transform: translateY(-3px) !important;
+            }
+
+/* ===============================
+   ROLE BADGES
+================================= */
+
+.role-group {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 16px !important;
+    margin-top: 0 !important;
+}
+
+.role-badge {
+    background: rgba(255, 255, 255, 0.05) !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-size: 0.75rem !important;
+    font-weight: 500;
+    color: var(--text-dim) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    transition: none !important;
+}
+
+    .role-badge:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        transform: none !important;
+        cursor: default !important;
+    }
+
+/* ===============================
+   SYSTEM CORE CARD
 ================================= */
 
 .system-core {
     position: relative;
     width: 100%;
-    max-width: 340px; 
-    height: 340px; 
+    max-width: 340px;
+    height: 340px;
     margin: 0 auto;
     border-radius: 28px;
     background: var(--glass-bg);
@@ -145,6 +237,7 @@ html, body {
     justify-content: center;
     z-index: 10;
 }
+
 .core-ring {
     position: absolute;
     inset: 20px;
@@ -166,7 +259,7 @@ html, body {
 .qr-main {
     font-size: 5rem;
     color: white;
-    filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
 }
 
 /* ===============================
@@ -220,7 +313,6 @@ html, body {
 ================================= */
 
 @media (max-width: 768px) {
-
     .landing-hero {
         min-height: auto;
         padding: 40px 0;
@@ -241,7 +333,7 @@ html, body {
     .btn-get-started {
         width: 100%;
         justify-content: center;
-        padding: 14px;
+        padding: 14px !important;
         margin-bottom: 30px;
     }
 
@@ -258,14 +350,11 @@ html, body {
         max-width: 100%;
     }
 
-    /* Smaller card on mobile */
     .system-core {
         max-width: 300px;
         height: 300px;
         border-radius: 22px;
     }
-
-
 
     .core-ring {
         inset: 15px;
@@ -274,6 +363,7 @@ html, body {
     .qr-main {
         font-size: 3.5rem;
     }
+
     .core-center {
         text-align: center;
     }
@@ -294,3 +384,24 @@ html, body {
         font-size: 1.3rem;
     }
 }
+/* Balanced START NOW button */
+.landing-hero .btn-get-started {
+    padding: 20px 48px !important;
+    font-size: 1.05rem !important;
+    border-radius: 8px !important;
+    min-width: 180px;
+    min-height: 56px;
+}
+.action-stack a.btn-modern.btn-emerald {
+    background: linear-gradient(135deg, #4f63d8, #6366f1) !important; 
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.25) !important;
+}
+
+    /* hover */
+    .action-stack a.btn-modern.btn-emerald:hover {
+        background: linear-gradient(135deg, #4458c9, #5a5ce6) !important;
+        box-shadow: 0 10px 26px rgba(99, 102, 241, 0.35) !important;
+        transform: translateY(-2px);
+    }
