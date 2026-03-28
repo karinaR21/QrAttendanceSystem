@@ -140,6 +140,32 @@
 
             </ul>
 
+            <!-- LANGUAGE SELECTOR -->
+            <div class="collapse navbar-collapse" id="languageSelector">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Language
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                            <li>
+                                <form method="post" asp-controller="Localization" asp-action="SetLanguage" class="d-inline">
+                                    <input type="hidden" name="culture" value="en" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <button type="submit" class="dropdown-item">English</button>
+                                </form>
+                            </li>
+                            <li>
+                                <form method="post" asp-controller="Localization" asp-action="SetLanguage" class="d-inline">
+                                    <input type="hidden" name="culture" value="bg" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                                    <button type="submit" class="dropdown-item">Български</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 

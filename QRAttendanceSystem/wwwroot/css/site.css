@@ -1,23 +1,33 @@
 html {
     font-size: 14px;
+    height: 100%;
 }
 
-/* Landing button appearance is controlled in landing.css to allow subtle tints */
-
 :root {
-    --btn-radius: 6px;
+    --btn-radius: 10px;
     --btn-padding: 12px 18px;
     --btn-font-size: 1rem;
     --btn-gap: 8px;
 }
 
-/* Landing button appearance is controlled in landing.css; full color gradients are defined in forms.css */
-
 body {
     min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(135deg,#0f172a,#1e293b,#312e81);
 }
 
+main {
+    flex: 1;
+}
+
+footer {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent;
+    backdrop-filter: none;
+}
 
 /* animations */
 .slide-in {
@@ -35,29 +45,17 @@ body {
         transform: translateY(0);
     }
 }
-footer {
-    background: rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(5px);
-    color: white;
-    text-align: center;
-    padding: 20px 0;
-}
 
-/* Centralized button normalization (shape, spacing, alignment) */
+/* shared button normalization - EXCLUDES navbar controls */
 button,
 .btn,
 .btn-action,
 .btn-modern,
 .btn-login,
 .btn-register,
-.nav-btn,
-.logout-btn,
 .btn-soft,
-.role-pill,
 .role-badge,
 .badge,
-.nav-icon,
-.nav-icon-disabled,
 a[class*="btn"],
 a.btn-modern {
     border-radius: var(--btn-radius) !important;
@@ -70,23 +68,19 @@ a.btn-modern {
     text-decoration: none !important;
 }
 
-/* Default hover/active transition for buttons */
-button:hover,
-.btn:hover,
-.btn-action:hover,
-.btn-modern:hover,
-.nav-btn:hover,
-.logout-btn:hover {
-    transform: translateY(-1px);
-    transition: transform 0.15s ease, background 0.15s ease;
-}
+    button:hover,
+    .btn:hover,
+    .btn-action:hover,
+    .btn-modern:hover,
+    .btn-soft:hover {
+        transform: translateY(-1px);
+        transition: transform 0.15s ease, background 0.15s ease;
+    }
 
-/* Keep form buttons full-width but normalized */
 .btn-modern {
     width: 100% !important;
 }
 
-/* Back-link shared style (used on forms and landing) */
 .footer-link-container {
     padding-top: 1rem;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -103,24 +97,24 @@ button:hover,
     opacity: 0.8;
 }
 
-.back-link i {
-    font-size: 1.1rem;
-    transition: transform 0.3s ease;
-}
+    .back-link i {
+        font-size: 1.1rem;
+        transition: transform 0.3s ease;
+    }
 
-.back-link:hover {
-    color: #ffffff !important;
-    opacity: 1;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
+    .back-link:hover {
+        color: #ffffff !important;
+        opacity: 1;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
 
-.back-link:hover i {
-    transform: translateX(-5px);
-}
+        .back-link:hover i {
+            transform: translateX(-5px);
+        }
 
 #filters .glass,
 #filters .glass-card {
-    max-width: 920px; 
+    max-width: 920px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -134,8 +128,6 @@ button:hover,
     }
 }
 
-/* Show the navbar "hamburger" toggler only on small screens (phones).
-   On larger screens keep the navbar expanded and hide the toggler. */
 .navbar-toggler {
     display: none !important;
 }
@@ -145,18 +137,16 @@ button:hover,
         display: block !important;
     }
 
-    /* Let the collapse behave normally on phones (bootstrap will toggle .show) */
     .navbar-collapse {
         display: none !important;
     }
 
-    .navbar-collapse.show {
-        display: block !important;
-    }
+        .navbar-collapse.show {
+            display: block !important;
+        }
 }
 
 @media (min-width: 577px) {
-    /* Always show nav items on larger screens */
     .navbar-collapse {
         display: flex !important;
         flex-basis: auto !important;
@@ -178,4 +168,30 @@ button:hover,
         padding-left: 1rem;
         padding-right: 1rem;
     }
+}
+
+.dashboard-main {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+footer {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent;
 }

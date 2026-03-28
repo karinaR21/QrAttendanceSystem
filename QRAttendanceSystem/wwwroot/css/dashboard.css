@@ -1,40 +1,26 @@
-﻿/* =====================================================
-   ROOT VARIABLES (VERY SENIOR MOVE)
-===================================================== */
-
-:root {
+﻿:root {
     --glass-bg: rgba(255,255,255,.08);
     --glass-strong: rgba(255,255,255,.12);
     --border-soft: rgba(255,255,255,.08);
     --text-main: #e6edf3;
-    --text-muted: .75;
-    --primary-grad: linear-gradient(135deg,#6366f1,#22d3ee);
-    --success-grad: linear-gradient(135deg,#1cc88a,#20c997);
-    --warning-grad: linear-gradient(135deg,#f6c23e,#f4a261);
+    --primary-grad: linear-gradient(135deg, #6366f1, #22d3ee);
+    --success-grad: linear-gradient(135deg, #1cc88a, #20c997);
+    --warning-grad: linear-gradient(135deg, #f6c23e, #f4a261);
 }
-
-/* =====================================================
-   GLOBAL DARK APP BACKGROUND
-===================================================== */
 
 .app-dark-gradient {
     min-height: 100vh;
-    padding: 50px 0;
-    background: radial-gradient(circle at 15% 20%, rgba(140,82,255,.25), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,198,255,.18), transparent 40%), linear-gradient(135deg,#0f2027,#1b2a49,#2c2f6b);
+    width: 100%;
+    padding: 32px 0 40px;
+    background: radial-gradient(circle at 15% 20%, rgba(140,82,255,.25), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,198,255,.18), transparent 40%), linear-gradient(135deg, #0f2027, #1b2a49, #2c2f6b);
 }
-
-
 
 .app-container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 0 20px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 32px;
 }
-
-
-/* =====================================================
-   GLASS DESIGN SYSTEM
-===================================================== */
 
 .glass {
     background: var(--glass-bg);
@@ -45,44 +31,21 @@
     transition: .35s ease;
 }
 
-
-/* =====================================================
-   STATS CARDS
-===================================================== */
-
-.stats-card {
-    padding: 30px;
-    color: white;
-}
-
-    .stats-card span {
-        opacity: .75;
-        font-size: .8rem;
-    }
-
-    .stats-card h1 {
-        font-size: 2.8rem;
-        font-weight: 600;
-        margin-top: 6px;
-    }
-
-    /* highlight = WOW card */
-    .stats-card.highlight {
-        background: var(--primary-grad);
-    }
-
-
-/* =====================================================
-   CONTENT GLASS CARD
-===================================================== */
-
 .glass-card {
     padding: 28px;
     color: var(--text-main);
+    background: rgba(255,255,255,.10);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    box-shadow: 0 20px 55px rgba(0,0,0,.35);
+    transition: .3s;
 }
 
+    .glass-card:hover {
+        transform: none;
+        box-shadow: 0 20px 55px rgba(0,0,0,.35);
+    }
 
-    /* Remove bootstrap white */
     .glass-card table,
     .table,
     .table tbody,
@@ -99,100 +62,17 @@
                 background: rgba(255,255,255,.04);
             }
 
-
-/* =====================================================
-   COURSE + ACTIVITY ITEMS
-===================================================== */
-
-.course-item-modern,
-.activity-item-modern {
-    background: rgba(255,255,255,.04);
-    padding: 16px;
-    border-radius: 16px;
-    margin-bottom: 12px;
-    transition: .25s;
-}
-
-    .course-item-modern:hover,
-    .activity-item-modern:hover {
-        background: rgba(255,255,255,.07);
-    }
-
-
-/* icon */
-
-.course-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: rgba(99,102,241,.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* course count bubble */
-
-.course-count {
-    min-width: 40px;
-    height: 40px;
-    border-radius: 999px;
-    background: var(--primary-grad);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    color: white;
-}
-
-
-/* =====================================================
-   EMAIL / USER PILLS
-===================================================== */
-
 .email-pill {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 20px;
+    padding: 10px 20px;
     border-radius: 999px;
     background: var(--primary-grad);
     color: white;
     font-weight: 500;
     box-shadow: 0 12px 30px rgba(99,102,241,.45);
 }
-
-
-/* =====================================================
-   ICON CIRCLES
-===================================================== */
-
-.icon-circle-lg {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-}
-
-.icon-circle-sm {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg,#ff7a18,#ffb347);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.6rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,.35);
-}
-
-
-/* =====================================================
-   GRADIENT HELPERS
-===================================================== */
 
 .bg-primary-gradient {
     background: var(--primary-grad);
@@ -206,85 +86,16 @@
     background: var(--warning-grad);
 }
 
-
-
-/* =====================================================
-   MODERN FORMS
-===================================================== */
-
-.form-group-modern {
-    margin-bottom: 18px;
+.chart-wrap {
+    position: relative;
+    height: 320px;
 }
-
-    .form-group-modern label {
-        font-size: .8rem;
-        opacity: .8;
-    }
-
-/* inputs */
-
-.form-control,
-.form-select {
-    background: rgba(255,255,255,.92);
-    border: none;
-    border-radius: 14px;
-    padding: 11px 14px;
-    transition: .2s;
-}
-
-    .form-control:focus,
-    .form-select:focus {
-        background: white;
-        box-shadow: 0 0 0 3px rgba(99,102,241,.25);
-    }
-
-
-/* =====================================================
-   BUTTON (VERY PREMIUM)
-===================================================== */
-
-.btn-soft {
-    border: none;
-    border-radius: 16px;
-    padding: 13px;
-    font-size: 1rem;
-    font-weight: 600;
-    background: linear-gradient(135deg,#ff7a18,#ffb347);
-    box-shadow: 0 12px 28px rgba(255,140,0,.35);
-    transition: .25s;
-}
-
-    .btn-soft:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 18px 38px rgba(255,140,0,.5);
-    }
-
-
-/* =====================================================
-   CHILD PILL
-===================================================== */
-
-.child-pill {
-    background: rgba(255,255,255,.12);
-    border-radius: 16px;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 500;
-}
-
-
-/* =====================================================
-   SMOOTH ENTRY ANIMATION
-===================================================== */
 
 .slide-in {
     animation: slideIn .45s ease;
 }
 
 @keyframes slideIn {
-
     from {
         opacity: 0;
         transform: translateY(18px);
@@ -296,46 +107,6 @@
     }
 }
 
-
-/* =====================================================
-   MOBILE FIX (VERY IMPORTANT)
-===================================================== */
-
-@media(max-width:768px) {
-
-    .stats-card h1 {
-        font-size: 2.2rem;
-    }
-
-    .glass {
-        border-radius: 20px;
-    }
-
-    .app-dark-gradient {
-        padding: 30px 0;
-    }
-}
-.glass-card {
-    background: rgba(255,255,255,.10);
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    box-shadow: 0 20px 55px rgba(0,0,0,.35);
-
-    .glass-card {
-        composes: glass-base;
-    }
-}
-.chart-wrap {
-    position: relative;
-    height: 320px;
-}
-.glass-card {
-    transition: .3s;
-}
-    .glass-card:hover {
-        transform: none;
-        box-shadow: 0 20px 55px rgba(0,0,0,.35);
-    }
 .filter-hidden {
     display: none;
 }
@@ -356,14 +127,23 @@
         transform: translateY(0);
     }
 }
-/* ================= FORCE CENTER DASHBOARD ================= */
 
-.app-dark-gradient {
-    display: flex;
-    justify-content: center;
+@media (min-width: 1400px) {
+    .app-container {
+        padding: 40px;
+    }
 }
 
-.app-container {
-    width: 100%;
-    max-width: 1100px;
+@media (max-width: 768px) {
+    .app-dark-gradient {
+        padding: 16px 0 24px;
+    }
+
+    .app-container {
+        padding: 16px;
+    }
+
+    .glass {
+        border-radius: 20px;
+    }
 }

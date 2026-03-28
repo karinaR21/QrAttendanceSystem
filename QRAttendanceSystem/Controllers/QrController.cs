@@ -24,7 +24,7 @@ namespace QRAttendanceSystem.Controllers
             return View("Generate", model);
         }
 
-        // Генерира PNG
+
         public IActionResult Generate(int sessionId)
         {
             var sessionExists = _context.Sessions.Any(s => s.Id == sessionId);
@@ -33,7 +33,6 @@ namespace QRAttendanceSystem.Controllers
                 return StatusCode(204); 
             }
 
-            // invalidate old tokens
             var oldTokens = _context.QrTokens
                 .Where(t => t.SessionId == sessionId && !t.IsUsed);
 

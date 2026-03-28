@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using QRAttendanceSystem.Data;
 using OfficeOpenXml;
@@ -23,18 +25,25 @@ builder.Services.AddSession(options =>
 builder.Services.AddSession();
 
 
+var supportedCultures = new[] { "en", "bg" };
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en"),
+    SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList(),
+    SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList()
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = localizationOptions.DefaultRequestCulture;
+    options.SupportedCultures = localizationOptions.SupportedCultures;
+    options.SupportedUICultures = localizationOptions.SupportedUICultures;
+});
+
 var app = builder.Build();
 
 // Request localization
-var cultures = new[] { new System.Globalization.CultureInfo("bg"), new System.Globalization.CultureInfo("en") };
-var requestLocalizationOptions = new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("bg"),
-    SupportedCultures = cultures,
-    SupportedUICultures = cultures
-};
-
-app.UseRequestLocalization(requestLocalizationOptions);
+app.UseRequestLocalization(localizationOptions);
 
 if (!app.Environment.IsDevelopment())
 {

@@ -1,315 +1,598 @@
 ﻿@using QRAttendanceSystem.Models
 
 <style>
+    .attendance-page {
+        width: 100%;
+        min-height: 100%;
+    }
 
-    /* ===============================
-       DASHBOARD DESIGN
-    ================================= */
+    .attendance-shell {
+        min-height: calc(100vh - 76px);
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        background: radial-gradient(circle at top left, rgba(59,130,246,0.18), transparent 28%), radial-gradient(circle at top right, rgba(16,185,129,0.12), transparent 24%), linear-gradient(135deg, #0b1220 0%, #13213d 45%, #1b2f5a 100%);
+    }
 
-    .equal-card {
-        height: 420px;
+    .attendance-container {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 28px 24px 32px;
+    }
+
+    .dashboard-header {
         display: flex;
-        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
     }
 
-    .scroll-content {
-        max-height: 300px;
-        overflow-y: scroll; 
+    .dashboard-title h1 {
+        color: #fff;
+        font-size: clamp(2.2rem, 3vw, 3.2rem);
+        font-weight: 800;
+        margin-bottom: 10px;
+        letter-spacing: -0.03em;
     }
 
-        /* Scrollbar */
-        .scroll-content::-webkit-scrollbar {
-            width: 6px;
+    .dashboard-subtitle {
+        color: rgba(255,255,255,0.72);
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .email-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 20px;
+        border-radius: 999px;
+        background: linear-gradient(135deg, rgba(99,102,241,0.45), rgba(34,211,238,0.35));
+        border: 1px solid rgba(255,255,255,0.14);
+        color: #fff;
+        font-weight: 600;
+        box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+        white-space: nowrap;
+    }
+
+    .filters-toolbar {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+        visibility: visible; /* Ensure the filters button is visible */
+    }
+
+    .btn-soft {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 14px;
+        padding: 12px 18px;
+        transition: all 0.25s ease;
+        font-weight: 600;
+    }
+
+        .btn-soft:hover,
+        .btn-soft:focus {
+            background: rgba(255,255,255,0.14);
+            color: #fff;
+            border-color: rgba(255,255,255,0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 22px rgba(0,0,0,0.18);
         }
 
-        .scroll-content::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.25);
-            border-radius: 10px;
-        }
-
-    /* Glass card */
     .glass-card {
         background: rgba(255,255,255,0.08);
         border: 1px solid rgba(255,255,255,0.12);
         backdrop-filter: blur(18px);
-        border-radius: 20px;
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: 24px;
+        box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+        color: #fff;
+    }
+
+    .filter-panel {
+        padding: 22px;
+        margin-bottom: 28px;
+    }
+
+        .filter-panel label {
+            color: rgba(255,255,255,0.78);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .filter-panel .form-control,
+        .filter-panel .form-select {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: #fff;
+            border-radius: 14px;
+            min-height: 48px;
+            box-shadow: none;
+        }
+
+            .filter-panel .form-control:focus,
+            .filter-panel .form-select:focus {
+                background: rgba(255,255,255,0.11);
+                border-color: rgba(96,165,250,0.7);
+                box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.18);
+                color: #fff;
+            }
+
+            .filter-panel .form-select option {
+                color: #111827;
+            }
+
+    .btn-apply {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        border: none;
+        color: #fff;
+        font-weight: 700;
+        border-radius: 14px;
+        min-height: 48px;
+    }
+
+        .btn-apply:hover {
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 22px rgba(37,99,235,0.28);
+        }
+
+    .btn-clear {
+        border-radius: 14px;
+        min-height: 48px;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        padding: 60px 24px;
+        text-align: center;
+    }
+
+        .empty-state h4 {
+            color: #fff;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: rgba(255,255,255,0.68);
+            margin: 0;
+        }
+
+    .stats-row {
+        margin-bottom: 28px;
+    }
+
+    .stat-card {
+        border-radius: 24px;
+        padding: 30px 24px;
+        text-align: center;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.16);
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+        }
+
+    .stat-title {
+        font-size: 1rem;
+        font-weight: 700;
+        opacity: 0.92;
+        margin-bottom: 12px;
+    }
+
+    .stat-value {
+        font-size: clamp(2.6rem, 4vw, 3.4rem);
+        font-weight: 800;
+        line-height: 1;
+    }
+
+    .stat-present {
+        background: linear-gradient(180deg, rgba(34,197,94,0.12), rgba(34,197,94,0.06));
+        border: 1px solid rgba(34,197,94,0.35);
+        color: #22c55e;
+    }
+
+    .stat-late {
+        background: linear-gradient(180deg, rgba(250,204,21,0.12), rgba(250,204,21,0.06));
+        border: 1px solid rgba(250,204,21,0.35);
+        color: #facc15;
+    }
+
+    .stat-absent {
+        background: linear-gradient(180deg, rgba(239,68,68,0.12), rgba(239,68,68,0.06));
+        border: 1px solid rgba(239,68,68,0.35);
+        color: #ef4444;
+    }
+
+    .content-row {
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 4px;
+        width: 100%;
+    }
+
+    .content-col {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+
+    .section-card {
+        width: 100%;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        padding: 24px;
+        overflow: hidden;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #fff;
+        min-height: 40px;
+        flex-shrink: 0;
+    }
+
+        .section-header i {
+            font-size: 1.25rem;
+        }
+
+    .scroll-content {
+        flex: 1;
+        min-height: 0;
+        height: 0;
+        overflow-y: auto; 
+        padding-right: 10px;
+        scrollbar-gutter: stable;
+    }
+
+    .scroll-content::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .scroll-content::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 999px;
+    }
+
+    .scroll-content::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.28);
+        border-radius: 999px;
+    }
+
+    .scroll-content::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.40);
     }
 
     .item-row {
-        padding: 14px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.06);
+        padding: 16px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        min-height: 86px;
     }
 
         .item-row:last-child {
             border-bottom: none;
         }
 
-    /* ===============================
-       PALE STAT CARDS
-    ================================= */
-
-    .stat-card {
-        border-radius: 18px;
-        padding: 28px;
-        text-align: center;
-        transition: 0.3s ease;
+    .item-main {
+        min-width: 0;
     }
 
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.25);
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.10);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.1rem;
+    }
+
+    .item-title {
+        font-weight: 700;
+        color: #fff;
+        font-size: 1.02rem;
+        margin-bottom: 2px;
+        word-break: break-word;
+    }
+
+    .item-subtitle {
+        color: rgba(255,255,255,0.68);
+        font-size: 0.92rem;
+        word-break: break-word;
+    }
+
+    .count-badge {
+        background: rgba(255,255,255,0.92);
+        color: #111827;
+        border-radius: 12px;
+        padding: 10px 14px;
+        min-width: 58px;
+        text-align: center;
+        font-weight: 800;
+        font-size: 0.95rem;
+        flex-shrink: 0;
+    }
+
+    .status-badge {
+        min-width: 110px;
+        text-align: center;
+        padding: 10px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        flex-shrink: 0;
+    }
+
+    @@media (max-width: 991.98px) {
+        .attendance-container {
+            padding: 18px 16px 24px;
         }
 
-    .stat-title {
-        font-size: 0.95rem;
-        opacity: 0.8;
+        .section-card {
+            height: 460px;
+        }
     }
 
-    .stat-value {
-        font-size: 2.4rem;
-        font-weight: 700;
-        margin-top: 8px;
+    @@media (max-width: 767.98px) {
+        .dashboard-header {
+            align-items: flex-start;
+        }
+
+        .email-pill {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .filter-panel {
+            padding: 18px;
+        }
+
+        .section-card {
+            padding: 20px;
+            height: 420px;
+        }
+
+        .stat-card {
+            padding: 24px 18px;
+        }
+
+        .status-badge {
+            min-width: 92px;
+            padding: 9px 12px;
+        }
+
+        .count-badge {
+            min-width: 50px;
+        }
     }
-
-    /* Pale colors */
-
-    .stat-present {
-        background: rgba(34,197,94,0.15);
-        border: 1px solid rgba(34,197,94,0.35);
-        color: #22c55e;
-    }
-
-    .stat-late {
-        background: rgba(250,204,21,0.15);
-        border: 1px solid rgba(250,204,21,0.35);
-        color: #facc15;
-    }
-
-    .stat-absent {
-        background: rgba(239,68,68,0.15);
-        border: 1px solid rgba(239,68,68,0.35);
-        color: #ef4444;
-    }
-
 </style>
 
-<div class="app-dark-gradient">
-    <div class="app-container">
+<div class="attendance-page">
+    <div class="attendance-shell">
+        <div class="attendance-container">
 
-        <!-- HEADER -->
-        <div class="text-white mb-4">
-            <h1 class="fw-semibold mb-2">My Attendance</h1>
-            <span class="email-pill">
-                <i class="bi bi-envelope me-2"></i>
-                @ViewBag.Email
-            </span>
-        </div>
+            <div class="dashboard-header">
+                <div class="dashboard-title">
+                    <h1>My Attendance</h1>
+                    <p class="dashboard-subtitle">Track your attendance, filter results, and review recent activity.</p>
+                </div>
 
-        <!-- FILTER BUTTON -->
-        <div class="mb-4">
-            <button class="btn btn-soft"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#filters">
-                <i class="bi bi-funnel me-2"></i>
-                Filters
-            </button>
-        </div>
+                <span class="email-pill">
+                    <i class="bi bi-envelope"></i>
+                    @ViewBag.Email
+                </span>
+            </div>
 
-        <!-- FILTER PANEL -->
-        <div class="collapse mb-4 @(ViewBag.From != null || ViewBag.To != null || ViewBag.SelectedCourse != null ? "show" : "")"
-             id="filters">
+            <div class="filters-toolbar">
+                <button class="btn btn-soft"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#filters"
+                        aria-expanded="false"
+                        aria-controls="filters">
+                    <i class="bi bi-funnel me-2"></i>
+                    Filters
+                </button>
+            </div>
 
-            <div class="glass glass-card p-4">
+            <div class="collapse mb-4 @(ViewBag.From != null || ViewBag.To != null || ViewBag.SelectedCourse != null ? "show" : "")"
+                 id="filters">
+                <div class="glass-card filter-panel">
+                    <form method="get">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-xl-3 col-md-6">
+                                <label for="from">From</label>
+                                <input id="from"
+                                       type="date"
+                                       name="from"
+                                       value="@ViewBag.From"
+                                       class="form-control" />
+                            </div>
 
-                <form method="get">
-                    <div class="row g-3 align-items-end">
+                            <div class="col-xl-3 col-md-6">
+                                <label for="to">To</label>
+                                <input id="to"
+                                       type="date"
+                                       name="to"
+                                       value="@ViewBag.To"
+                                       class="form-control" />
+                            </div>
 
-                        <div class="col-md-3">
-                            <label class="text-white-50 small">From</label>
-                            <input type="date"
-                                   name="from"
-                                   value="@ViewBag.From"
-                                   class="form-control" />
-                        </div>
+                            <div class="col-xl-4 col-md-8">
+                                <label for="courseId">Course</label>
+                                <select id="courseId" name="courseId" class="form-select">
+                                    <option value="">All Classes</option>
 
-                        <div class="col-md-3">
-                            <label class="text-white-50 small">To</label>
-                            <input type="date"
-                                   name="to"
-                                   value="@ViewBag.To"
-                                   class="form-control" />
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="text-white-50 small">Course</label>
-                            <select name="courseId" class="form-select">
-                                <option value="">All Classes</option>
-
-                                @foreach (Course c in ViewBag.Courses)
-                                {
-                                    if (ViewBag.SelectedCourse != null && (int)ViewBag.SelectedCourse == c.Id)
+                                    @foreach (Course c in ViewBag.Courses)
                                     {
-                                        <option value="@c.Id" selected="selected">@c.Name</option>
+                                        if (ViewBag.SelectedCourse != null && (int)ViewBag.SelectedCourse == c.Id)
+                                        {
+                                            <option value="@c.Id" selected="selected">@c.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@c.Id">@c.Name</option>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <option value="@c.Id">@c.Name</option>
-                                    }
-                                }
-                            </select>
-                        </div>
+                                </select>
+                            </div>
 
-                        <div class="col-md-2">
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-soft w-100" type="submit">Apply</button>
-                                <a href="/Statistics/Student" class="btn btn-outline-light w-100">Clear</a>
+                            <div class="col-xl-2 col-md-4">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-apply" type="submit">
+                                        <i class="bi bi-check2-circle me-2"></i>
+                                        Apply
+                                    </button>
+                                    <a href="/Statistics/Student" class="btn btn-outline-light btn-clear">
+                                        <i class="bi bi-arrow-counterclockwise me-2"></i>
+                                        Clear
+                                    </a>
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                </form>
-
+                    </form>
+                </div>
             </div>
-        </div>
 
-        @if (!(bool)ViewBag.HasResults)
-        {
-            <div class="glass glass-card text-center p-5 mt-4">
-                <h4>No attendance records were found</h4>
-                <p class="text-white-50">Try adjusting your filters.</p>
-            </div>
-        }
-        else
-        {
-            int present = 0;
-            int late = 0;
-            int absent = 0;
-
-            if (ViewBag.ByStatus != null)
+            @if (!(bool)ViewBag.HasResults)
             {
-                foreach (var s in ViewBag.ByStatus)
-                {
-                    if (s.Status == "Present") present = s.Count;
-                    else if (s.Status == "Late") late = s.Count;
-                    else if (s.Status == "Absent") absent = s.Count;
-                }
+                <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                    <div class="glass-card empty-state text-center">
+                        <h4>No attendance records were found</h4>
+                        <p>Try adjusting your filters to see results.</p>
+                    </div>
+                </div>
             }
+            else
+            {
+                int present = 0;
+                int late = 0;
+                int absent = 0;
 
-            <!-- PALE STAT CARDS -->
-            <div class="row g-4 mb-5">
+                if (ViewBag.ByStatus != null)
+                {
+                    foreach (var s in ViewBag.ByStatus)
+                    {
+                        if (s.Status == "Present") present = s.Count;
+                        else if (s.Status == "Late") late = s.Count;
+                        else if (s.Status == "Absent") absent = s.Count;
+                    }
+                }
 
-                <div class="col-md-4">
-                    <div class="stat-card stat-present">
-                        <div class="stat-title">Present Days</div>
-                        <div class="stat-value">@present</div>
+                <div class="row g-4 stats-row">
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="stat-card stat-present">
+                            <div class="stat-title">Present Days</div>
+                            <div class="stat-value">@present</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-4">
-                    <div class="stat-card stat-late">
-                        <div class="stat-title">Late Days</div>
-                        <div class="stat-value">@late</div>
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="stat-card stat-late">
+                            <div class="stat-title">Late Days</div>
+                            <div class="stat-value">@late</div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="col-md-4">
-                    <div class="stat-card stat-absent">
-                        <div class="stat-title">Absent Days</div>
-                        <div class="stat-value">@absent</div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- MAIN CONTENT -->
-            <div class="row g-4">
-
-             
-                <!-- BY COURSE -->
-                <div class="col-lg-6">
-                    <div class="glass glass-card equal-card">
-
-                        <h5 class="fw-semibold mb-3">
-                            <i class="bi bi-journal-text me-2"></i>
-                            Attendance by Course
-                        </h5>
-
-                        <div class="scroll-content">
-
-                            @foreach (var item in ViewBag.ByCourse)
-                            {
-                                <div class="item-row d-flex justify-content-between align-items-center">
-
-                                    <div class="d-flex align-items-center gap-3">
-
-                                        <!-- Icon Circle -->
-                                        <div class="icon-circle bg-primary-gradient d-flex align-items-center justify-content-center"
-                                             style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);">
-                                            <i class="bi bi-book"></i>
-                                        </div>
-
-                                        <!-- Course Info -->
-                                        <div>
-                                            <div class="fw-semibold">
-                                                @item.Course
-                                            </div>
-
-                                            <div class="small opacity-75">
-                                                Total attendances
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <!-- Count Badge -->
-                                    <span class="badge bg-light text-dark px-3 py-2">
-                                        @item.Count
-                                    </span>
-
-                                </div>
-                            }
-
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <div class="stat-card stat-absent">
+                            <div class="stat-title">Absent Days</div>
+                            <div class="stat-value">@absent</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- RECENT -->
-                <div class="col-lg-6">
-                    <div class="glass glass-card equal-card">
+                <div class="content-row">
+                    <div class="content-col">
+                        <div class="glass-card section-card">
+                            <div class="section-header">
+                                <i class="bi bi-journal-text"></i>
+                                <span>Attendance by Course</span>
+                            </div>
 
-                        <h5 class="fw-semibold mb-3">
-                            <i class="bi bi-clock-history me-2"></i>
-                            Recent Activity
-                        </h5>
+                            <div class="scroll-content">
+                                @foreach (var item in ViewBag.ByCourse)
+                                {
+                                    <div class="item-row d-flex justify-content-between align-items-center gap-3">
+                                        <div class="d-flex align-items-center gap-3 item-main">
+                                            <div class="icon-circle">
+                                                <i class="bi bi-book"></i>
+                                            </div>
 
-                        <div class="scroll-content">
+                                            <div>
+                                                <div class="item-title">@item.Course</div>
+                                                <div class="item-subtitle">Total attendances</div>
+                                            </div>
+                                        </div>
 
-                            @foreach (var item in ViewBag.Recent)
-                            {
-                                string color =
-                                item.Status == "Present" ? "success" :
-                                item.Status == "Late" ? "warning" :
-                                "danger";
-
-                                <div class="item-row d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <div class="fw-semibold">@item.Course</div>
-                                        <div class="small opacity-75">@item.TimeRecorded</div>
+                                        <span class="count-badge">@item.Count</span>
                                     </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
 
-                                    <span class="badge bg-@color px-3 py-2">
-                                        @item.Status
-                                    </span>
-                                </div>
-                            }
+                    <div class="content-col">
+                        <div class="glass-card section-card">
+                            <div class="section-header">
+                                <i class="bi bi-clock-history"></i>
+                                <span>Recent Activity</span>
+                            </div>
 
+                            <div class="scroll-content">
+                                @foreach (var item in ViewBag.Recent)
+                                {
+                                    string color =
+                                    item.Status == "Present" ? "success" :
+                                    item.Status == "Late" ? "warning" :
+                                                                    "danger";
+
+                                    <div class="item-row d-flex justify-content-between align-items-center gap-3">
+                                        <div class="d-flex align-items-center gap-3 item-main">
+                                            <div class="icon-circle">
+                                                <i class="bi bi-clock-history"></i>
+                                            </div>
+
+                                            <div>
+                                                <div class="item-title">@item.Course</div>
+                                                <div class="item-subtitle">@item.TimeRecorded</div>
+                                            </div>
+                                        </div>
+
+                                        <span class="badge bg-@color status-badge">
+                                            @item.Status
+                                        </span>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
-
-        }
-
+            }
+        </div>
     </div>
 </div>
